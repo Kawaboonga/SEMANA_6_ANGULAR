@@ -1,0 +1,167 @@
+<!-- ============================================================
+     SECCIÓN PRINCIPAL: QUIÉNES SOMOS / IDENTIDAD DEL PROYECTO
+     ------------------------------------------------------------
+     - Presenta la misión de SoundSeeker.
+     - Combina imagen + texto + bloques de valor.
+     - Incluye CTA hacia las secciones clave: tutores, productos y contacto.
+=============================================================== -->
+<section class="pt-4">
+
+  <!-- ------------------------------------------------------------
+       ENCABEZADO DE LA PÁGINA
+       ------------------------------------------------------------
+       - Título principal sin subtítulo (ya se comunica en el contenido).
+       - display-6 → jerarquía visual uniforme con páginas similares.
+  -------------------------------------------------------------- -->
+  <div class="d-flex justify-content-between align-items-center mb-5">
+    <div>
+      <h2 class="mb-0 page-title display-6">
+        Conectamos música, personas e instrumentos
+      </h2>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       CARD PRINCIPAL: IMAGEN IZQUIERDA + CONTENIDO DERECHO
+       ------------------------------------------------------------
+       - Utiliza Bootstrap grid para asegurar responsividad.
+       - appFadeUp → animación de entrada desde el viewport.
+  =============================================================== -->
+  <div class="card shadow-sm overflow-hidden" appFadeUp>
+    <div class="row g-0">
+
+      <!-- --------------------------------------------------------
+           COLUMNA IZQUIERDA: IMAGEN PRINCIPAL
+           --------------------------------------------------------
+           - Imagen de amplia resolución, ocupando todo el alto.
+           - object-fit: cover; para evitar deformaciones.
+      ---------------------------------------------------------- -->
+      <div class="col-12 col-md-6">
+        <div class="h-100">
+          <img
+            src="assets/img/home/slider2.jpg"
+            alt="Clases de música e intercambio de instrumentos"
+            class="img-fluid w-100 h-100"
+            style="object-fit: cover;"
+          />
+        </div>
+      </div>
+
+      <!-- --------------------------------------------------------
+           COLUMNA DERECHA: CONTENIDO DEL PROYECTO
+           --------------------------------------------------------
+           - Intro → explicación corta del proyecto.
+           - Bloques de valor → beneficios y promesas del servicio.
+           - CTA al final.
+      ---------------------------------------------------------- -->
+      <div class="col-12 col-md-6 d-flex flex-column">
+        <div class="card-body p-4 p-lg-5 d-flex flex-column h-100">
+
+          <!-- INTRO DEL PROYECTO -->
+          <p class="text-secondary mb-3">
+            SoundSeeker nace como un proyecto local para <strong>Santiago</strong>, pensado para quienes
+            quieren aprender, mejorar o retomar la música sin perderse entre plataformas genéricas.
+          </p>
+
+          <p class="text-secondary mb-4">
+            Reunimos a <strong>tutores de guitarra, bajo y otros instrumentos</strong> con estudiantes reales, y al mismo tiempo
+            impulsamos la <strong>recirculación de instrumentos, amplificadores y pedales de segunda mano</strong> para que sigan
+            sonando en nuevas manos.
+          </p>
+
+          <!-- ====================================================
+               BLOQUES DE VALOR (4 atributos principales)
+               ----------------------------------------------------
+               - Íconos de Bootstrap Icons.
+               - Layout responsivo en 2×2.
+          ======================================================= -->
+          <div class="row g-3 mb-4">
+
+            <!-- TUTORES VERIFICADOS -->
+            <div class="col-12 col-sm-6">
+              <div class="d-flex gap-3">
+                <div class="fs-3">
+                  <i class="bi bi-people-fill"></i>
+                </div>
+                <div>
+                  <h3 class="h6 mb-1">Tutores verificados</h3>
+                  <p class="small text-secondary mb-0">
+                    Perfiles claros, experiencia, estilos y modalidades (presencial / online) definidos desde el inicio.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- INSTRUMENTOS CON HISTORIA -->
+            <div class="col-12 col-sm-6">
+              <div class="d-flex gap-3">
+                <div class="fs-3">
+                  <i class="bi bi-music-note"></i>
+                </div>
+                <div>
+                  <h3 class="h6 mb-1">Instrumentos con historia</h3>
+                  <p class="small text-secondary mb-0">
+                    Guitarras, bajos, pedales y amplis usados, descritos con cariño y foco en el estado real del equipo.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- ENFOQUE LOCAL -->
+            <div class="col-12 col-sm-6">
+              <div class="d-flex gap-3">
+                <div class="fs-3">
+                  <i class="bi bi-geo-alt-fill"></i>
+                </div>
+                <div>
+                  <h3 class="h6 mb-1">En tu comuna</h3>
+                  <p class="small text-secondary mb-0">
+                    Partimos en Huechuraba, pero con mirada a conectar barrios y comunas de todo Santiago.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- EXPERIENCIA SIMPLE -->
+            <div class="col-12 col-sm-6">
+              <div class="d-flex gap-3">
+                <div class="fs-3">
+                  <i class="bi bi-lightning-charge-fill"></i>
+                </div>
+                <div>
+                  <h3 class="h6 mb-1">Experiencia simple</h3>
+                  <p class="small text-secondary mb-0">
+                    Navegación clara, fichas completas y un panel admin pensado para crecer sin perder el control.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- ====================================================
+               CTA: ACCIONES PRINCIPALES
+               ----------------------------------------------------
+               - Botones en columna (mobile) y fila (desktop).
+               - Llevan a las secciones principales del proyecto.
+          ======================================================= -->
+          <div class="mt-auto pt-2">
+            <div class="d-flex flex-column flex-sm-row gap-2">
+              <a routerLink="/tutores" class="btn btn-primary w-100">
+                Buscar tutores
+              </a>
+              <a routerLink="/productos" class="btn btn-secondary w-100">
+                Ver instrumentos
+              </a>
+              <a routerLink="/contacto" class="btn btn-secondary w-100">
+                Contáctanos
+              </a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>

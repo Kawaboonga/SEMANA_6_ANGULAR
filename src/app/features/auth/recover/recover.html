@@ -1,0 +1,70 @@
+<!-- src/app/features/auth/recover-password/recover-password.component.html -->
+
+<div class="container py-4" appFadeUp>
+  <div class="row justify-content-center">
+    <div class="col-md-5">
+      <div class="card shadow-sm border-0">
+        <div class="card-body p-4">
+          <!-- ======================================================
+               TÍTULO + DESCRIPCIÓN DE LA PANTALLA
+               Explica de forma simple qué hace esta vista.
+          ======================================================= -->
+          <h1 class="h5 mb-3 text-center">Recuperar contraseña</h1>
+          <p class="text-muted small text-center mb-4">
+            Ingresa tu correo y te enviaremos un enlace para restablecer tu contraseña (simulado).
+          </p>
+
+          <!-- ======================================================
+               FORMULARIO REACTIVO
+               Conectado al FormGroup "form" del componente Recover.
+               onSubmit() maneja todo el flujo de validación y mensaje.
+          ======================================================= -->
+          <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+            <!-- CAMPO CORREO -->
+            <div class="mb-3">
+              <label class="form-label">Correo electrónico</label>
+              <input
+                type="email"
+                class="form-control"
+                formControlName="email"
+                [class.is-invalid]="
+                  hasError('email', 'required') ||
+                  hasError('email', 'email')
+                "
+              />
+              <!-- Errores específicos del campo email -->
+              <div class="invalid-feedback" *ngIf="hasError('email', 'required')">
+                El correo es obligatorio.
+              </div>
+              <div class="invalid-feedback" *ngIf="hasError('email', 'email')">
+                Debes ingresar un correo válido.
+              </div>
+            </div>
+
+            <!-- MENSAJE DE ERROR GLOBAL (correo no encontrado, etc.) -->
+            <div *ngIf="errorMessage" class="alert alert-danger py-2 small">
+              {{ errorMessage }}
+            </div>
+
+            <!-- MENSAJE DE ÉXITO (cuando recoverPassword responde OK) -->
+            <div *ngIf="message" class="alert alert-success py-2 small">
+              {{ message }}
+            </div>
+
+            <!-- BOTÓN DE ENVÍO
+                 Dispara onSubmit() en el componente.
+            -->
+            <button type="submit" class="btn btn-primary w-100">
+              Enviar instrucciones
+            </button>
+          </form>
+
+          <!-- ENLACE DE VUELTA AL LOGIN -->
+          <div class="text-center mt-3">
+            <a routerLink="/auth/login" class="small">Volver al login</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

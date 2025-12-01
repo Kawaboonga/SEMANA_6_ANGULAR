@@ -1,0 +1,127 @@
+<!-- src/app/features/auth/login/login.component.html -->
+
+<div class="container py-4" appFadeUp>
+  <div class="row justify-content-center">
+    <div class="col-lg-10 col-xl-9">
+      <div class="card shadow-sm border-0 overflow-hidden">
+        <div class="row g-0">
+
+          <!-- ============================================================
+               COLUMNA IZQUIERDA: IMAGEN 
+               Mantiene la card más visual y acompaña el formulario.
+          ============================================================ -->
+          <div class="col-12 col-md-6">
+            <div class="h-100">
+              <img
+                src="/assets/img/general/g6.png"
+                alt="Iniciar sesión"
+                class="img-fluid w-100 h-100 login-img"
+                style="object-fit: cover;"
+              />
+            </div>
+          </div>
+
+          <!-- ============================================================
+               COLUMNA DERECHA: FORMULARIO DE LOGIN
+               Form reactivo conectado a LoginComponent (form, onSubmit, hasError).
+          ============================================================ -->
+          <div class="col-12 col-md-6">
+            <div class="card-body p-4 p-lg-5">
+              <h1 class="h4 mb-4 text-center">Iniciar sesión</h1>
+
+              <!-- ======================================================
+                   FORMULARIO REACTIVO
+                   - Vinculado con [formGroup]="form"
+                   - onSubmit controla el flujo de login en login.ts
+              ======================================================= -->
+              <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+                <!-- CORREO -->
+                <div class="mb-3">
+                  <label class="form-label">Correo electrónico</label>
+                  <input
+                    type="email"
+                    class="form-control"
+                    formControlName="email"
+                    [class.is-invalid]="hasError('email', 'required') || hasError('email', 'email')"
+                  />
+                  <!-- Mensaje si el campo está vacío -->
+                  <div class="invalid-feedback" *ngIf="hasError('email', 'required')">
+                    El correo es obligatorio.
+                  </div>
+                  <!-- Mensaje si el formato no es válido -->
+                  <div class="invalid-feedback" *ngIf="hasError('email', 'email')">
+                    Debes ingresar un correo válido.
+                  </div>
+                </div>
+
+                <!-- CONTRASEÑA -->
+                <div class="mb-3">
+                  <label class="form-label">Contraseña</label>
+                  <input
+                    type="password"
+                    class="form-control"
+                    formControlName="password"
+                    [class.is-invalid]="hasError('password', 'required')"
+                  />
+                  <div class="invalid-feedback" *ngIf="hasError('password', 'required')">
+                    La contraseña es obligatoria.
+                  </div>
+                </div>
+
+                <!-- ==================================================
+                     ENLACE A RECUPERAR CONTRASEÑA
+                     Redirige al flujo de /auth/recover-password
+                =================================================== -->
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <a routerLink="/auth/recover-password" class="small">Olvidé mi contraseña</a>
+                </div>
+
+                <!-- MENSAJE DE ERROR GLOBAL (login.ts → errorMessage) -->
+                <div *ngIf="errorMessage" class="alert alert-danger py-2 small">
+                  {{ errorMessage }}
+                </div>
+
+                <!-- BOTÓN DE ENVÍO
+                     - Se deshabilita si el form es inválido o está en loading
+                     - El texto cambia según el estado de loading
+                -->
+                <button
+                  type="submit"
+                  class="btn btn-primary w-100"
+                  [disabled]="form.invalid || loading"
+                >
+                  <span *ngIf="!loading">Entrar</span>
+                  <span *ngIf="loading">Ingresando...</span>
+                </button>
+              </form>
+
+              <!-- ==================================================
+                   ENLACE A REGISTRO
+                   Para usuarios nuevos que aún no tienen cuenta
+              =================================================== -->
+              <div class="text-center mt-3">
+                <span class="small text-muted">¿Aún no tienes cuenta?</span>
+                <a routerLink="/auth/register" class="small ms-1">Crear cuenta</a>
+              </div>
+
+              <!-- ==================================================
+                   CREDENCIALES DE DEMO
+                   Solo para pruebas locales del login.
+                   admin → acceso a /admin
+              =================================================== -->
+              <div class="text-center mt-3">
+                <span class="small text-muted">admin@soundseeker.cl  -  Admin123</span>
+              </div>
+
+              <!-- Usuario estándar de ejemplo para pruebas de login -->
+              <div class="text-center mt-3">
+                <span class="small text-muted">user@soundseeker.cl  -  User123</span>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /.row g-0 -->
+      </div><!-- /.card -->
+    </div>
+  </div>
+</div>

@@ -1,0 +1,432 @@
+<!-- src/app/shared/forms/tutor-form/tutor-form.html -->
+
+<!-- ============================================================================
+FORMULARIO DE TUTOR
+----------------------------------------------------------------------------
+Este template se conecta al TutorFormComponent mediante [formGroup]="form".
+
+Ideas clave:
+- El (ngSubmit)="onSubmit()" dispara la lógica que arma el objeto Tutor.
+- Casi todo se basa en selects múltiples + helper onMultiSelectChange().
+- El formulario está pensado para alimentar la ficha de tutor (perfil público).
+=========================================================================== -->
+<form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+
+  <!-- ------------------------------------------------------------------------
+  BOTONES SUPERIORES (ACCESO RÁPIDO)
+  Mismo bloque que el final, pero arriba, para no obligar a scrollear hasta
+  abajo cuando el formulario ya está completo.
+  NOTA: hay dos bloques seguidos idénticos; se puede dejar solo uno si estorba.
+  ------------------------------------------------------------------------ -->
+  <div class="mt-4 d-flex justify-content-end gap-2">
+    <button
+      type="button"
+      class="btn btn-outline-secondary btn-sm"
+      (click)="onCancel()"
+    >
+      Cancelar
+    </button>
+    <button type="submit" class="btn btn-primary btn-sm">
+      Guardar tutor
+    </button>
+  </div>
+
+  <!-- (Bloque duplicado: mismo grupo de botones que el anterior.
+       Lo dejo igual a tu código original. Más adelante puedes eliminar
+       uno si sientes que es redundante.) -->
+  <div class="mt-4 d-flex justify-content-end gap-2">
+    <button
+      type="button"
+      class="btn btn-outline-secondary btn-sm"
+      (click)="onCancel()"
+    >
+      Cancelar
+    </button>
+    <button type="submit" class="btn btn-primary btn-sm">
+      Guardar tutor
+    </button>
+  </div>
+
+  <div class="row g-3">
+
+    <!-- --------------------------------------------------------------------
+    NOMBRE DEL TUTOR
+    Campo obligatorio.
+    - Se muestra en cards, fichas y listados.
+    - También sirve como base para generar el id/slug del tutor en el TS.
+    -------------------------------------------------------------------- -->
+    <div class="col-md-6">
+      <label class="form-label">Nombre del tutor</label>
+      <input
+        type="text"
+        class="form-control"
+        formControlName="name"
+        [class.is-invalid]="hasError('name', 'required')"
+      />
+      <div class="invalid-feedback" *ngIf="hasError('name', 'required')">
+        El nombre es obligatorio.
+      </div>
+    </div>
+
+    <!-- --------------------------------------------------------------------
+    COMUNA (UBICACIÓN PREDEFINIDA)
+    - Lista de comunas predefinidas de la RM (ver arreglo communes en TS).
+    - Obligatoria: permite filtrar tutores por zona como criterio real.
+    -------------------------------------------------------------------- -->
+    <div class="col-md-3">
+      <label class="form-label">Comuna (RM)</label>
+      <select
+        class="form-select"
+        formControlName="commune"
+        [class.is-invalid]="hasError('commune', 'required')"
+      >
+        <option value="">Selecciona una comuna</option>
+        <option *ngFor="let c of communes" [value]="c">
+          {{ c }}
+        </option>
+      </select>
+      <div class="invalid-feedback" *ngIf="hasError('commune', 'required')">
+        La comuna es obligatoria.
+      </div>
+    </div>
+
+    <!-- --------------------------------------------------------------------
+    CIUDAD
+    Campo opcional, pensado por si en el futuro hay más ciudades que Santiago.
+    -------------------------------------------------------------------- -->
+    <div class="col-md-3">
+      <label class="form-label">Ciudad</label>
+      <input
+        type="text"
+        class="form-control"
+        formControlName="city"
+        placeholder="Santiago"
+      />
+    </div>
+
+    <!-- --------------------------------------------------------------------
+    AVATAR (URL)
+    - Se usa en cards y perfil del tutor.
+    - Normalmente es una ruta relativa dentro de /assets.
+    - Si se deja vacío, el TS puede usar un avatar genérico por defecto.
+    -------------------------------------------------------------------- -->
+    <div class="col-12">
+      <label class="form-label">Avatar (URL)</label>
+      <input
+        type="text"
+        class="form-control"
+        formControlName="avatarUrl"
+        placeholder="assets/img/trainers/tutor-x.jpg"
+      />
+      <div class="form-text small">
+        Ruta relativa a <code>assets/</code>. Si se deja vacío, puedes usar un
+        avatar por defecto en el template.
+      </div>
+    </div>
+
+    <!-- --------------------------------------------------------------------
+    INSTRUMENTOS
+    - Select múltiple conectado al control "instruments" (array de strings).
+    - onMultiSelectChange() se encarga de actualizar el form correctamente.
+    - Obligatorio: define qué tipo de clases puede ofrecer el tutor.
+    -------------------------------------------------------------------- -->
+    <div class="col-md-6">
+      <label class="form-label">Instrumentos</label>
+      <select
+        class="form-select"
+        multiple
+        size="5"
+        formControlName="instruments"
+        (change)="onMultiSelectChange('instruments', $event)"
+        [class.is-invalid]="hasError('instruments', 'required')"
+      >
+        <option
+          *ngFor="let inst of instrumentOptions"
+          [value]="inst.value"
+        >
+          {{ inst.label }}
+        </option>
+      </select>
+      <div class="form-text small">
+        Mantén presionado Ctrl (Cmd en Mac) para seleccionar varios.
+      </div>
+      <div
+        class="invalid-feedback d-block"
+        *ngIf="hasError('instruments', 'required')"
+      >
+        Selecciona al menos un instrumento.
+      </div>
+    </div>
+
+    <!-- --------------------------------------------------------------------
+    ESTILOS
+    - Otro select múltiple para estilos musicales.
+    - Se guarda en "styles" (array de strings).
+    - Ayuda a matchear alumnos por gusto musical (rock, jazz, etc.).
+    -------------------------------------------------------------------- -->
+    <div class="col-md-6">
+      <label class="form-label">Estilos</label>
+      <select
+        class="form-select"
+        multiple
+        size="5"
+        formControlName="styles"
+        (change)="onMultiSelectChange('styles', $event)"
+        [class.is-invalid]="hasError('styles', 'required')"
+      >
+        <option *ngFor="let s of styleOptions" [value]="s">
+          {{ s | titlecase }}
+        </option>
+      </select>
+      <div class="form-text small">
+        Mantén presionado Ctrl (Cmd en Mac) para seleccionar varios estilos.
+      </div>
+      <div
+        class="invalid-feedback d-block"
+        *ngIf="hasError('styles', 'required')"
+      >
+        Selecciona al menos un estilo.
+      </div>
+    </div>
+
+    <!-- --------------------------------------------------------------------
+    MODALIDADES
+    - Define si el tutor hace clases presencial, online o ambas.
+    - Se guarda en "modalities" (array de strings).
+    - El texto de ayuda explica el uso combinado para "presencial y online".
+    -------------------------------------------------------------------- -->
+    <div class="col-md-6">
+      <label class="form-label">Modalidad</label>
+      <select
+        class="form-select"
+        multiple
+        size="3"
+        formControlName="modalities"
+        (change)="onMultiSelectChange('modalities', $event)"
+        [class.is-invalid]="hasError('modalities', 'required')"
+      >
+        <option *ngFor="let m of modalityOptions" [value]="m">
+          {{ m | titlecase }}
+        </option>
+      </select>
+      <div class="form-text small">
+        Selecciona "Presencial", "Online" o ambas para "Presencial y online".
+      </div>
+      <div
+        class="invalid-feedback d-block"
+        *ngIf="hasError('modalities', 'required')"
+      >
+        Selecciona al menos una modalidad.
+      </div>
+    </div>
+
+    <!-- --------------------------------------------------------------------
+    VALOR POR HORA
+    - Se muestra en el perfil del tutor (sidebar).
+    - Campo obligatorio → CLP con un mínimo 0.
+    - El step=1000 es solo por comodidad al editar.
+    -------------------------------------------------------------------- -->
+    <div class="col-md-6">
+      <label class="form-label">Valor por hora (CLP)</label>
+      <div class="input-group">
+        <span class="input-group-text">CLP</span>
+        <input
+          type="number"
+          class="form-control"
+          formControlName="hourlyRate"
+          min="0"
+          step="1000"
+          [class.is-invalid]="hasError('hourlyRate', 'required')"
+        />
+      </div>
+      <div
+        class="invalid-feedback d-block"
+        *ngIf="hasError('hourlyRate', 'required')"
+      >
+        El valor por hora es obligatorio.
+      </div>
+      <div class="form-text small">
+        Este valor se mostrará en el sidebar del perfil del tutor.
+      </div>
+    </div>
+
+    <!-- --------------------------------------------------------------------
+    RATING (PROMEDIO)
+    - Rating predefinido para no inventar decimales.
+    - Se muestra como "X.X ★" en la ficha.
+    -------------------------------------------------------------------- -->
+    <div class="col-md-3">
+      <label class="form-label">Rating</label>
+      <select
+        class="form-select"
+        formControlName="rating"
+      >
+        <option *ngFor="let r of ratingOptions" [ngValue]="r">
+          {{ r | number: '1.1-1' }} ★
+        </option>
+      </select>
+      <div class="form-text small">
+        Valor promedio que se mostrará en la ficha.
+      </div>
+    </div>
+
+    <!-- --------------------------------------------------------------------
+    CANTIDAD DE RESEÑAS
+    - Refuerza la percepción de experiencia (ej: 4.8 ★, 30 reseñas).
+    -------------------------------------------------------------------- -->
+    <div class="col-md-3">
+      <label class="form-label">Cantidad de reseñas</label>
+      <select
+        class="form-select"
+        formControlName="ratingCount"
+      >
+        <option *ngFor="let n of ratingCountOptions" [ngValue]="n">
+          {{ n }} reseñas
+        </option>
+      </select>
+    </div>
+
+    <!-- --------------------------------------------------------------------
+    DESCRIPCIÓN CORTA
+    - Obligatoria.
+    - Va en cards y resumen del perfil (el “pitch” del tutor).
+    -------------------------------------------------------------------- -->
+    <div class="col-12">
+      <label class="form-label">Descripción corta</label>
+      <textarea
+        class="form-control"
+        rows="2"
+        formControlName="shortDescription"
+        [class.is-invalid]="hasError('shortDescription', 'required')"
+        placeholder="Resumen breve del enfoque del tutor."
+      ></textarea>
+      <div
+        class="invalid-feedback"
+        *ngIf="hasError('shortDescription', 'required')"
+      >
+        La descripción corta es obligatoria.
+      </div>
+      <div class="form-text small">
+        Se usa en las cards y en el resumen del perfil.
+      </div>
+    </div>
+
+    <!-- --------------------------------------------------------------------
+    DESCRIPCIÓN COMPLETA
+    - Texto largo para el perfil completo.
+    - Aquí se puede desarrollar metodología, enfoque, etc.
+    -------------------------------------------------------------------- -->
+    <div class="col-12">
+      <label class="form-label">Descripción completa</label>
+      <textarea
+        class="form-control"
+        rows="4"
+        formControlName="fullDescription"
+        placeholder="Texto largo para el perfil del tutor."
+      ></textarea>
+    </div>
+
+    <!-- --------------------------------------------------------------------
+    EXPERIENCIA
+    - Años de docencia, bandas, giras, proyectos, etc.
+    - Aporta credibilidad al perfil.
+    -------------------------------------------------------------------- -->
+    <div class="col-md-6">
+      <label class="form-label">Experiencia</label>
+      <textarea
+        class="form-control"
+        rows="2"
+        formControlName="experience"
+        placeholder="Años de docencia, bandas, proyectos, etc."
+      ></textarea>
+    </div>
+
+    <!-- --------------------------------------------------------------------
+    FORMACIÓN
+    - Estudios formales, títulos, diplomados, cursos relevantes.
+    -------------------------------------------------------------------- -->
+    <div class="col-md-6">
+      <label class="form-label">Formación</label>
+      <textarea
+        class="form-control"
+        rows="2"
+        formControlName="education"
+        placeholder="Estudios, títulos, cursos relevantes."
+      ></textarea>
+    </div>
+
+    <!-- --------------------------------------------------------------------
+    IDIOMAS
+    - Select múltiple conectado al control "languages".
+    - Permite ofrecer clases en más de un idioma.
+    -------------------------------------------------------------------- -->
+    <div class="col-md-6">
+      <label class="form-label">Idiomas</label>
+      <select
+        class="form-select"
+        multiple
+        size="3"
+        formControlName="languages"
+        (change)="onMultiSelectChange('languages', $event)"
+        [class.is-invalid]="hasError('languages', 'required')"
+      >
+        <option *ngFor="let lang of languageOptions" [value]="lang">
+          {{ lang }}
+        </option>
+      </select>
+      <div class="form-text small">
+        Idiomas en los que puede impartir clases.
+      </div>
+      <div
+        class="invalid-feedback d-block"
+        *ngIf="hasError('languages', 'required')"
+      >
+        Selecciona al menos un idioma.
+      </div>
+    </div>
+
+    <!-- --------------------------------------------------------------------
+    DISPONIBILIDAD SEMANAL
+    - Select múltiple de presets (availabilityOptions).
+    - El componente TS los transforma en weeklyAvailability para que el
+      front pueda mostrarlos como badges tipo "Lun: 19:00, 20:00".
+    -------------------------------------------------------------------- -->
+    <div class="col-md-6">
+      <label class="form-label">Disponibilidad semanal</label>
+      <select
+        class="form-select"
+        multiple
+        size="4"
+        formControlName="availabilityIds"
+        (change)="onMultiSelectChange('availabilityIds', $event)"
+      >
+        <option *ngFor="let opt of availabilityOptions" [value]="opt.id">
+          {{ opt.label }}
+        </option>
+      </select>
+      <div class="form-text small">
+        Puedes elegir uno o más bloques de horario. Se transforman en
+        <code>weeklyAvailability</code> automáticamente al guardar.
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ------------------------------------------------------------------------
+  BOTONES INFERIORES
+  Repetición de las acciones para cuando el usuario llega al final del form.
+  Evita tener que scrollear hacia arriba para guardar o cancelar.
+  ------------------------------------------------------------------------ -->
+  <div class="mt-4 d-flex justify-content-end gap-2">
+    <button
+      type="button"
+      class="btn btn-outline-secondary btn-sm"
+      (click)="onCancel()"
+    >
+      Cancelar
+    </button>
+    <button type="submit" class="btn btn-primary btn-sm">
+      Guardar tutor
+    </button>
+  </div>
+</form>

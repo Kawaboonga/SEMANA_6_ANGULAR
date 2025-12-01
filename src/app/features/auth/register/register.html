@@ -1,0 +1,212 @@
+<!-- src/app/features/auth/register/register.component.html -->
+
+
+
+<div class="container py-4" appFadeUp>
+  <div class="row justify-content-center">
+    <div class="col-lg-10 col-xl-9">
+      <div class="card shadow-sm overflow-hidden">
+
+        <div class="row g-0">
+
+          <!-- IMAGEN IZQUIERDA -->
+          <div class="col-12 col-md-6">
+            <div class="h-100">
+              <img
+                src="/assets/img/general/g2.png"
+                alt="Registro"
+                class="img-fluid w-100 h-100 register-img"
+                style="object-fit: cover;"
+              />
+            </div>
+          </div>
+
+          <!-- COLUMNA FORMULARIO DERECHA -->
+          <div class="col-12 col-md-6">
+            <div class="card-body p-4 p-lg-5">
+              <h1 class="h4 mb-4 text-center">Crear cuenta</h1>
+
+              <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+                <!-- NOMBRE + APELLIDOS -->
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label">Nombre</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      formControlName="firstName"
+                      (keyup)="onNameKeyup()"
+                      [class.is-invalid]="hasError('firstName', 'required') || hasError('firstName', 'minlength')"
+                    />
+                    <div class="invalid-feedback" *ngIf="hasError('firstName', 'required')">
+                      El nombre es obligatorio.
+                    </div>
+                    <div class="invalid-feedback" *ngIf="hasError('firstName', 'minlength')">
+                      El nombre debe tener al menos 2 caracteres.
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label">Apellidos</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      formControlName="lastName"
+                      (keyup)="onNameKeyup()"
+                      [class.is-invalid]="hasError('lastName', 'required') || hasError('lastName', 'minlength')"
+                    />
+                    <div class="invalid-feedback" *ngIf="hasError('lastName', 'required')">
+                      El apellido es obligatorio.
+                    </div>
+                    <div class="invalid-feedback" *ngIf="hasError('lastName', 'minlength')">
+                      El apellido debe tener al menos 2 caracteres.
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Vista previa del nombre público -->
+                <div class="mb-3">
+                  <small class="text-muted">
+                    Nombre público:
+                    <strong *ngIf="displayNamePreview; else placeholderName">
+                      {{ displayNamePreview }}
+                    </strong>
+                    <ng-template #placeholderName>
+                      Aún no ingresas tu nombre completo.
+                    </ng-template>
+                  </small>
+                </div>
+
+                <!-- CORREO -->
+                <div class="mb-3">
+                  <label class="form-label">Correo electrónico</label>
+                  <input
+                    type="email"
+                    class="form-control"
+                    formControlName="email"
+                    [class.is-invalid]="hasError('email', 'required') || hasError('email', 'email')"
+                  />
+                  <div class="invalid-feedback" *ngIf="hasError('email', 'required')">
+                    El correo es obligatorio.
+                  </div>
+                  <div class="invalid-feedback" *ngIf="hasError('email', 'email')">
+                    Debes ingresar un correo válido.
+                  </div>
+                </div>
+
+                <!-- CONTRASEÑA + CONFIRMACIÓN -->
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label">Contraseña</label>
+                    <input
+                      type="password"
+                      class="form-control"
+                      formControlName="password"
+                      [class.is-invalid]="
+                        hasError('password', 'required') ||
+                        hasError('password', 'minlength') ||
+                        hasError('password', 'maxlength') ||
+                        hasError('password', 'weakPassword')
+                      "
+                    />
+                    <div class="invalid-feedback" *ngIf="hasError('password', 'required')">
+                      La contraseña es obligatoria.
+                    </div>
+                    <div class="invalid-feedback" *ngIf="hasError('password', 'minlength')">
+                      Debe tener al menos 6 caracteres.
+                    </div>
+                    <div class="invalid-feedback" *ngIf="hasError('password', 'maxlength')">
+                      No puede exceder 18 caracteres.
+                    </div>
+                    <div class="invalid-feedback" *ngIf="hasError('password', 'weakPassword')">
+                      Debe contener al menos un número y una letra mayúscula.
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label">Confirmar contraseña</label>
+                    <input
+                      type="password"
+                      class="form-control"
+                      formControlName="confirmPassword"
+                      [class.is-invalid]="
+                        hasError('confirmPassword', 'required') ||
+                        (form.errors?.['passwordsDontMatch'] && (form.touched || submitted))
+                      "
+                    />
+                    <div class="invalid-feedback" *ngIf="hasError('confirmPassword', 'required')">
+                      Debes confirmar la contraseña.
+                    </div>
+                    <div
+                      class="invalid-feedback"
+                      *ngIf="form.errors?.['passwordsDontMatch'] && (form.touched || submitted)"
+                    >
+                      Las contraseñas no coinciden.
+                    </div>
+                  </div>
+                </div>
+
+                <!-- FECHA DE NACIMIENTO -->
+                <div class="mb-3">
+                  <label class="form-label">Fecha de nacimiento</label>
+                  <input
+                    type="date"
+                    class="form-control"
+                    formControlName="dateOfBirth"
+                    [class.is-invalid]="hasError('dateOfBirth', 'required') || hasError('dateOfBirth', 'tooYoung')"
+                  />
+                  <div class="invalid-feedback" *ngIf="hasError('dateOfBirth', 'required')">
+                    La fecha de nacimiento es obligatoria.
+                  </div>
+                  <div class="invalid-feedback" *ngIf="hasError('dateOfBirth', 'tooYoung')">
+                    Debes tener al menos 13 años para registrarte.
+                  </div>
+                </div>
+
+                <!-- DIRECCIÓN -->
+                <div class="mb-3">
+                  <label class="form-label">Dirección de despacho (opcional)</label>
+                  <input type="text" class="form-control" formControlName="shippingAddress" />
+                </div>
+
+                <!-- MENSAJES GLOBALES -->
+                <div *ngIf="errorMessage" class="alert alert-danger py-2 small">
+                  {{ errorMessage }}
+                </div>
+                <div *ngIf="successMessage" class="alert alert-success py-2 small">
+                  {{ successMessage }}
+                </div>
+
+                <!-- BOTONES -->
+                <div class="d-flex flex-column gap-2">
+                  <button
+                    type="submit"
+                    class="btn btn-primary w-100"
+                    [disabled]="form.invalid"
+                  >
+                    Crear cuenta
+                  </button>
+
+                  <button
+                    type="button"
+                    class="btn btn-outline-secondary w-100"
+                    (click)="onReset()"
+                    [disabled]="!canResetForm"
+                  >
+                    Limpiar campos
+                  </button>
+                </div>
+              </form>
+
+              <div class="text-center mt-3">
+                <span class="small text-muted">¿Ya tienes cuenta?</span>
+                <a routerLink="/auth/login" class="small ms-1">Inicia sesión</a>
+              </div>
+            </div>
+          </div>
+          <!-- fin col formulario -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

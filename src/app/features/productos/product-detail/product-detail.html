@@ -1,0 +1,139 @@
+<!-- ============================================================================
+     PRODUCT DETAIL PAGE
+     Muestra el detalle completo de un producto individual.
+     Se activa mediante la ruta /productos/:slug
+     ----------------------------------------------------------------------------
+     Estructura:
+     - Card principal con imagen (izquierda) + contenido (derecha)
+     - Footer con botones de acción
+     - Estado para producto no encontrado
+============================================================================ -->
+
+<div class="py-2"></div>
+
+<!-- Si existe el producto, renderizamos el layout completo -->
+<div class="card overflow-hidden" appFadeUp *ngIf="product as p; else notFound">
+  <div class="row g-0">
+
+    <!-- ============================================================
+         COLUMNA IZQUIERDA — IMAGEN PRINCIPAL DEL PRODUCTO
+         Toma el 50% del card en pantallas md+
+    ============================================================ -->
+    <div class="col-md-6">
+      <div class="h-100 w-100">
+        <img
+          *ngIf="p.imageUrl"
+          [src]="p.imageUrl"
+          [alt]="p.name"
+          class="w-100 h-100 object-fit-cover"
+        />
+      </div>
+    </div>
+
+    <!-- ============================================================
+         COLUMNA DERECHA — INFORMACIÓN DEL PRODUCTO
+         Contiene: título, descripción, detalles y precio
+    ============================================================ -->
+    <div class="col-md-6 d-flex flex-column">
+      <div class="p-4 p-md-5 flex-grow-1">
+
+        <!-- TÍTULO DEL PRODUCTO -->
+        <h1 class="h3">{{ p.name }}</h1>
+        <hr>
+
+        <!-- Descripción corta o fallback a descripción principal -->
+        <p class="text-body-secondary">
+          {{ p.shortDescription || p.description }}
+        </p>
+
+        <hr>
+
+        <!-- Descripción principal -->
+        <p class="text-body-secondary">
+          {{ p.description }}
+        </p>
+
+        <hr>
+
+        <!-- ========================================================
+             BLOQUE DE ATRIBUTOS DEL PRODUCTO
+             Marca · Modelo · Año · Condición · Ubicación · Precio
+        ======================================================== -->
+        <div class="mb-4">
+
+          <p class="mb-1">
+            <strong>Categoría:</strong>
+            {{ p.category | titlecase }}
+          </p>
+
+          <p class="mb-1" *ngIf="p.brand">
+            <strong>Marca:</strong> {{ p.brand }}
+          </p>
+
+          <p class="mb-1" *ngIf="p.model">
+            <strong>Modelo:</strong> {{ p.model }}
+          </p>
+
+          <p class="mb-1" *ngIf="p.year">
+            <strong>Año:</strong> {{ p.year }}
+          </p>
+
+          <p class="mb-1" *ngIf="p.condition">
+            <strong>Condición:</strong> {{ p.condition | titlecase }}
+          </p>
+
+          <p class="mb-1" *ngIf="p.location">
+            <strong>Ubicación:</strong> {{ p.location }}
+          </p>
+
+          <!-- Precio actual -->
+          <p class="h4 mt-4 mb-0 fw-bold">
+            {{ p.price | currency:'CLP':'symbol':'1.0-0' }}
+          </p>
+
+          <!-- Precio anterior (si existe → se muestra tachado) -->
+          <p
+            class="text-decoration-line-through text-muted mb-0"
+            *ngIf="p.previousPrice"
+          >
+            {{ p.previousPrice | currency:'CLP':'symbol':'1.0-0' }}
+          </p>
+
+        </div>
+
+      </div>
+
+      <!-- ========================================================
+           FOOTER DEL CARD
+           Botones de acción:
+           - Contactar vendedor (CTA principal)
+           - Volver a productos
+      ======================================================== -->
+      <div class="p-4 border-top bg-dark d-flex gap-3 justify-content-start">
+
+        <button class="btn btn-primary flex-fill py-2">
+          Contactar vendedor
+        </button>
+
+        <a routerLink="/productos" class="btn btn-outline-light flex-fill py-2">
+          Volver a productos
+        </a>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ============================================================
+     ESTADO: PRODUCTO NO ENCONTRADO
+     Se muestra si 'product' es undefined/null
+============================================================ -->
+<ng-template #notFound>
+  <div class="container py-4">
+    <p>Producto no encontrado.</p>
+    <a routerLink="/productos" class="btn btn-outline-light btn-sm">
+      Volver a productos
+    </a>
+  </div>
+</ng-template>

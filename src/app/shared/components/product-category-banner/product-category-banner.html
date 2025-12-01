@@ -1,0 +1,41 @@
+<!-- =========================================================================
+     PRODUCT CATEGORY BANNER (HTML)
+     -------------------------------------------------------------------------
+     Filtro visual superior para categorías de productos.
+
+     Características:
+     - Cada botón representa una categoría (Guitarras, Bajos, Pedales, etc.).
+     - Usa clases CSS para estados (active, first, last).
+     - total responsive → en mobile vertical, en desktop horizontal.
+     - Controlado por el componente product-category-banner.ts
+     ========================================================================== -->
+
+<div class="category-banner d-flex flex-column flex-md-row">
+  
+  <!-- ===========================================================
+       Bucle de categorías del banner
+       * categories viene del .ts → claves + etiquetas
+       =========================================================== -->
+
+  <button
+    *ngFor="let c of categories; let i = index"
+    type="button"
+
+    class="category-btn flex-fill"
+    [class.active]="activeCategory === c.key"
+    [class.first]="i === 0"
+    [class.last]="i === categories.length - 1"
+
+    (click)="selectCategory(c.key)"
+  >
+
+  <!-- Estado activo (se aplica estilo visual destacado) -->
+  <!-- Esquinas redondeadas correctas según posición -->
+  <!-- Notifica al componente padre (ProductList) -->
+  <!-- Texto visible de la categoría -->
+
+    <!-- Texto visible de la categoría -->
+    {{ c.label }}
+  </button>
+  
+</div>

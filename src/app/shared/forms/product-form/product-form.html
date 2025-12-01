@@ -1,0 +1,246 @@
+<!-- ============================================================================
+FORMULARIO DE PRODUCTO
+----------------------------------------------------------------------------
+Este template trabaja junto con el FormGroup del ProductFormComponent.
+
+Detalles clave:
+- Todos los inputs están ligados a formControlName.
+- Las validaciones visuales dependen del helper hasError().
+- Secciones bien separadas: datos básicos, descripciones, detalles técnicos,
+  flags editoriales.
+- Botones de Guardar/Cancelar están duplicados arriba y abajo para mejorar
+  accesibilidad al editar formularios largos.
+=========================================================================== -->
+
+<form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+
+  <!-- ------------------------------------------------------------------------
+  ACCIONES SUPERIORES
+  Barra superior para cancelar/guardar sin tener que llegar al final del form.
+  Ideal cuando el usuario edita algo rápido.
+  ------------------------------------------------------------------------ -->
+  <div class="mb-3 d-flex justify-content-end gap-2">
+    <button type="button" class="btn btn-outline-secondary btn-sm" (click)="onCancel()">
+      Cancelar
+    </button>
+    <button type="submit" class="btn btn-primary btn-sm">
+      Guardar
+    </button>
+  </div>
+
+  <div class="row g-3">
+
+    <!-- --------------------------------------------------------------------
+    NOMBRE DEL PRODUCTO
+    Campo obligatorio. Se usa para:
+      - mostrar en cards y listados
+      - generar slug (si no existe uno previo)
+    -------------------------------------------------------------------- -->
+    <div class="col-md-6">
+      <label class="form-label">Nombre</label>
+      <input
+        class="form-control"
+        formControlName="name"
+        [class.is-invalid]="hasError('name','required')"
+      />
+      <div class="invalid-feedback" *ngIf="hasError('name','required')">
+        Obligatorio.
+      </div>
+    </div>
+
+    <!-- --------------------------------------------------------------------
+    CATEGORÍA
+    Determina dónde se agrupa el producto en el catálogo:
+      guitarras, bajos, pedales, amplificadores, etc.
+    También ayuda a filtrar en páginas de categoría.
+    -------------------------------------------------------------------- -->
+    <div class="col-md-3">
+      <label class="form-label">Categoría</label>
+      <select
+        class="form-select"
+        formControlName="category"
+        [class.is-invalid]="hasError('category','required')"
+      >
+        <!-- null = obliga a seleccionar -->
+        <option [ngValue]="null">Selecciona categoría</option>
+
+        <!-- Lista de categorías definida en categoryOptions -->
+        <option *ngFor="let c of categoryOptions" [ngValue]="c">
+          {{ c | titlecase }}
+        </option>
+      </select>
+    </div>
+
+    <!-- --------------------------------------------------------------------
+    PRECIO (CLP)
+    Campo obligatorio. Número mínimo = 0.
+    Nota: El form controla solo el valor. El formateo en moneda ocurre afuera.
+    -------------------------------------------------------------------- -->
+    <div class="col-md-3">
+      <label class="form-label">Precio (CLP)</label>
+      <input
+        type="number"
+        class="form-control"
+        formControlName="price"
+        [class.is-invalid]="hasError('price','required')"
+      />
+      <div class="invalid-feedback" *ngIf="hasError('price','required')">
+        Obligatorio.
+      </div>
+    </div>
+
+    <!-- --------------------------------------------------------------------
+    DESCRIPCIÓN CORTA
+    Se muestra en las cards y en listados.
+    Ideal para 1 o 2 líneas que describen rápidamente el producto.
+    -------------------------------------------------------------------- -->
+    <div class="col-12">
+      <label class="form-label">Descripción corta</label>
+      <textarea
+        class="form-control"
+        rows="2"
+        formControlName="shortDescription"
+      ></textarea>
+    </div>
+
+    <!-- --------------------------------------------------------------------
+    DESCRIPCIÓN COMPLETA
+    Obligatoria. Se muestra en la página de detalle del producto.
+    Debe tener suficiente información para compradores reales.
+    -------------------------------------------------------------------- -->
+    <div class="col-12">
+      <label class="form-label">Descripción completa</label>
+      <textarea
+        class="form-control"
+        rows="4"
+        formControlName="description"
+        [class.is-invalid]="hasError('description','required')"
+      ></textarea>
+      <div class="invalid-feedback" *ngIf="hasError('description','required')">
+        Obligatoria.
+      </div>
+    </div>
+
+    <!-- --------------------------------------------------------------------
+    MARCA DEL PRODUCTO
+    Opcional, pero útil para búsquedas y para mostrar en cards.
+    -------------------------------------------------------------------- -->
+    <div class="col-md-4">
+      <label class="form-label">Marca</label>
+      <input class="form-control" formControlName="brand" />
+    </div>
+
+    <!-- --------------------------------------------------------------------
+    MODELO DEL PRODUCTO
+    No obligatorio, pero importante para diferenciar versiones.
+    -------------------------------------------------------------------- -->
+    <div class="col-md-4">
+      <label class="form-label">Modelo</label>
+      <input class="form-control" formControlName="model" />
+    </div>
+
+    <!-- --------------------------------------------------------------------
+    AÑO
+    Útil para instrumentos usados o ediciones especiales.
+    Validado con min/max para evitar años imposibles.
+    -------------------------------------------------------------------- -->
+    <div class="col-md-4">
+      <label class="form-label">Año</label>
+      <input
+        class="form-control"
+        type="number"
+        min="1900"
+        max="2100"
+        formControlName="year"
+      />
+    </div>
+
+    <!-- --------------------------------------------------------------------
+    CONDICIÓN (estado del producto)
+    - nuevo
+    - usado
+    Ayuda a mostrar badges y diferenciar precio.
+    -------------------------------------------------------------------- -->
+    <div class="col-md-4">
+      <label class="form-label">Condición</label>
+      <select class="form-select" formControlName="condition">
+        <option *ngFor="let c of conditionOptions" [ngValue]="c">
+          {{ c | titlecase }}
+        </option>
+      </select>
+    </div>
+
+    <!-- --------------------------------------------------------------------
+    STOCK
+    Cantidad disponible. Permite manejar disponibilidad sin dar de baja
+    el producto completo.
+    -------------------------------------------------------------------- -->
+    <div class="col-md-4">
+      <label class="form-label">Stock</label>
+      <input type="number" class="form-control" formControlName="stock" />
+    </div>
+
+    <!-- --------------------------------------------------------------------
+    IMAGEN (URL)
+    Solo URL completa.
+    No se valida aquí el formato porque dependerá del hosting (Cloudinary, etc.)
+    -------------------------------------------------------------------- -->
+    <div class="col-md-4">
+      <label class="form-label">Imagen (URL)</label>
+      <input class="form-control" formControlName="imageUrl" />
+    </div>
+
+    <!-- --------------------------------------------------------------------
+    FLAGS EDITORIALES
+    Controlan cómo aparece el producto en distintas partes del sitio:
+      showInCarousel → aparece en carruseles del home
+      isFeatured     → aparece en tarjeta “destacados”
+      isOffer        → se etiqueta como oferta
+      isNew          → badge “Nuevo”
+      isActive       → si está despublicado, no aparece en ninguna parte
+    -------------------------------------------------------------------- -->
+    <div class="col-12 d-flex flex-wrap gap-3 mt-2">
+
+      <label class="form-check form-check-inline">
+        <input class="form-check-input" type="checkbox" formControlName="showInCarousel" />
+        <span class="form-check-label">Carrusel</span>
+      </label>
+
+      <label class="form-check form-check-inline">
+        <input class="form-check-input" type="checkbox" formControlName="isFeatured" />
+        <span class="form-check-label">Destacado</span>
+      </label>
+
+      <label class="form-check form-check-inline">
+        <input class="form-check-input" type="checkbox" formControlName="isOffer" />
+        <span class="form-check-label">Oferta</span>
+      </label>
+
+      <label class="form-check form-check-inline">
+        <input class="form-check-input" type="checkbox" formControlName="isNew" />
+        <span class="form-check-label">Nuevo</span>
+      </label>
+
+      <label class="form-check form-check-inline">
+        <input class="form-check-input" type="checkbox" formControlName="isActive" />
+        <span class="form-check-label">Publicado</span>
+      </label>
+
+    </div>
+  </div>
+
+  <!-- ------------------------------------------------------------------------
+  ACCIONES INFERIORES
+  Repetición de los botones para comodidad del usuario.
+  Después de un formulario largo, no tiene que scrollear de vuelta al inicio.
+  ------------------------------------------------------------------------ -->
+  <div class="mt-4 d-flex justify-content-end gap-2">
+    <button type="button" class="btn btn-outline-secondary btn-sm" (click)="onCancel()">
+      Cancelar
+    </button>
+    <button type="submit" class="btn btn-primary btn-sm">
+      Guardar
+    </button>
+  </div>
+
+</form>

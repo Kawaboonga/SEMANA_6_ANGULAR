@@ -1,0 +1,90 @@
+<!-- src/app/featured/cursos/cursos-list/cursos-list.html -->
+
+<section class="pt-4">
+
+  <!-- ============================================================
+       ENCABEZADO
+  ============================================================ -->
+  <div class="d-flex justify-content-between align-items-center mb-1 flex-wrap gap-2">
+    <div>
+      <h2 class="mb-1 display-6">Cursos disponibles</h2>
+      <p class="text-secondary">
+        Encuentra el curso que mejor se adapte a tu nivel y modalidad.
+      </p>
+    </div>
+  </div>
+
+  <div appFadeUp>
+
+    <!-- ============================================================
+         FILTROS (nivel + modalidad)
+    ============================================================ -->
+    <div class="card my-5">
+      <div class="card-body py-2">
+
+        <div class="d-flex flex-wrap align-items-center gap-3">
+
+          <!-- FILTRO: Nivel -->
+          <div class="d-flex align-items-center gap-2">
+            <label for="difficulty" class="form-label small mb-0">Nivel</label>
+
+            <select
+              id="difficulty"
+              class="form-select form-select-sm w-auto"
+              [ngModel]="selectedDifficulty"
+              (ngModelChange)="onDifficultyChange($event)"
+            >
+              <option value="todos">Todos</option>
+              <option *ngFor="let d of difficulties" [value]="d">
+                {{ d }}
+              </option>
+            </select>
+          </div>
+
+          <!-- FILTRO: Modalidad -->
+          <div class="d-flex align-items-center gap-2">
+            <label for="modality" class="form-label small mb-0">Modalidad</label>
+
+            <select
+              id="modality"
+              class="form-select form-select-sm w-auto"
+              [ngModel]="selectedModality"
+              (ngModelChange)="onModalityChange($event)"
+            >
+              <option value="todas">Todas</option>
+              <option *ngFor="let m of modalities" [value]="m">
+                {{ m }}
+              </option>
+            </select>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+
+    <!-- ============================================================
+         LISTADO DE CURSOS
+    ============================================================ -->
+    <div *ngIf="filtered.length; else emptyState" class="row g-4" appFadeUp>
+      <div
+        class="col-md-6 col-lg-3"
+        *ngFor="let course of filtered"
+      >
+        <app-course-card [course]="course"></app-course-card>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ============================================================
+       EMPTY STATE (sin resultados)
+  ============================================================ -->
+  <ng-template #emptyState>
+    <div class="text-center py-5 text-body-secondary" appFadeUp>
+      No hay cursos que coincidan con los filtros seleccionados.
+    </div>
+  </ng-template>
+
+</section>

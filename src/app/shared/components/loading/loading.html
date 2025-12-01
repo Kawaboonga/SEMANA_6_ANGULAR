@@ -1,0 +1,24 @@
+<!-- =========================================================================
+     LOADING OVERLAY (HTML)
+     -------------------------------------------------------------------------
+     Esta vista aparece únicamente cuando isLoading() === true.
+     El *ngIf es reactivo gracias al computed() del componente.
+     
+     - Cubre toda la pantalla (definido en loading.css)
+     - Muestra un spinner Bootstrap accesible
+     - Bloquea interacción mientras dura la carga
+   ========================================================================= -->
+
+<div *ngIf="isLoading()" class="loading-overlay">
+
+  <!-- Spinner centrado -->
+  <div 
+    class="spinner-border" 
+    role="status" 
+    aria-label="Cargando"
+  >
+    <!-- Accesibilidad: texto solo para lectores de pantalla -->
+    <span class="visually-hidden">Cargando...</span>
+  </div>
+
+</div>

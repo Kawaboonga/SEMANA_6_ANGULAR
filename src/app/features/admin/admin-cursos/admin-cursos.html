@@ -1,0 +1,155 @@
+<!-- src/app/features/admin/admin-cursos/admin-cursos.html -->
+
+<!-- Encabezado de la sección: título + botón para crear nuevo curso -->
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2 class="h5 mb-0">Cursos</h2>
+  <button class="btn btn-sm btn-primary" (click)="onCreate()">
+    <i class="bi bi-plus-lg me-1"></i> Nuevo curso
+  </button>
+</div>
+
+<div class="row">
+  <!-- Columna que muestra el formulario (solo cuando showForm = true) -->
+  <div class="col-lg-12">
+    <div class="card shadow-sm border-0" *ngIf="showForm">
+      <div class="card-body">
+        <!-- Título del form según si estoy creando o editando -->
+        <h3 class="h6 mb-3">
+          {{ selectedCourse ? 'Editar curso' : 'Nuevo curso' }}
+        </h3>
+
+        <!-- Formulario de curso reutilizable -->
+        <!-- [course] recibe el curso seleccionado (o null para crear) -->
+        <!-- (save) devuelve el curso listo para guardar -->
+        <!-- (cancel) cierra el formulario sin cambios -->
+        <app-course-form
+          [course]="selectedCourse"
+          (save)="handleSave($event)"
+          (cancel)="handleCancel()"
+        ></app-course-form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Columna con la tabla de cursos existentes -->
+  <div class="col-lg-12">
+    <div class="table-responsive mb-3">
+      <table class="table table-sm align-middle">
+        <thead class="table-light">
+          <tr>
+            <th>Título</th>
+            <th>Nivel</th>
+            <th>Horas</th>
+            <th>Clases</th>
+            <!-- Columnas de flags para controlar visibilidad/comportamiento -->
+            <th>Carousel</th>
+            <th>Dest</th>
+            <th>Oferta</th>
+            <th>Nuevo</th>
+            <th>Activo</th>
+            <!-- Columna para botones de acciones -->
+            <th style="width: 1%"></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <!-- Fila por cada curso cargado desde el servicio -->
+          <tr *ngFor="let c of courses">
+            <td>
+              <div class="fw-semibold small">{{ c.title }}</div>
+            </td>
+
+            <td class="small">
+              {{ c.level }}
+            </td>
+
+            <td class="small">
+              {{ c.durationHours }} h
+            </td>
+
+            <td class="small">
+              {{ c.totalLessons }}
+            </td>
+
+            <!-- Checkbox para mostrar u ocultar en carrusel -->
+            <td>
+              <input
+                type="checkbox"
+                class="form-check-input"
+                [checked]="c.showInCarousel"
+                (change)="onToggleFlag(c, 'showInCarousel')"
+              />
+            </td>
+
+            <!-- Checkbox para marcar como destacado -->
+            <td>
+              <input
+                type="checkbox"
+                class="form-check-input"
+                [checked]="c.isFeatured"
+                (change)="onToggleFlag(c, 'isFeatured')"
+              />
+            </td>
+
+            <!-- Checkbox para marcar como oferta -->
+            <td>
+              <input
+                type="checkbox"
+                class="form-check-input"
+                [checked]="c.isOffer"
+                (change)="onToggleFlag(c, 'isOffer')"
+              />
+            </td>
+
+            <!-- Checkbox para marcar como curso "nuevo" -->
+            <td>
+              <input
+                type="checkbox"
+                class="form-check-input"
+                [checked]="c.isNew"
+                (change)="onToggleFlag(c, 'isNew')"
+              />
+            </td>
+
+            <!-- Checkbox para activar/desactivar el curso en la web -->
+            <td>
+              <input
+                type="checkbox"
+                class="form-check-input"
+                [checked]="c.isActive"
+                (change)="onToggleFlag(c, 'isActive')"
+              />
+            </td>
+
+            <!-- Botones de acciones (editar / eliminar) -->
+            <td class="text-end">
+              <div class="btn-group btn-group-sm">
+                <button
+                  class="btn btn-outline-secondary"
+                  (click)="onEdit(c)"
+                  title="Editar curso"
+                >
+                  <i class="bi bi-pencil"></i>
+                </button>
+                <button
+                  class="btn btn-outline-danger"
+                  (click)="onDelete(c)"
+                  title="Eliminar curso"
+                >
+                  <i class="bi bi-trash"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+
+          <!-- Mensaje cuando no hay cursos -->
+          <tr *ngIf="courses.length === 0">
+            <td colspan="10" class="text-center text-muted small py-3">
+              Aún no hay cursos creados.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

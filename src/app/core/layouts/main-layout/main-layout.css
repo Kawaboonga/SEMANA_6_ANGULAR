@@ -1,0 +1,12 @@
+/* Hace que el layout principal ocupe todo el alto de la ventana */
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* El contenido central crece y empuja el footer hacia abajo */
+.layout-main {
+  flex: 1;
+  display: block;
+}

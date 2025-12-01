@@ -1,0 +1,142 @@
+<article class="card h-100 fade-up-card is-visible hover-lift-card">
+
+  <!-- ============================================================
+       BLOQUE: IMAGEN PRINCIPAL 16:9
+       ------------------------------------------------------------
+       Se usa ratio Bootstrap para mantener proporción uniforme
+       en todas las cards, independiente del tamaño original.
+       La imagen se muestra solo si existe imageUrl.
+    ============================================================ -->
+  <div class="ratio ratio-16x9" *ngIf="course.imageUrl">
+    <img
+      [src]="course.imageUrl"
+      [alt]="course.title"
+      class="card-img-top object-fit-cover"
+    />
+  </div>
+
+  <!-- ============================================================
+       CUERPO PRINCIPAL DE LA CARD
+    ============================================================ -->
+  <div class="card-body d-flex flex-column">
+
+    <!-- ======================================================
+         TÍTULO + TUTOR + BADGE DE DIFICULTAD
+         ------------------------------------------------------
+         El título está envuelto en un "stretched-link" para
+         que toda el área sea clickeable sin distorsionar estilos.
+      ====================================================== -->
+    <div class="d-flex justify-content-between align-items-start">
+      <div>
+        <!-- Link invisible que cubre todo el bloque -->
+        <a [routerLink]="['/cursos', course.slug]" class="stretched-link"></a>
+
+        <!-- Título del curso -->
+        <h5 class="mb-2">
+          {{ course.title }}
+        </h5>
+
+        <!-- Nombre del tutor -->
+        <p class="card-subtitle text-muted small pt-1">
+          {{ course.tutorName }}
+        </p>
+      </div>
+
+      <!-- Badge de dificultad (visual + rápido de leer) -->
+      <span class="badge bg-primary-subtle text-primary-emphasis small">
+        {{ course.difficulty }}
+      </span>
+    </div>
+
+
+    <!-- ======================================================
+         MODALIDADES (PRESENCIAL / ONLINE / HÍBRIDO)
+         ------------------------------------------------------
+         Se muestra cada modalidad con su ícono correspondiente.
+      ====================================================== -->
+    <div class="d-flex flex-wrap gap-2 text-body-secondary card-text pt-1">
+      <span
+        *ngFor="let m of course.modalities"
+        class="d-inline-flex align-items-center gap-1"
+      >
+        <!-- Ícono según modalidad -->
+        <i
+          class="bi"
+          [ngClass]="{
+            'bi-person-walking': m === 'Presencial',
+            'bi-camera-video': m === 'Online',
+            'bi-arrows-move': m === 'Híbrido'
+          }"
+        ></i>
+
+        <!-- Texto -->
+        {{ m | titlecase }}
+      </span>
+    </div>
+
+
+    <!-- ======================================================
+         META (Dificultad + duración condensada)
+         ------------------------------------------------------
+         Ej: "Intermedio · 16 h · 8 clases"
+      ====================================================== -->
+    <p class="card-text text-body-secondary small my-1 meta">
+      {{ meta }}
+    </p>
+
+
+    <!-- ======================================================
+         RATING (estrellas + cantidad)
+         ------------------------------------------------------
+         Se muestra únicamente si existe rating.
+      ====================================================== -->
+    <div
+      class="d-flex align-items-center gap-1 small text-warning my-1"
+      *ngIf="course.rating"
+    >
+      <i class="bi bi-star-fill"></i>
+      <span>{{ course.rating | number: '1.1-1' }}</span>
+
+      <span class="text-secondary" *ngIf="course.ratingCount">
+        ({{ course.ratingCount }})
+      </span>
+    </div>
+
+
+    <!-- ======================================================
+         DESCRIPCIÓN CORTA
+         ------------------------------------------------------
+         Resumen rápido para captar interés.
+      ====================================================== -->
+    <p class="card-text text-body-secondary small my-3 description">
+      {{ course.shortDescription }}
+    </p>
+
+  </div>
+
+  <!-- ============================================================
+       FOOTER (PRECIO + CTA)
+       ------------------------------------------------------------
+       Se mantiene fijo al final gracias a h-100 + flex-column.
+       El CTA queda a la derecha, precio destacado a la izquierda.
+    ============================================================ -->
+  <div class="card-footer py-3">
+    <div class="mt-auto d-flex justify-content-between align-items-center">
+      
+      <!-- Precio formateado a CLP -->
+      <div class="fw-semibold price">
+        {{ priceLabel }}
+      </div>
+
+      <!-- Botón a página de detalle -->
+      <a
+        [routerLink]="['/cursos', course.slug]"
+        class="btn btn-primary"
+      >
+        Ver curso
+      </a>
+
+    </div>
+  </div>
+
+</article>

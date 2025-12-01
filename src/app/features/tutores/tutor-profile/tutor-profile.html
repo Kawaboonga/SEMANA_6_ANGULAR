@@ -1,0 +1,414 @@
+<!-- =======================================================================
+     PERFIL DEL TUTOR
+     -----------------------------------------------------------------------
+     Plantilla principal del perfil.
+     Contiene:
+       • Header con avatar + info principal
+       • Tabs pegados al card
+       • Secciones: Perfil, Cursos, Reseñas, Equipos
+       • Sidebar con precio y CTA
+     ======================================================================= -->
+
+<!-- Vista principal cuando SÍ hay un tutor cargado -->
+<section class="page-shell" *ngIf="tutor as t">
+  <div appFadeUp>
+
+    <!-- ================================================================
+         HEADER DEL PERFIL
+         Foto + Nombre + Estilos + Niveles + Rating + Short Description
+         ================================================================ -->
+    <div class="d-flex align-items-center mb-4 gap-3">
+
+      <!-- Avatar del tutor -->
+      <div class="tutor-avatar">
+        <img
+          [src]="(t.avatarUrl || '').trim() || 'assets/img/trainers/marco-vidal.jpg'"
+          [alt]="t.name"
+          class="rounded-circle img-fluid"
+        />
+
+        <!-- DEBUG → puedes eliminarlo cuando quieras -->
+        <div class="text-danger small">avatarUrl: {{ t.avatarUrl }}</div>
+      </div>
+
+      <!-- Bloque de texto principal -->
+      <div>
+        <h1 class="mb-1 text-light">{{ t.name }}</h1>
+
+        <!-- Estilos + nivel -->
+        <p class="text-body-secondary mb-2">
+          {{ t.styles.join(' · ') | titlecase }} ·
+          {{ t.levelRange.join(' a ') | titlecase }}
+        </p>
+
+        <!-- Rating + instrumentos -->
+        <div class="d-flex flex-wrap gap-2 align-items-center mb-2">
+
+          <!-- Rating -->
+          <div class="d-flex align-items-center gap-1 small text-warning">
+            <i class="bi bi-star-fill"></i>
+            <span>{{ t.rating | number: '1.1-1' }}</span>
+            <span class="text-secondary">({{ t.ratingCount }})</span>
+          </div>
+
+          <!-- Instrumentos destacados como badge -->
+          <span class="badge bg-primary-subtle text-primary-emphasis small">
+            {{ t.instruments.join(' · ') | titlecase }}
+          </span>
+        </div>
+
+        <!-- Descripción corta -->
+        <p class="text-body-secondary mb-0">
+          {{ t.shortDescription }}
+        </p>
+      </div>
+    </div>
+
+    <!-- ================================================================
+         CUERPO PRINCIPAL (Tabs + Contenido)
+         ================================================================ -->
+    <div class="row g-4">
+
+      <!-- ================================
+           COLUMNA CENTRAL (TABS + CARD)
+           ================================ -->
+      <div class="col-lg-8">
+
+        <!-- Card contenedor del perfil -->
+        <div class="card bg-darky border-0 shadow-sm mb-3">
+
+          <!-- -----------------------------------------
+               TABS superiores pegados al borde del card
+               ----------------------------------------- -->
+          <div class="row-cols-1">
+            <div class="profile-tabs">
+
+              <!-- Tab PERFIL -->
+              <button
+                class="profile-tab"
+                type="button"
+                [class.active]="activeTab === 'perfil'"
+                (click)="setTab('perfil')"
+              >
+                Perfil
+              </button>
+
+              <!-- Tab CURSOS -->
+              <button
+                class="profile-tab"
+                type="button"
+                [class.active]="activeTab === 'cursos'"
+                (click)="setTab('cursos')"
+              >
+                Cursos
+              </button>
+
+              <!-- Tab RESEÑAS -->
+              <button
+                class="profile-tab"
+                type="button"
+                [class.active]="activeTab === 'resenas'"
+                (click)="setTab('resenas')"
+              >
+                Reseñas
+              </button>
+
+              <!-- Tab EQUIPO -->
+              <button
+                class="profile-tab"
+                type="button"
+                [class.active]="activeTab === 'equipo'"
+                (click)="setTab('equipo')"
+              >
+                Equipos &amp; sonido
+              </button>
+
+            </div>
+          </div>
+
+          <!-- -----------------------------------------
+               CONTENIDO DE LA TAB SELECCIONADA
+               ----------------------------------------- -->
+          <div class="card-body card-tab">
+
+            <!-- ============================================================
+                 TAB: PERFIL
+                 ============================================================ -->
+            <ng-container *ngIf="activeTab === 'perfil'">
+
+              <h4 class="mb-3 text-light">Acerca del tutor</h4>
+              <p class="text-body-secondary">
+                {{ t.fullDescription || t.shortDescription }}
+              </p>
+
+              <hr class="border-secondary-subtle my-4" />
+
+              <!-- GRID DE INFORMACIÓN -->
+              <div class="row g-4">
+
+                <!-- Instrumentos -->
+                <div class="col-md-6">
+                  <h6 class="text-muted text-uppercase small mb-2">
+                    Instrumentos
+                  </h6>
+
+                  <div class="d-flex flex-wrap gap-2">
+                    <span class="badge bg-secondary" *ngFor="let inst of t.instruments">
+                      {{ inst | titlecase }}
+                    </span>
+                  </div>
+                </div>
+
+                <!-- Estilos -->
+                <div class="col-md-6">
+                  <h6 class="text-muted text-uppercase small mb-2">Estilos</h6>
+
+                  <div class="d-flex flex-wrap gap-2">
+                    <span class="badge bg-secondary" *ngFor="let style of t.styles">
+                      {{ style | titlecase }}
+                    </span>
+                  </div>
+                </div>
+
+                <!-- Modalidad -->
+                <div class="col-md-6">
+                  <h6 class="text-muted text-uppercase small mb-2">Modalidad</h6>
+
+                  <div class="d-flex flex-wrap gap-2">
+
+                    <!-- Presencial -->
+                    <span
+                      *ngIf="t.modalities.includes('presencial')"
+                      class="badge rounded-pill bg-secondary d-inline-flex align-items-center gap-1"
+                    >
+                      <i class="bi bi-person-walking"></i>
+                      Presencial
+                    </span>
+
+                    <!-- Online -->
+                    <span
+                      *ngIf="t.modalities.includes('online')"
+                      class="badge rounded-pill bg-secondary d-inline-flex align-items-center gap-1"
+                    >
+                      <i class="bi bi-camera-video"></i>
+                      Online
+                    </span>
+
+                    <!-- Híbrido -->
+                    <span
+                      *ngIf="t.modalities.includes('presencial y online')"
+                      class="badge rounded-pill bg-secondary d-inline-flex align-items-center gap-1"
+                    >
+                      <i class="bi bi-person-walking"></i>
+                      <i class="bi bi-camera-video"></i>
+                      Presencial y Online
+                    </span>
+
+                  </div>
+                </div>
+
+                <!-- Experiencia -->
+                <div class="col-md-6">
+                  <h6 class="text-muted text-uppercase small mb-2">
+                    Experiencia
+                  </h6>
+                  <p class="mb-0">{{ t.experience }}</p>
+                </div>
+
+                <!-- Formación -->
+                <div class="col-md-6">
+                  <h6 class="text-muted text-uppercase small mb-2">
+                    Formación
+                  </h6>
+                  <p class="mb-0">{{ t.education }}</p>
+                </div>
+
+                <!-- Idiomas -->
+                <div class="col-md-6">
+                  <h6 class="text-muted text-uppercase small mb-2">Idiomas</h6>
+                  <p class="mb-0">{{ t.languages.join(', ') }}</p>
+                </div>
+
+              </div>
+
+              <hr class="border-secondary-subtle my-4" />
+
+              <!-- Disponibilidad semanal -->
+              <div>
+                <h6 class="text-muted text-uppercase small mb-2">
+                  Disponibilidad semanal
+                </h6>
+
+                <div class="d-flex flex-wrap gap-2">
+                  <span class="badge bg-secondary" *ngFor="let slot of t.weeklyAvailability">
+                    {{ slot.day }}: {{ slot.times.join(', ') }}
+                  </span>
+                </div>
+              </div>
+
+            </ng-container>
+
+            <!-- ============================================================
+                 TAB: CURSOS DEL TUTOR
+                 ============================================================ -->
+            <ng-container *ngIf="activeTab === 'cursos'">
+
+              <h5 class="mb-3 text-light">Cursos del tutor</h5>
+
+              <!-- Sin cursos -->
+              <p *ngIf="coursesFromTutor.length === 0" class="text-body-secondary mb-0">
+                Este tutor aún no tiene cursos publicados.
+              </p>
+
+              <!-- Grid de cursos -->
+              <div class="row g-3 fade-up" *ngIf="coursesFromTutor.length > 0">
+                <div class="col-12 col-md-6" *ngFor="let c of coursesFromTutor">
+                  <app-course-card [course]="c"></app-course-card>
+                </div>
+              </div>
+
+            </ng-container>
+
+            <!-- ============================================================
+                 TAB: RESEÑAS
+                 ============================================================ -->
+            <ng-container *ngIf="activeTab === 'resenas'">
+
+              <h5 class="mb-3 text-light">Reseñas</h5>
+
+              <p *ngIf="t.reviews.length === 0" class="text-body-secondary mb-0">
+                Aún no hay reseñas. Sé el primero en compartir tu experiencia.
+              </p>
+
+              <!-- Listado de reseñas -->
+              <div class="mb-3" *ngFor="let r of t.reviews">
+
+                <div class="d-flex justify-content-between">
+                  <strong>{{ r.author }}</strong>
+
+                  <span class="text-warning small">
+                    <i class="bi bi-star-fill me-1"></i>{{ r.rating }}
+                  </span>
+                </div>
+
+                <p class="mb-1 text-body-secondary">{{ r.comment }}</p>
+
+                <small class="text-muted">
+                  {{ r.createdAt | date }}
+                </small>
+
+                <hr class="my-3" />
+              </div>
+
+            </ng-container>
+
+            <!-- ============================================================
+                 TAB: EQUIPO / SETUP
+                 ============================================================ -->
+            <ng-container *ngIf="activeTab === 'equipo'">
+
+              <h5 class="mb-3 text-light">Equipo / Set up</h5>
+
+              <p *ngIf="t.gear.length === 0" class="text-body-secondary mb-0">
+                Todavía no ha compartido su equipo.
+              </p>
+
+              <!-- Equipos -->
+              <div class="row g-3" *ngFor="let g of t.gear">
+                <div class="col-12">
+
+                  <div class="d-flex gap-3">
+
+                    <!-- Imagen del gear -->
+                    <div class="gear-thumb" *ngIf="g.imageUrl">
+                      <img
+                        [src]="g.imageUrl"
+                        [alt]="g.name"
+                        class="rounded"
+                      />
+                    </div>
+
+                    <!-- Info del gear -->
+                    <div>
+                      <h6 class="mb-1 text-light">{{ g.name }}</h6>
+                      <p class="mb-1 text-body-secondary">
+                        {{ g.description }}
+                      </p>
+
+                      <small class="text-muted">
+                        Por qué lo usa: {{ g.reason }}
+                      </small>
+                    </div>
+
+                  </div>
+
+                </div>
+              </div>
+
+            </ng-container>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- ================================
+           SIDEBAR DERECHA
+           ================================ -->
+      <aside class="col-12 col-lg-4">
+
+        <div class="card bg-darky sticky-top" style="top: 90px">
+          <div class="card-body">
+
+            <!-- Precio por hora -->
+            <div class="d-flex justify-content-between align-items-baseline mb-2">
+              <h6 class="text-muted text-uppercase small mb-0">Precio por hora</h6>
+              <h3 class="mb-0 text-light">
+                ${{ t.hourlyRate | number: '1.0-0' }}
+              </h3>
+            </div>
+
+            <p class="small text-body-secondary mb-3">
+              Clases {{ t.modalities.join(', ') }} en {{ t.commune }}.
+            </p>
+
+            <!-- CTA: Iniciar sesión -->
+            <button class="btn btn-primary w-100 mb-3">
+              <i class="bi bi-box-arrow-in-right me-2"></i>
+              Iniciar sesión para reservar
+            </button>
+
+            <p class="small text-body-secondary mb-2">
+              Aquí podrías agregar un calendario o bloques futuros disponibles.
+            </p>
+
+            <!-- CTA secundaria -->
+            <div class="d-flex gap-2 mt-3">
+              <button class="btn btn-outline-light flex-fill" type="button">
+                <i class="bi bi-whatsapp"></i>
+              </button>
+            </div>
+
+            <!-- Volver -->
+            <div class="d-grid gap-2 mt-3">
+              <a routerLink="/tutores" class="btn btn-primary" type="button">
+                Volver a tutores
+              </a>
+            </div>
+
+          </div>
+        </div>
+
+      </aside>
+
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================
+     VISTA CUANDO NO EXISTE EL TUTOR
+     ================================================================ -->
+<section class="page-shell my-5" *ngIf="!tutor">
+  <p class="text-body-secondary">
+    No encontramos este tutor.
+  </p>
+</section>

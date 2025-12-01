@@ -1,0 +1,14 @@
+.object-fit-cover {
+  object-fit: cover;
+}
+
+.card {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  .col-md-6 img {
+    max-height: 300px;
+  }
+}

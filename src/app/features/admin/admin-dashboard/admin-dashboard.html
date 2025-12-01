@@ -1,0 +1,75 @@
+<!-- src/app/features/admin/admin-dashboard/admin-dashboard.html -->
+
+<div class="container-fluid" appFadeUp>
+  <!-- ============================================================
+       FILA DE MÉTRICAS PRINCIPALES (tutores, productos, usuarios)
+  ============================================================ -->
+  <div class="row g-3 mb-4">
+    <!-- CARD TUTORES: total y destacados -->
+    <div class="col-md-4">
+      <div class="card shadow-sm border-0">
+        <div class="card-body">
+          <h2 class="h6 text-uppercase text-muted mb-2">Tutores</h2>
+          <div class="d-flex align-items-baseline gap-2">
+            <!-- totalTutores() viene del dashboard.ts (signal con computed) -->
+            <span class="display-6 fw-bold">{{ totalTutores() }}</span>
+            <span class="text-muted">registrados</span>
+          </div>
+          <p class="small text-muted mb-0">
+            Destacados (rating ≥ 4.5): {{ destacadosTutores().length }}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARD PRODUCTOS: total y cuántos se muestran en carrusel -->
+    <div class="col-md-4">
+      <div class="card shadow-sm border-0">
+        <div class="card-body">
+          <h2 class="h6 text-uppercase text-muted mb-2">Productos</h2>
+          <div class="d-flex align-items-baseline gap-2">
+            <!-- totalProductos() se calcula desde AdminDataService.products -->
+            <span class="display-6 fw-bold">{{ totalProductos() }}</span>
+            <span class="text-muted">activos</span>
+          </div>
+          <p class="small text-muted mb-0">
+            En carrusel: {{ productosEnCarrusel() }}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARD USUARIOS: usuarios internos del panel (admin/editor/viewer) -->
+    <div class="col-md-4">
+      <div class="card shadow-sm border-0">
+        <div class="card-body">
+          <h2 class="h6 text-uppercase text-muted mb-2">Usuarios</h2>
+          <div class="d-flex align-items-baseline gap-2">
+            <!-- totalUsuarios() se basa en AdminDataService.users -->
+            <span class="display-6 fw-bold">{{ totalUsuarios() }}</span>
+            <span class="text-muted">registrados</span>
+          </div>
+          <p class="small text-muted mb-0">
+            Gestión de cuentas y roles desde el módulo de usuarios.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       BLOQUE INFORMATIVO / AYUDA RÁPIDA DEL PANEL
+       (texto para recordar qué controlan los flags del admin)
+  ============================================================ -->
+  <div class="card shadow-sm border-0">
+    <div class="card-body">
+      <h2 class="h6 text-uppercase text-muted mb-3">Resumen rápido</h2>
+      <p class="mb-0 text-muted small">
+        Desde este panel puedes gestionar tutores, productos y usuarios.
+        Los flags de <code>showInCarousel</code>, <code>isFeatured</code>,
+        <code>isOffer</code> e <code>isNew</code> en productos controlan qué
+        aparece en los carruseles del sitio público.
+      </p>
+    </div>
+  </div>
+</div>

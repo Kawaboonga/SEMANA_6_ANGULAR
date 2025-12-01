@@ -1,0 +1,23 @@
+<!-- Navbar global del sitio.
+     Se mantiene fijo arriba para tener navegación consistente en todas las páginas. -->
+<app-navbar></app-navbar>
+
+<!-- Contenedor principal del layout.
+     flex-grow-1 permite que esta sección ocupe todo el espacio entre navbar y footer. -->
+<main class="flex-grow-1 page-shell">
+  <div class="container">
+    
+    <!-- Miga de pan (breadcrumb).
+         Se muestra justo antes del contenido principal de cada página
+         para que el usuario sepa exactamente dónde está navegando. -->
+    <app-breadcrumb></app-breadcrumb> 
+
+    <!-- Aquí Angular renderiza el componente correspondiente a la ruta actual.
+         Básicamente todo lo que cambia de página en página aparece aquí. -->
+    <router-outlet></router-outlet>
+  </div>
+</main>
+
+<!-- Footer global del sitio.
+     Siempre visible al final y fuera del router-outlet. -->
+<app-footer></app-footer>

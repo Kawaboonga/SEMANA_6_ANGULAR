@@ -1,0 +1,349 @@
+<div
+  class="carousel slide ss-carousel"
+  [id]="carouselId"
+  data-bs-ride="carousel"
+  data-bs-interval="3000"
+  data-bs-pause="hover"
+>
+  <!--
+    CONTENEDOR DE SLIDES
+    --------------------
+    Bootstrap requiere:
+    - .carousel-inner
+    - dentro, varios .carousel-item
+  -->
+  <div class="carousel-inner pb-5">
+
+    <!--
+      RECORRIDO DE SLIDES
+      -------------------
+      `slides` es un array de "páginas".
+      Cada `slide` contiene varios `item` (cards).
+      - La primera slide (i === 0) se marca como .active
+    -->
+    <div
+      class="carousel-item"
+      *ngFor="let slide of slides; let i = index"
+      [class.active]="i === 0"
+    >
+      <div class="row g-4">
+        <!--
+          COLUMNA DE CADA ITEM
+          --------------------
+          - getColClass() define las columnas según type / breakpoint.
+          - trackById → optimiza *ngFor.
+        -->
+        <div
+          class="col-12 col-sm-6"
+          [ngClass]="getColClass()"
+          *ngFor="let item of slide; trackBy: trackById"
+        >
+          <!--
+            SWITCH GLOBAL POR TIPO
+            ======================
+            type:
+              - 'tutor'     → usa <app-tutor-card>
+              - 'product'   → layout de producto
+              - 'course'    → layout de curso
+              - 'highlight' → destacados
+              - 'offer'     → ofertas
+              - 'news'      → noticias
+              - default     → layout genérico
+          -->
+          <ng-container [ngSwitch]="type">
+
+            <!-- ================================================== -->
+            <!-- 🟦 TUTORES (usa el componente <app-tutor-card>)    -->
+            <!-- ================================================== -->
+            <ng-container *ngSwitchCase="'tutor'">
+              <app-tutor-card
+                [tutor]="$any(item)"
+                variant="carousel"
+                [descriptionMaxLength]="100"
+              ></app-tutor-card>
+            </ng-container>
+
+            <!-- ================================================== -->
+            <!-- 🟨 RESTO DE TIPOS (PRODUCT, COURSE, NEWS, etc.)    -->
+            <!-- ================================================== -->
+            <ng-container *ngSwitchDefault>
+              <div class="card h-100 carousel-card hover-lift">
+                <!--
+                  IMAGEN PRINCIPAL + BADGES
+                  ------------------------
+                  - imageUrl: imagen del item
+                  - badge: etiqueta (ej: "Nuevo", "Hot", etc.)
+                  - dateLabel: etiqueta de fecha (ej: "NOV 2025")
+                -->
+                <div class="position-relative">
+                  <img
+                    class="card-img-top"
+                    [src]="$any(item).imageUrl"
+                    [alt]="$any(item).title"
+                  />
+
+                  <!-- Badge principal -->
+                  <span
+                    *ngIf="$any(item).badge"
+                    class="badge position-absolute top-0 start-0 m-2 badge-pill"
+                  >
+                    {{ $any(item).badge }}
+                  </span>
+
+                  <!-- Fecha / label lateral -->
+                  <div
+                    *ngIf="$any(item).dateLabel"
+                    class="date-badge position-absolute top-0 end-0 m-2"
+                  >
+                    {{ $any(item).dateLabel }}
+                  </div>
+                </div>
+
+                <!--
+                  CUERPO DE LA CARD
+                  -----------------
+                  El contenido interno también se ramifica según `type`.
+                -->
+                <div class="card-body d-flex flex-column">
+                  <ng-container [ngSwitch]="type">
+
+                    <!-- ================== -->
+                    <!-- 🟧 PRODUCTOS        -->
+                    <!-- ================== -->
+                    <ng-container *ngSwitchCase="'product'">
+                      <h5 class="card-title mb-1">
+                        {{ $any(item).title }}
+                      </h5>
+
+                      <p
+                        class="small text-muted mb-1"
+                        *ngIf="$any(item).subtitle"
+                      >
+                        {{ $any(item).subtitle }}
+                      </p>
+
+                      <!-- Precio + precio anterior -->
+                      <div
+                        class="mb-1"
+                        *ngIf="$any(item).price !== undefined"
+                      >
+                        <span class="fw-bold price">
+                          ${{ $any(item).price | number : '1.0-0' }}
+                        </span>
+
+                        <span
+                          class="text-muted text-decoration-line-through small ms-2"
+                          *ngIf="$any(item).previousPrice !== undefined"
+                        >
+                          ${{ $any(item).previousPrice | number : '1.0-0' }}
+                        </span>
+                      </div>
+
+                      <p
+                        class="small mb-2"
+                        *ngIf="$any(item).description"
+                      >
+                        {{ $any(item).description }}
+                      </p>
+                    </ng-container>
+
+                    <!-- ================== -->
+                    <!-- 🟪 CURSOS           -->
+                    <!-- ================== -->
+                    <ng-container *ngSwitchCase="'course'">
+                      <h5 class="card-title mb-1">
+                        {{ $any(item).title }}
+                      </h5>
+
+                      <p class="small text-muted mb-1">
+                        {{ $any(item).level || 'Todos los niveles' }}
+                        <span *ngIf="$any(item).subtitle">
+                          · {{ $any(item).subtitle }}
+                        </span>
+                      </p>
+
+                      <p
+                        class="small mb-2"
+                        *ngIf="$any(item).description"
+                      >
+                        {{ $any(item).description }}
+                      </p>
+
+                      <p
+                        class="small mb-2"
+                        *ngIf="$any(item).price !== undefined"
+                      >
+                        Desde
+                        <span class="fw-bold">
+                          ${{ $any(item).price | number : '1.0-0' }}
+                        </span>
+                      </p>
+                    </ng-container>
+
+                    <!-- ================== -->
+                    <!-- ⭐ DESTACADOS       -->
+                    <!-- ================== -->
+                    <ng-container *ngSwitchCase="'highlight'">
+                      <h5 class="card-title mb-1">
+                        {{ $any(item).title }}
+                      </h5>
+
+                      <p
+                        class="small text-muted mb-1"
+                        *ngIf="$any(item).subtitle"
+                      >
+                        {{ $any(item).subtitle }}
+                      </p>
+
+                      <p
+                        class="small mb-2"
+                        *ngIf="$any(item).description"
+                      >
+                        {{ $any(item).description }}
+                      </p>
+                    </ng-container>
+
+                    <!-- ================== -->
+                    <!-- 💸 OFERTAS         -->
+                    <!-- ================== -->
+                    <ng-container *ngSwitchCase="'offer'">
+                      <h5 class="card-title mb-1">
+                        {{ $any(item).title }}
+                      </h5>
+
+                      <p
+                        class="small text-muted mb-1"
+                        *ngIf="$any(item).subtitle"
+                      >
+                        {{ $any(item).subtitle }}
+                      </p>
+
+                      <div
+                        class="mb-1"
+                        *ngIf="$any(item).price !== undefined"
+                      >
+                        <span class="fw-bold price">
+                          ${{ $any(item).price | number : '1.0-0' }}
+                        </span>
+
+                        <span
+                          class="text-muted text-decoration-line-through small ms-2"
+                          *ngIf="$any(item).previousPrice !== undefined"
+                        >
+                          ${{ $any(item).previousPrice | number : '1.0-0' }}
+                        </span>
+                      </div>
+
+                      <p
+                        class="small mb-2"
+                        *ngIf="$any(item).description"
+                      >
+                        {{ $any(item).description }}
+                      </p>
+                    </ng-container>
+
+                    <!-- ================== -->
+                    <!-- 📰 NEWS / NOVEDADES -->
+                    <!-- ================== -->
+                    <ng-container *ngSwitchCase="'news'">
+                      <h5 class="card-title mb-1">
+                        {{ $any(item).title }}
+                      </h5>
+
+                      <p
+                        class="small text-muted mb-1"
+                        *ngIf="$any(item).subtitle"
+                      >
+                        {{ $any(item).subtitle }}
+                      </p>
+
+                      <p
+                        class="small mb-2"
+                        *ngIf="$any(item).description"
+                      >
+                        {{ $any(item).description }}
+                      </p>
+                    </ng-container>
+
+                    <!-- ================== -->
+                    <!-- DEFAULT GENÉRICO   -->
+                    <!-- ================== -->
+                    <ng-container *ngSwitchDefault>
+                      <h5 class="card-title mb-1">
+                        {{ $any(item).title }}
+                      </h5>
+
+                      <p
+                        class="small mb-2"
+                        *ngIf="$any(item).description"
+                      >
+                        {{ $any(item).description }}
+                      </p>
+                    </ng-container>
+                  </ng-container>
+
+                  <!--
+                    FOOTER DE LA CARD
+                    -----------------
+                    - rating (si existe)
+                    - botón CTA (si existe ctaLabel/ctaLink)
+                  -->
+                  <div class="mt-auto pt-3">
+                    <!-- Rating -->
+                    <div
+                      *ngIf="$any(item).rating !== undefined"
+                      class="rating-row d-flex align-items-center mb-2 small"
+                    >
+                      <span class="rating-icon me-1">⭐</span>
+                      <span class="rating-text">
+                        {{ $any(item).rating }} / 5
+                      </span>
+                    </div>
+
+                    <!-- CTA -->
+                    <a
+                      *ngIf="$any(item).ctaLabel"
+                      class="btn btn-cta"
+                      [href]="$any(item).ctaLink || '#'"
+                    >
+                      {{ $any(item).ctaLabel }}
+                    </a>
+                  </div>
+
+                </div>
+              </div>
+            </ng-container>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--
+    CONTROLES INFERIORES PERSONALIZADOS
+    -----------------------------------
+    - Solo se muestran si hay más de 1 slide.
+    - Usan data-bs-target y data-bs-slide para hablar con el carrusel Bootstrap.
+  -->
+  <div class="ss-bottom-controls" *ngIf="slides.length > 1">
+    <button
+      class="ss-nav-pill ss-nav-pill-prev"
+      type="button"
+      [attr.data-bs-target]="'#' + carouselId"
+      data-bs-slide="prev"
+      aria-label="Anterior"
+    >
+      <i class="bi bi-arrow-left"></i>
+    </button>
+
+    <button
+      class="ss-nav-pill ss-nav-pill-next"
+      type="button"
+      [attr.data-bs-target]="'#' + carouselId"
+      data-bs-slide="next"
+      aria-label="Siguiente"
+    >
+      <i class="bi bi-arrow-right"></i>
+    </button>
+  </div>
+</div>

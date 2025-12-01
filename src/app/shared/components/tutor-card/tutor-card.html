@@ -1,0 +1,133 @@
+<!-- ============================================================================
+TUTOR CARD
+------------------------------------------------------------------------------
+Card reutilizable para mostrar un tutor en el GRID y en el CAROUSEL.
+
+Estructura:
+  • Imagen / avatar reducido
+  • Nombre, instrumentos, modalidades, rating
+  • Descripción (opcional y truncada)
+  • Estilos en badges
+  • Footer con precio por hora + botón Ver perfil
+
+La lógica visual depende de:
+  → [variant] (carousel / grid)
+  → [showDescription]
+  → [descriptionMaxLength]
+============================================================================ -->
+
+<div class="card hover-lift h-100 flex-fill tutor-card">
+
+  <!-- ============================================================
+       HEADER: Imagen del tutor
+       - En este diseño se usa una imagen rectangular pequeña tipo banner.
+       - fallback si falta avatarUrl.
+  ============================================================ -->
+  <div class="card-header">
+    <img 
+      [src]="tutor.avatarUrl || 'assets/img/trainers/marco-vidal.jpg'"
+      [alt]="tutor.name"
+      class="card-img-top img-fluid tutor-avatar-sm"
+    />
+  </div>
+
+
+  <!-- ============================================================
+       CUERPO PRINCIPAL DE LA CARD
+  ============================================================ -->
+  <div class="card-body d-flex flex-column">
+
+    <!-- ------------------------------------------------------------
+         NOMBRE + INSTRUMENTOS + MODALIDADES + RATING
+    ------------------------------------------------------------- -->
+    <div>
+      <!-- Nombre -->
+      <h5 class="card-title tutor-title mb-1">{{ tutor.name }}</h5>
+
+      <!-- Instrumentos (guitarra, bajo, etc.) -->
+      <p class="card-subtitle text-muted small mb-1 tutor-subtitle">
+        {{ tutor.instruments.join(' · ') | titlecase }}
+      </p>
+
+      <!-- Modalidades (presencial / online) con íconos -->
+      <div class="d-flex flex-wrap gap-2">
+        <div
+          class="d-flex align-items-center gap-1 small"
+          *ngFor="let m of tutor.modalities"
+        >
+          <i
+            class="bi"
+            [ngClass]="{
+              'bi-person-walking': m === 'presencial',
+              'bi-camera-video': m === 'online'
+            }"
+          ></i>
+          <span>{{ m | titlecase }}</span>
+        </div>
+      </div>
+
+      <!-- Rating -->
+      <div class="d-flex align-items-center gap-1 small text-warning py-2">
+        <i class="bi bi-star-fill"></i>
+        <span>{{ tutor.rating | number: '1.1-1' }}</span>
+        <span class="text-secondary">({{ tutor.ratingCount }})</span>
+      </div>
+    </div>
+
+
+    <!-- ------------------------------------------------------------
+         DESCRIPCIÓN (solo si showDescription === true)
+    ------------------------------------------------------------- -->
+    <p
+      *ngIf="showDescription"
+      class="card-text text-body-secondary mb-3 tutor-description"
+    >
+      <!-- Usa shortDescription si existe; si no, trunca fullDescription -->
+      {{ tutor.shortDescription || (tutor.fullDescription | truncate: descriptionMaxLength) }}
+    </p>
+
+
+    <!-- ------------------------------------------------------------
+         ESTILOS MUSICALES (rock, funk, jazz...)
+         Cada estilo representado como badge.
+    ------------------------------------------------------------- -->
+    <div class="mb-3">
+      <span
+        class="badge bg-secondary me-1 mb-1"
+        *ngFor="let style of tutor.styles"
+      >
+        {{ style | titlecase }}
+      </span>
+    </div>
+
+  </div>
+
+
+
+  <!-- ============================================================
+       FOOTER: Precio + CTA "Ver perfil"
+       - Siempre fijo al fondo de la card.
+  ============================================================ -->
+  <div class="card-footer py-3">
+    <div class="mt-auto d-flex justify-content-between align-items-center">
+
+      <!-- Precio -->
+      <div class="text-sm">
+        <div class="fw-semibold">
+          ${{ tutor.hourlyRate | number: '1.0-0' }}
+        </div>
+        <div class="text-muted small">por hora</div>
+      </div>
+
+      <!-- CTA -->
+      <a
+        class="btn btn-cta"
+        [routerLink]="['/tutores', tutor.id]"
+      >
+        Ver perfil
+      </a>
+
+    </div>
+  </div>
+
+</div>

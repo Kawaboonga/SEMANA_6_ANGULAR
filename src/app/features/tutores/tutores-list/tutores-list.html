@@ -1,0 +1,78 @@
+<section class="py-4">
+
+  <!-- ============================================================
+       ENCABEZADO DE LA PÁGINA
+       ------------------------------------------------------------
+       Título + subtítulo. No tiene lógica, solo texto estático.
+  ============================================================ -->
+  <h2 class="text-light display-6">Instructores disponibles</h2>
+  <p class="text-secondary pb-4">
+    Encuentra un tutor que mejor se adapte a tu nivel y modalidad.
+  </p>
+
+
+  <!-- ============================================================
+       CONTENEDOR PRINCIPAL (animación fade)
+       ------------------------------------------------------------
+       Todo el bloque interno hace fade-up cuando aparece.
+  ============================================================ -->
+  <div appFadeUp>
+
+    <!-- ============================================================
+         BARRA DE FILTROS (DUMB COMPONENT)
+         ------------------------------------------------------------
+         - Recibe los valores del filtro actual mediante @Input
+         - Emite eventos:
+             • filterChange → cuando cambia un campo
+             • reset        → cuando se presionan “limpiar filtros”
+    ============================================================ -->
+    <!-- Estado actual del filtro -->
+    <!-- Cambios parciales -->
+    <!-- Reset completo -->
+    <app-tutor-filter-bar
+      [filter]="filter()"                     
+      (filterChange)="onFilterChange($event)"  
+      (reset)="onResetFilter()"               
+      class="mb-4"
+    ></app-tutor-filter-bar>
+
+
+    <!-- ============================================================
+         LISTADO DE TUTORES FILTRADOS
+         ------------------------------------------------------------
+         - tutors() es un computed() → se recalcula automático
+         - Se usa grid de Bootstrap
+         - Cada tutor usa app-tutor-card (dumb component)
+    ============================================================ -->
+    <div class="row g-4 pt-3" appFadeUp>
+      
+      <!-- Tarjeta individual -->
+      <div
+        class="col-12 col-md-6 col-lg-3"
+        *ngFor="let tutor of tutors()"
+      >
+        <app-tutor-card
+          [tutor]="tutor"          
+          variant="grid"           
+          [descriptionMaxLength]="140"   
+        ></app-tutor-card>
+      </div>
+      <!--- Datos del tutor -->
+      <!-- Versión compacta de la card -->
+      <!-- Recorte de texto -->
+
+
+      <!-- ======================================================
+           ESTADO VACÍO (cuando no hay coincidencias)
+           ------------------------------------------------------
+           tutors().length === 0 → no se encontró ningún tutor.
+      ======================================================= -->
+      <div class="col-12" *ngIf="tutors().length === 0">
+        <div class="alert alert-dark text-center mt-4">
+          No se encontraron tutores con estos filtros.
+        </div>
+      </div>
+
+    </div> <!-- /row -->
+  </div> <!-- /fade-up -->
+</section>

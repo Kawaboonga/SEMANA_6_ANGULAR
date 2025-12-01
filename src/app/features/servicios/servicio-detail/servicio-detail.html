@@ -1,0 +1,234 @@
+<!-- ============================================================
+     DETALLE DE SERVICIO
+     Vista principal del servicio seleccionado por slug
+============================================================== -->
+<section
+  class="py-4"
+  *ngIf="currentService() as servicio"
+>
+  <div class="row g-4" appFadeUp>
+
+    <!-- ============================================================
+         COLUMNA PRINCIPAL — INFORMACIÓN DEL SERVICIO
+         Incluye imagen, título, descripción, pasos y bloques destacados
+    =============================================================== -->
+    <div class="col-lg-8">
+      <article class="card p-3 p-md-4">
+
+        <!-- ---------------------------------------------------------
+             Meta superior del servicio (badge + categoría interna)
+        ---------------------------------------------------------- -->
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
+
+          <!-- Badge del tipo de servicio -->
+          <span class="badge rounded-pill text-uppercase small service-badge">
+            Servicio especializado
+          </span>
+
+          <!-- Meta adicional -->
+          <div class="d-inline-flex align-items-center gap-2 small">
+            <span class="d-inline-flex align-items-center gap-1">
+              <i class="bi bi-tag"></i>
+              <span>
+                SoundSeeker · Mantenimiento y ajustes
+              </span>
+            </span>
+          </div>
+
+        </div>
+
+        <!-- ---------------------------------------------------------
+             Imagen principal del servicio
+        ---------------------------------------------------------- -->
+        <figure class="mb-4">
+          <img
+            [src]="servicio.imageUrl"
+            [alt]="servicio.name"
+            class="img-fluid rounded-3 service-main-image w-100"
+          />
+        </figure>
+
+        <!-- ---------------------------------------------------------
+             Encabezado del servicio: título + subtítulo
+        ---------------------------------------------------------- -->
+        <header class="mb-3">
+          <h1 class="h2 mb-2 fw-bold">
+            {{ servicio.name }}
+          </h1>
+
+          <p class="mb-0">
+            Servicios para guitarras, bajos y equipo de cuerdas.
+          </p>
+
+          <hr>
+        </header>
+
+        <!-- ---------------------------------------------------------
+             Descripción completa del servicio (texto largo)
+        ---------------------------------------------------------- -->
+        <section class="service-content">
+          <p
+            *ngFor="let p of servicio.description"
+            class="mb-3 text-body"
+          >
+            {{ p }}
+          </p>
+        </section>
+
+        <!-- ---------------------------------------------------------
+             Bloque destacado / highlight
+             Muestra beneficios clave o información importante
+        ---------------------------------------------------------- -->
+        <section class="service-highlight my-4">
+          <div class="d-flex flex-column flex-md-row gap-3 align-items-start align-items-md-center">
+
+            <!-- Beneficio 1 -->
+            <div class="d-flex align-items-center gap-2">
+              <i class="bi bi-stars fs-5"></i>
+              <div class="small">
+                <div class="fw-semibold">
+                  Enfoque en músicos reales
+                </div>
+                <div>
+                  Ajustes pensados para escenario, ensayo y estudio.
+                </div>
+              </div>
+            </div>
+
+            <!-- Separador vertical (solo desktop) -->
+            <div class="vr d-none d-md-block opacity-25"></div>
+
+            <!-- Beneficio 2 -->
+            <div class="d-flex align-items-center gap-2 small">
+              <i class="bi bi-geo-alt"></i>
+              <span>
+                Taller en Santiago · Coordinación por WhatsApp o correo
+              </span>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- ---------------------------------------------------------
+             Sección: "¿Cómo funciona?" — pasos del flujo
+        ---------------------------------------------------------- -->
+        <section class="service-steps mt-3">
+          <h2 class="h5 mb-3">
+            ¿Cómo funciona este servicio?
+          </h2>
+
+          <ol class="ps-3 mb-0 small">
+            <li class="mb-1">
+              Nos contactas y nos envías una breve descripción de tu instrumento y lo que necesitas.
+            </li>
+            <li class="mb-1">
+              Coordinamos fecha, lugar de entrega y un presupuesto estimado.
+            </li>
+            <li class="mb-1">
+              Realizamos el servicio y te entregamos recomendaciones de mantención.
+            </li>
+          </ol>
+        </section>
+
+      </article>
+    </div>
+
+    <!-- ============================================================
+         SIDEBAR DERECHA — CTA + navegación a otros servicios
+    =============================================================== -->
+    <aside class="col-lg-4">
+
+      <!-- Wrapper sticky (solo desktop) -->
+      <div class="service-sidebar-wrapper position-lg-sticky top-lg-0">
+
+        <!-- ---------------------------------------------------------
+             CARD: Contacto / llamada a la acción (CTA)
+        ---------------------------------------------------------- -->
+        <div class="card rounded-4 p-3 p-md-4 mb-3 shadow-sm">
+
+          <h2 class="h6 text-uppercase fw-semibold mb-2">
+            Agenda tu servicio
+          </h2>
+
+          <p class="small mb-3">
+            Cuéntanos qué necesitas y te ayudamos a definir el mejor servicio para tu instrumento.
+          </p>
+
+          <!-- Botones de contacto -->
+          <div class="d-grid gap-2 mb-3">
+            <button type="button" class="btn btn-primary">
+              <i class="bi bi-whatsapp me-1"></i>
+              Hablar por WhatsApp
+            </button>
+
+            <button type="button" class="btn btn-secondary">
+              <i class="bi bi-envelope me-1"></i>
+              Enviar un correo
+            </button>
+          </div>
+
+          <div class="d-flex align-items-center gap-2 small">
+            <i class="bi bi-info-circle"></i>
+            <span>Respuesta habitual en menos de 24 horas.</span>
+          </div>
+
+        </div>
+
+        <!-- ---------------------------------------------------------
+             CARD: Lista de otros servicios (sidebar navigation)
+        ---------------------------------------------------------- -->
+        <div class="card rounded-4 p-3 p-md-4 shadow-sm">
+
+          <h2 class="h6 text-uppercase fw-semibold mb-3">
+            Otros servicios
+          </h2>
+
+          <nav aria-label="Navegación entre servicios">
+            <ul class="list-unstyled mb-0">
+
+              <!-- Item por cada servicio distinto al actual -->
+              <li *ngFor="let s of otherServices" class="mb-1">
+
+                <a
+                  [routerLink]="['/servicios', s.slug]"
+                  class="service-sidebar-link d-flex align-items-center justify-content-between rounded-3 px-2 py-2"
+                  [class.active]="s.id === servicio.id"
+                >
+                  <div class="d-flex flex-column">
+                    <span class="small fw-semibold">
+                      {{ s.name }}
+                    </span>
+                    <span class="xsmall">
+                      Ver detalles
+                    </span>
+                  </div>
+
+                  <span class="small ms-2">
+                    <i class="bi bi-arrow-right-short fs-5"></i>
+                  </span>
+                </a>
+
+              </li>
+
+            </ul>
+          </nav>
+        </div>
+
+        <!-- ---------------------------------------------------------
+             BOTÓN: Volver al listado de servicios
+        ---------------------------------------------------------- -->
+        <div class="d-grid gap-2 mt-3">
+          <a
+            routerLink="/servicios"
+            class="btn btn-primary"
+            type="button"
+          >
+            ← Volver a servicios
+          </a>
+        </div>
+
+      </div>
+    </aside>
+
+  </div>
+</section>

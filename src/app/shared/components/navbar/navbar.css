@@ -1,0 +1,87 @@
+/* navbar.css */
+
+.navbar-brand {
+  letter-spacing: 0.08em;
+}
+
+/* Borde inferior en el link activo
+.navbar-nav .nav-link.active {
+  border-bottom: 2px solid var(--accent);
+} */
+
+
+/* Quitar borde del link: usamos un pseudo-elemento mejor */
+.navbar-nav .nav-link {
+  position: relative;
+  padding-bottom: 0.5rem; /* ajusta si deseas más espacio */
+}
+
+/* Línea bajo el navbar para indicar la página activa*/
+.navbar-nav .nav-link.active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1.4rem; 
+  height: 4px;
+  background-color: var(--accent);
+} 
+
+/*.navbar .nav-link.active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(-1 * (var(--navbar-height) - 100%));
+  height: 2px;
+  background: var(--accent);
+}*/
+
+
+
+
+
+
+/* Bloque de sesión (login / usuario) */
+.navbar-session {
+  margin-left: 1.5rem;
+}
+
+/* Ajustar opacidad del fondo */
+.bg-opacity-75 {
+  --bs-bg-opacity: 0.15;
+}
+
+/* Altura fija del navbar usando la variable global */
+.navbar {
+  --bs-navbar-padding-y: 0;
+  min-height: var(--navbar-height);
+}
+
+/* Que el contenido interno se estire a la misma altura */
+.navbar .container {
+  min-height: var(--navbar-height);
+  display: flex;
+  align-items: center;
+}
+
+/* Más separación horizontal entre vínculos */
+.navbar-nav .nav-item + .nav-item {
+  margin-left: 1.25rem;
+}
+
+/* Vista móvil: mejorar bloque de sesión */
+@media (max-width: 991.98px) {
+  .navbar-session {
+    width: 100%;
+    margin-left: 0;
+    padding-top: .75rem;
+    border-top: 1px solid rgba(255,255,255,.15);
+    flex-wrap: wrap;
+  }
+
+  .navbar-session .btn,
+  .navbar-session .dropdown {
+    width: 100%;
+  }
+}

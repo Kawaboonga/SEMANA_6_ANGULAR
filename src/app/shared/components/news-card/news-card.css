@@ -1,0 +1,44 @@
+.btn-cta {
+  background: #0d6efd;
+  border: none;
+  color: #fff;
+  border-radius: 8px;
+  padding-inline: 1.25rem;
+}
+
+.btn-cta:hover {
+  opacity: 0.9;
+  color: #fff;
+}
+
+
+
+.news-card {
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+/* Imagen */
+.news-card img {
+  height: 190px;
+  object-fit: cover;
+}
+
+/* Título y textos */
+.news-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.news-subtitle {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.news-excerpt {
+  font-size: 0.9rem;
+  color: #374151;
+}
+
+/* Ya tienes .date-badge y .btn-cta en carousel.css / global, se reutilizan */

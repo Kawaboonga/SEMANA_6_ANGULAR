@@ -1,1 +1,606 @@
-/* You can add global styles to this file, and also import other style files */
+
+
+
+/* =========================================================
+   1. VARIABLES DE DISEÑO (THEME ROOT)
+   ---------------------------------------------------------
+   Define colores, sombras, radios y recursos globales.
+   Son accesibles desde cualquier componente.
+   ========================================================= */
+
+:root {
+  /* Colores principales del tema */
+  --brand-1: #0f172a;
+  --brand-2: #1e293b;
+  --accent: #8b5cf6;
+  --accent-2: #22d3ee;
+
+  /* Estados */
+  --ok: #22c55e;
+  --warn: #f59e0b;
+  --danger: #ef4444;
+
+  /* Tipografía y neutros */
+  --text: #e5e7eb;
+  --muted: #94a3b8;
+
+  /* Colores base de tarjetas */
+  --card: #111827;
+  --card-2: #0b1220;
+
+  /* Sombra general */
+  --shadow: 0 10px 30px rgba(0,0,0,.35);
+
+  /* Bordes redondeados */
+  --radius: 1rem;
+  --radius-xl: 1.25rem;
+  --radius-lg: .85rem;
+  --radius-md: .65rem;
+  --bs-border-radius: 0.65rem;
+
+  /* alto de navbar */
+  --navbar-height: 5rem;
+
+  /* Imagen principal del HERO (solo Home) */
+  --hero-img:url("assets/img/home/slider2.jpg");
+}
+
+/* =========================================================
+   2. BASE DEL DOCUMENTO
+   ---------------------------------------------------------
+   Estilos aplicados al body y elementos HTML comunes.
+   ========================================================= */
+body {
+  margin: 0;
+  background: linear-gradient(180deg, var(--brand-1), var(--brand-2));
+  color: var(--text);
+
+  /* Fade-in general cuando carga la app, Entrada suave del documento*/
+  opacity: 0; transition: opacity .8s ease;}
+
+body.is-loaded {
+  opacity: 1; /* Se activa en main.ts al terminar bootstrap */
+}
+
+/* Todas las imágenes responsivas */
+/* Tborder-radius: .5rem;
+img {max-width: 100%; height: auto; }
+
+
+/* =========================================================
+   3. TARJETAS Y EFECTOS DE ELEVACIÓN
+   ---------------------------------------------------------
+   “Card-dark” para bloques oscuros + animación hover.
+   ========================================================= */
+.card-dark {
+  background: linear-gradient(180deg,#0d1323,#0b111e);
+  border: 1px solid rgba(253, 250, 250, 0.08);
+  border-radius: var(--radius);
+}
+
+
+.bg-darky {
+    background: linear-gradient(180deg,#0d1323,#0b111e);
+    border: 1px solid rgba(214, 204, 204, 0.1);
+    border-radius: var(--radius);
+}
+
+
+.card.bg-darky .card-footer {
+    background: #151129;
+    border-top: 1px solid rgba(214, 204, 204, 0.08);
+    border-radius: var(--radius);
+}
+
+.card.bg-darky .card-header {
+    padding-top:20px ;
+    margin-bottom: 0;
+    border-bottom: 1px solid rgba(214, 204, 204, 0.08);
+}
+
+.card.bg-darky .card-footer:last-child {
+    border-radius: 0 0 var(--bs-card-inner-border-radius) var(--bs-card-inner-border-radius);
+}
+
+
+.card {
+     border-radius: var(--radius);
+}
+
+.card-img-top {
+    width: 100%;
+    border-top-left-radius: calc(1rem - 1px);
+    border-top-right-radius: calc(1rem - 1px);
+    border-bottom-left-radius: calc(0rem - 1px);
+    border-bottom-right-radius: calc(0rem - 1px);
+}
+
+
+/*
+
+.card-footer {
+    background: #232f4a;
+    border-top: 1px solid rgba(214, 204, 204, 0.08);
+    border-radius: var(--radius);
+}
+
+.card-footer:last-child {
+    border-radius: 0 0 var(--bs-card-inner-border-radius) var(--bs-card-inner-border-radius);
+}*/
+
+
+.hover-lift {transition: .25s transform, .25s box-shadow;}
+.hover-lift:hover {transform: translateY(-4px);box-shadow: var(--shadow);}
+
+
+/* =========================================================
+   4. ANIMACIÓN "FADE UP" (entrada suave por scroll)
+   ---------------------------------------------------------
+   Activado por IntersectionObserver en HomeComponent.
+   ========================================================= */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.fade-up {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity .4s ease, transform .4s ease;
+}
+
+.fade-up.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+
+.fade {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .fade.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+
+     /* Animación keyframes */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeInSlow {
+      from {
+        opacity: 0;
+        transform: translateY(40px) scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+
+/* =========================================================
+   5. EFECTO "SHEEN" (brillo animado en texto)
+   ---------------------------------------------------------
+   Usado para títulos con gradiente móvil.
+   ========================================================= */
+@keyframes sheen {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.brand-sheen {
+  background: linear-gradient(90deg, var(--text), var(--accent), var(--accent-2), var(--text));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  background-size: 300% 100%;
+  animation: sheen 6s linear infinite;
+}
+
+
+
+/* =========================================================
+   6. HERO PRINCIPAL (Home)
+   ---------------------------------------------------------
+   Imagen a pantalla completa + blend + centro vertical.
+   ========================================================= */
+#sticky-parallax-header {
+  color: #fff;
+  height: 100vh;
+  width: 100%;
+  background-image: var(--hero-img);
+  background-size: cover;
+  background-position: 50% 0;
+  background-blend-mode: soft-light;
+  animation: fadeInSlow 1.5s ease;
+
+  margin-top: calc(-1 * var(--navbar-height));
+  padding-top: var(--navbar-height);
+
+  display: grid;
+  place-items: center;
+  text-align: center;
+
+  font-size: clamp(2rem, 4vw + 1rem, 5rem);
+
+  isolation: isolate; /* Permite que ::after vaya por detrás */
+  position: relative;
+}
+
+/* Degradado en la parte inferior del HERO */
+#sticky-parallax-header::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 52svh;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    rgba(0,0,0,0) 0%,
+    rgba(0,0,0,.4) 45%,
+    rgba(0,0,0,.85) 100%
+  );
+  z-index: -1;
+}
+
+.parallax-header {
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 52svh;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+
+/* =========================================================
+   7. MEJORA PROGRESIVA (MÁSCARA)
+   ---------------------------------------------------------
+   En navegadores modernos, se reemplaza el degradado por
+   una máscara suave (más nítida y profesional).
+   ========================================================= */
+@supports (mask-image: linear-gradient(#000, transparent)) or
+          (-webkit-mask-image: linear-gradient(#000, transparent)) {
+
+  #sticky-parallax-header::after {
+    background: none;
+  }
+
+  #sticky-parallax-header {
+    /* Antes: 30% */
+    -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 75%, transparent 100%);
+            mask-image: linear-gradient(to bottom, #000 0%, #000 75%, transparent 100%);
+    -webkit-mask-size: 100% 100%;
+            mask-size: 100% 100%;
+  }
+}
+
+/* =========================================================
+   8. NAVBAR AL HACER SCROLL
+   ---------------------------------------------------------
+   Se activa desde NavbarComponent con HostListener.
+   ========================================================= */
+.nav-scroll-opaque {
+  background-color: rgba(0,0,0,.9) !important;
+  backdrop-filter: blur(6px);
+}
+
+.page-shell {
+  padding-top: var(--navbar-height);
+}
+
+/* =========================================================
+   9. SKIP LINK (ACCESIBILIDAD)
+   ---------------------------------------------------------
+   Para saltar al contenido con tab.
+   ========================================================= */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.skip-link:focus {
+  left: 1rem;
+  top: 1rem;
+  width: auto;
+  height: auto;
+  padding: .5rem 1rem;
+  background: #0a193e;
+  color: #fff;
+  border-radius: .5rem;
+  z-index: 9999;
+}
+
+/* =========================================================
+   10. SCROLL-LINKED ANIMATIONS
+   ---------------------------------------------------------
+   (solo navegadores modernos con animation-timeline)
+   ========================================================= */
+@supports (animation-timeline: scroll()) {
+
+  /* Animación PARALLAX (movimiento + encogimiento del HERO) */
+  @keyframes sticky-parallax-header-move-and-size {
+    from { background-position: 50% 0; }
+    to   {
+      background-position: 50% 100%;
+      background-color: #0d1e4d;
+      height: 10svh;
+      font-size: 2em;
+    }
+  }
+
+  /* Fade-out del contenido del hero mientras el usuario baja */
+  @keyframes hero-fade-out {
+    from { opacity: 1; transform: translateY(0); }
+    to   { opacity: 0; transform: translateY(-30px); }
+  }
+
+  .hero-fade {
+    animation: hero-fade-out linear both;
+    animation-timeline: scroll();
+    animation-range: 60vh 95vh; /* tramo donde desaparece */
+  }
+
+  /* Desvanecimiento total del HERO completo */
+  @keyframes hero-wrapper-vanish {
+    from { opacity: 1; }
+    to   { opacity: 0; }
+  }
+
+  #sticky-parallax-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+
+    animation-name: sticky-parallax-header-move-and-size, hero-wrapper-vanish;
+    animation-duration: 1s, 1s;
+    animation-timing-function: linear, linear;
+    animation-fill-mode: forwards, both;
+
+    /* La magia: vincula animación al scroll */
+    animation-timeline: scroll(), scroll();
+    animation-range: 0vh 90vh, 65vh 100vh;
+
+    will-change: opacity, background-position;
+  }
+
+  /* SOLO en Home: espacio para el HERO fijo */
+  body.has-hero {
+    padding-top: 100svh; /* espacio que ocupa el hero fijo */
+  }
+}
+
+/* EXCEPCIÓN: en el Home (body.has-hero) queremos que el contenido
+   empiece inmediatamente después del hero, sin el offset del navbar. */
+body.has-hero .page-shell {
+  padding-top: 0;
+}
+
+
+/* =========================================================
+   11. FALLBACK PARA NAVEGADORES ANTIGUOS
+   ========================================================= */
+@supports not (animation-timeline: scroll()) {
+
+  #sticky-parallax-header {
+    position: relative;
+    min-height: 100svh;
+  }
+
+  /* Las demás páginas no se ven afectadas */
+}
+
+/* =========================================================
+   12. REDUCIR MOTION (ACCESIBILIDAD)
+   ========================================================= */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* Entrada suave del documento */
+    .fade-up{opacity:0;animation:fadeUp .8s ease-out .15s forwards}
+   
+ 
+    .card-group {
+        -webkit-box-orient: horizontal;
+        -webkit-box-direction: normal;
+        -ms-flex-flow: row wrap;
+        flex-flow: row wrap;
+    }
+
+.muted {color: var(--muted);}
+
+
+[id] {
+  scroll-margin-top: var(--navbar-height);
+}
+
+/*Si solo aplicar a categorías
+
+#categorias {
+  scroll-margin-top: var(--navbar-height);
+}
+
+*/
+
+
+
+
+/* Contenedor general — se verá como la línea divisoria */
+.split-bs-card {
+  width: 100%;
+  background: #190b3a;      /* color del separador visible */
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1px;                  /* ← la separación visible entre bloques */
+}
+
+/* Paneles internos */
+.split-bs-item {
+  background: #2a0f63;       /* color de cada panel */
+  transition: background 0.35s ease, transform 0.35s ease;
+}
+
+.split-bs-item:hover {
+  background: #5c2dd6;
+  transform: translateY(-2px);
+}
+
+/* Icono en su caja */
+.icon-box {
+  width: 70px;
+  height: 70px;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.12);
+}
+
+/* Responsive: apilar y mantener 1px visible */
+@media (max-width: 768px) {
+  .split-bs-card {
+    grid-template-columns: 1fr;
+    gap: 1px;    /* mantiene separación vertical visible */
+  }
+}
+
+
+/* breadcrumb.component.css */
+
+/* Fondo o spacing */
+.my-breadcrumb {
+  background: transparent;         /* o un color */
+  padding: 20px 0 0 0;
+  margin-bottom: 1rem;
+  font-weight: 100;
+
+}
+
+/* Color del texto */
+.my-breadcrumb .breadcrumb-item,
+.my-breadcrumb .breadcrumb-item a {
+  color: #e9e9e9;  
+  text-decoration: none;                /* tu color de texto */
+}
+
+/* Separador “/” */
+.my-breadcrumb .breadcrumb-item + .breadcrumb-item::before {
+  color: #731cbb;                  /* color del separador */
+}
+
+/* Último elemento (activo) */
+.my-breadcrumb .breadcrumb-item.active {
+  color: #965fc4;                  /* color para la página actual */
+  font-weight: 300;
+}
+
+/* --- Fade suave para breadcrumb --- */
+.breadcrumb-fade {
+  opacity: 1;
+  transition: opacity 0.6s ease-in-out;
+}
+
+.breadcrumb-fade.fade-out {
+  opacity: 0;
+}
+
+
+.btn-cta {
+  background: #0d6efd;
+  border: none;
+  color: #fff;
+  border-radius: 8px;
+  padding-inline: 1.25rem;
+}
+
+.btn-cta:hover {
+  opacity: 0.9;
+  color: #fff;
+}
+
+
+.badge {
+    --bs-badge-padding-x: 1em;
+    --bs-badge-padding-y: 0.65em;
+    }
+
+
+.navbar-nav[_ngcontent-ng-c3773050633] .nav-link.active[_ngcontent-ng-c3773050633] {
+    border-bottom: 4px solid var(--accent);
+}
+
+.navbar-nav[_ngcontent-ng-c651948831] .nav-link.active[_ngcontent-ng-c651948831] {
+    border-bottom: 4px solid var(--accent);
+    padding-bottom: 18px;
+}
+
+
+.fade-item {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.6s ease-out,
+    transform 0.6s ease-out;
+  will-change: opacity, transform;
+}
+
+/* Cuando el elemento es visible, se anima */
+.fade-item.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
+
+
+/* =========================================================
+   ANIMACION CARDS
+   ========================================================= */
+
+/* Fade-up base */
+.fade-up-card {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity .4s ease, transform .4s ease;
+}
+
+.fade-up-card.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Hover lift compatible */
+.hover-lift-card {
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+
+/* Aquí combinamos el transform dynamic */
+.hover-lift-card:hover {
+  transform: translateY(-4px);
+}
+
+.fade-up-card.is-visible.hover-lift-card:hover {
+  transform: translateY(-4px); /* 0px (fade) + (-4px hover) */
+}
+
+.page-title {
+  
+}

@@ -1,0 +1,131 @@
+<!-- src/app/features/admin/admin-usuarios/admin-usuarios.html -->
+
+<!-- ============================================================
+     ENCABEZADO: título + botón para crear nuevo usuario
+============================================================ -->
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2 class="h5 mb-0">Usuarios</h2>
+
+  <!-- Botón que abre el formulario en modo "nuevo usuario" -->
+  <button class="btn btn-primary btn-sm" (click)="onCreate()">
+    <i class="bi bi-plus-lg me-1"></i> Nuevo usuario
+  </button>
+</div>
+
+<div class="row">
+
+  <!-- ============================================================
+       BLOQUE FORMULARIO (crear / editar usuario)
+       Solo se muestra cuando showForm = true
+  ============================================================ -->
+  <div class="col-lg-12" *ngIf="showForm">
+    <div class="card shadow-sm border-0">
+      <div class="card-body">
+        <!-- Título dinámico según estemos editando o creando -->
+        <h3 class="h6 mb-3">
+          {{ selectedUser ? 'Editar usuario' : 'Nuevo usuario' }}
+        </h3>
+
+        <!-- Formulario reutilizable para usuarios
+             - [roles]: lista de roles que se pueden asignar
+             - [initialValue]: usuario a editar (o null si es nuevo)
+             - (save): emite el usuario listo para guardar
+             - (cancel): cierra el formulario sin guardar -->
+        <app-user-form
+          [roles]="rolesDisponibles"
+          [initialValue]="selectedUser"
+          (save)="handleSave($event)"
+          (cancel)="handleCancel()"
+        ></app-user-form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       LISTADO TABULAR DE USUARIOS
+       Incluye nombre, correo, rol, estado y acción de editar
+  ============================================================ -->
+  <div class="col-lg-12">
+    <div class="table-responsive mb-3">
+      <table class="table table-sm align-middle">
+        <thead class="table-light">
+          <tr>
+            <th>Nombre</th>
+            <th>Correo</th>
+            <th>Rol</th>
+            <th>Activo</th>
+            <th style="width: 1%"></th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <!-- ============================
+               FILA DE USUARIO
+               Se recorre la lista reactiva usuarios()
+          ============================ -->
+          <tr *ngFor="let u of usuarios()">
+            <!-- Nombre y fecha de nacimiento -->
+            <td>
+              <div class="fw-semibold small">
+                {{ u.firstName }} {{ u.lastName }}
+              </div>
+              <div class="text-muted small">
+                Fecha nac: {{ u.dateOfBirth }}
+              </div>
+            </td>
+
+            <!-- Correo principal del usuario -->
+            <td class="small">{{ u.email }}</td>
+
+            <!-- CAMBIO DE ROL DESDE LA TABLA
+                 Usa ngModel para actualizar el rol en AuthService -->
+            <td class="small">
+              <select
+                class="form-select form-select-sm"
+                [ngModel]="u.role"
+                (ngModelChange)="onChangeRole(u, $event)"
+              >
+                <option value="admin">Admin</option>
+                <option value="instructor">Instructor</option>
+                <option value="user">User</option>
+              </select>
+            </td>
+
+            <!-- CHECKBOX DE ESTADO ACTIVO/INACTIVO -->
+            <td>
+              <input
+                type="checkbox"
+                class="form-check-input"
+                [checked]="u.isActive"
+                (change)="onToggleActive(u)"
+              />
+            </td>
+
+            <!-- BOTÓN EDITAR
+                 Abre el formulario con los datos del usuario seleccionado -->
+            <td class="text-end">
+              <button
+                class="btn btn-outline-secondary btn-sm"
+                (click)="onEdit(u)"
+              >
+                <i class="bi bi-pencil"></i>
+              </button>
+            </td>
+          </tr>
+
+          <!-- ============================
+               ESTADO SIN USUARIOS
+               Mensaje cuando la lista está vacía
+          ============================ -->
+          <tr *ngIf="usuarios().length === 0">
+            <td colspan="5" class="text-center text-muted small py-3">
+              Aún no hay usuarios registrados.
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>

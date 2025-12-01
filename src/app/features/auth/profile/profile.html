@@ -1,0 +1,139 @@
+<!-- src/app/features/auth/profile/profile.component.html -->
+
+<!-- ============================================================
+     CONTENEDOR PRINCIPAL
+     Solo se muestra si hay un usuario logueado (currentUser()).
+============================================================ -->
+<div class="container py-5" *ngIf="currentUser() as user">
+  <!-- Fila con animación de entrada utilizando la directiva appFadeUp -->
+  <div class="row justify-content-center" appFadeUp>
+    <div class="col-md-6 col-lg-5">
+      <div class="card shadow-sm border-0">
+        <div class="card-body p-4">
+          <!-- Título de la sección -->
+          <h1 class="h5 mb-3 text-center">Mi cuenta</h1>
+
+          <!-- Badge con el rol actual del usuario (admin, instructor, user) -->
+          <div class="mb-4 text-center">
+            <span class="badge bg-primary text-uppercase">
+              {{ user.role }}
+            </span>
+          </div>
+
+          <!-- ======================================================
+               FORMULARIO DE PERFIL
+               Enlazado al FormGroup definido en profile.component.ts
+          ======================================================= -->
+          <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+
+            <!-- NOMBRE (PRIMER NOMBRE) -->
+            <!--
+              Campo para el primer nombre del usuario.
+              Se vincula con formControlName="firstName" tal como está definido
+              en el FormGroup del componente.
+            -->
+            <div class="mb-3">
+              <label class="form-label">Nombre</label>
+              <input
+                type="text"
+                class="form-control"
+                formControlName="firstName"
+                [class.is-invalid]="
+                  hasError('firstName', 'required') ||
+                  hasError('firstName', 'minlength')
+                "
+              />
+              <div class="invalid-feedback" *ngIf="hasError('firstName', 'required')">
+                El nombre es obligatorio.
+              </div>
+              <div class="invalid-feedback" *ngIf="hasError('firstName', 'minlength')">
+                El nombre debe tener al menos 2 caracteres.
+              </div>
+            </div>
+
+            <!-- APELLIDO (LAST NAME) -->
+            <!-- Campo para el apellido del usuario. -->
+            <div class="mb-3">
+              <label class="form-label">Apellido</label>
+              <input
+                type="text"
+                class="form-control"
+                formControlName="lastName"
+                [class.is-invalid]="
+                  hasError('lastName', 'required') ||
+                  hasError('lastName', 'minlength')
+                "
+              />
+              <div class="invalid-feedback" *ngIf="hasError('lastName', 'required')">
+                El apellido es obligatorio.
+              </div>
+              <div class="invalid-feedback" *ngIf="hasError('lastName', 'minlength')">
+                El apellido debe tener al menos 2 caracteres.
+              </div>
+            </div>
+
+            <!-- EMAIL (SOLO LECTURA) -->
+            <!--
+              El correo se muestra deshabilitado porque no se puede modificar
+              desde esta pantalla. El valor viene precargado en el FormGroup.
+            -->
+            <div class="mb-3">
+              <label class="form-label">Correo electrónico</label>
+              <input
+                type="email"
+                class="form-control"
+                formControlName="email"
+                [disabled]="true"
+              />
+              <div class="form-text">
+                No puedes cambiar tu correo desde aquí.
+              </div>
+            </div>
+
+            <!-- FECHA DE NACIMIENTO -->
+            <!-- Campo obligatorio de tipo date. -->
+            <div class="mb-3">
+              <label class="form-label">Fecha de nacimiento</label>
+              <input
+                type="date"
+                class="form-control"
+                formControlName="dateOfBirth"
+                [class.is-invalid]="hasError('dateOfBirth', 'required')"
+              />
+              <div class="invalid-feedback" *ngIf="hasError('dateOfBirth', 'required')">
+                La fecha de nacimiento es obligatoria.
+              </div>
+            </div>
+
+            <!-- DIRECCIÓN DE DESPACHO -->
+            <!-- Campo opcional donde el usuario puede guardar su dirección. -->
+            <div class="mb-3">
+              <label class="form-label">Dirección de despacho</label>
+              <input
+                type="text"
+                class="form-control"
+                formControlName="shippingAddress"
+              />
+            </div>
+
+            <!-- MENSAJE DE ÉXITO -->
+            <!--
+              Se muestra solo cuando hasSuccessMessage = true.
+              El texto viene desde successMessage en el componente.
+            -->
+            <div *ngIf="hasSuccessMessage" class="alert alert-success py-2 small">
+              {{ successMessage }}
+            </div>
+
+            <!-- BOTÓN DE GUARDAR -->
+            <!-- Envía el formulario y dispara onSubmit() en el componente. -->
+            <button type="submit" class="btn btn-primary w-100">
+              Guardar cambios
+            </button>
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

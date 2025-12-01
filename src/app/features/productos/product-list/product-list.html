@@ -1,0 +1,70 @@
+<!-- ============================================================================
+     TEMPLATE: PRODUCT LIST PAGE
+     Vista principal del catálogo de productos.
+     - Muestra título + subtítulo
+     - Banner de categorías principales (Guitarras / Bajos / Pedales / Amps)
+     - Filtros secundarios (orden, condición, etc.)
+     - Grid de productos filtrados
+     ----------------------------------------------------------------------------
+     Este template trabaja SOLO con @Inputs/@Outputs del smart component.
+     Toda la lógica vive en product-list.ts.
+============================================================================ -->
+
+<section class="py-4">
+
+  <!-- ============================================================
+       ENCABEZADO PRINCIPAL
+       Título + subtítulo del catálogo
+  ============================================================ -->
+  <div class="d-flex justify-content-between align-items-center mb-5">
+    <div>
+      <h2 class="mb-1 display-6">Catálogo de productos</h2>
+      <p class="text-secondary mb-0">
+        Guitarras, bajos, pedales, amplificadores y más.
+      </p>
+    </div>
+  </div>
+
+  <!-- Wrapper con fade-up general -->
+  <div appFadeUp>
+
+    <!-- ============================================================
+         BANNER DE CATEGORÍAS PRINCIPALES
+         - Botones grandes (Guitarras / Bajos / Pedales / Amplificadores)
+         - categoryChange: emite categoría seleccionada
+         - activeCategory: categoría activa actual
+    ============================================================ -->
+    <div>
+      <app-product-category-banner
+        [activeCategory]="bannerCategory()"
+        (categoryChange)="onBannerCategoryChange($event)">
+      </app-product-category-banner>
+    </div>
+
+    <!-- ============================================================
+         FILTROS SECUNDARIOS
+         - condición (nuevo, usado…)
+         - orden (recent, price-low, price-high)
+         - botón "Limpiar filtros"
+         - Inputs/Outputs completamente controlados por signals
+    ============================================================ -->
+    <div class="mb-4">
+      <app-product-filters
+        [filter]="filter()"
+        (filterChange)="onFilterChange($event)"
+        (clearAll)="onClearAll()">
+      </app-product-filters>
+    </div>
+
+    <!-- ============================================================
+         GRID DE PRODUCTOS
+         - Recibe lista final filtrada desde computed() en TS
+         - Componente UI totalmente “tonto”
+    ============================================================ -->
+    <div appFadeUp>
+      <app-product-grid [products]="products()"></app-product-grid>
+    </div>
+
+  </div> <!-- /fade wrapper -->
+
+</section>

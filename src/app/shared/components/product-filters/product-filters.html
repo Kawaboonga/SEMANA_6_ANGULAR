@@ -1,0 +1,119 @@
+<!-- =========================================================================
+     PRODUCT FILTERS (HTML)
+     ------------------------------------------------------------------------
+     Barra de filtros compacta con:
+       · Buscador (marca / modelo)
+       · Condición (nuevo / usado / todos)
+       · Categorías secundarias (no banner)
+       · Ordenamiento
+       · Botón para limpiar todos los filtros
+
+     NOTA:
+     La lógica vive en product-filters.ts → este template SOLO emite eventos.
+     ====================================================================== -->
+
+<div class="card bg-darky-filters mb-5">
+  <div class="card-body py-2">
+    
+    <!-- Grid responsivo de 1 fila con 5 elementos -->
+    <div class="row g-2 align-items-center">
+
+      <!-- ============================================================
+           Buscador de texto
+           ------------------------------------------------------------
+           Envía cada cambio al método onSearch(term)
+           Filtra por marca / modelo / texto libre.
+      ============================================================ -->
+      <div class="col-12 col-md-4">
+        <div class="input-group input-group-sm">
+          <span class="input-group-text">
+            <i class="bi bi-search"></i>
+          </span>
+
+          <input
+            type="search"
+            class="form-control"
+            placeholder="Buscar por marca o modelo"
+            (input)="onSearch($any($event.target).value)"
+          />
+        </div>
+      </div>
+
+
+      <!-- ============================================================
+           Condición del producto
+           ------------------------------------------------------------
+           nuevo / usado / todos
+           Trabaja sobre filter.condition
+      ============================================================ -->
+      <div class="col-6 col-md-2">
+        <select
+          class="form-select form-select-sm"
+          [ngModel]="filter.condition"
+          (ngModelChange)="onConditionChange($event)"
+        >
+          <option [ngValue]="'todos'">Todos</option>
+          <option [ngValue]="'nuevo'">Nuevo</option>
+          <option [ngValue]="'usado'">Usado</option>
+        </select>
+      </div>
+
+
+      <!-- ============================================================
+           Categoría secundaria
+           ------------------------------------------------------------
+           NO es el banner principal.
+           Este filtro solo restringe aún más dentro de la vista.
+      ============================================================ -->
+      <div class="col-6 col-md-3">
+        <select
+          class="form-select form-select-sm"
+          [ngModel]="filter.category"
+          (ngModelChange)="onCategoryChange($event)"
+        >
+          <option [ngValue]="'todos'">Todas las categorías</option>
+          <option [ngValue]="'guitarra'">Guitarras</option>
+          <option [ngValue]="'bajo'">Bajos</option>
+          <option [ngValue]="'pedal'">Pedales</option>
+          <option [ngValue]="'amplificador'">Amplificadores</option>
+          <option [ngValue]="'accesorio'">Accesorios</option>
+        </select>
+      </div>
+
+
+      <!-- ============================================================
+           Ordenamiento
+           ------------------------------------------------------------
+           Usa filter.sortBy → 'recent', 'priceAsc', 'priceDesc'
+      ============================================================ -->
+      <div class="col-6 col-md-2">
+        <select
+          class="form-select form-select-sm"
+          [ngModel]="filter.sortBy"
+          (ngModelChange)="onSortChange($event)"
+        >
+          <option [ngValue]="'recent'">Más recientes</option>
+          <option [ngValue]="'priceAsc'">Precio: menor a mayor</option>
+          <option [ngValue]="'priceDesc'">Precio: mayor a menor</option>
+        </select>
+      </div>
+
+
+      <!-- ============================================================
+           Botón “Limpiar”
+           ------------------------------------------------------------
+           Restaura filtros a su estado base (desde ProductList).
+      ============================================================ -->
+      <div class="col-6 col-md-1 ms-auto d-flex justify-content-end">
+        <button
+          type="button"
+          class="btn btn-primary btn-sm"
+          (click)="onClear()"
+        >
+          Limpiar
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>

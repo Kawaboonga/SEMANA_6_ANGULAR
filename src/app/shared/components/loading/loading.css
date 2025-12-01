@@ -1,0 +1,42 @@
+/* ============================================================================
+   LOADING OVERLAY (CSS)
+   ----------------------------------------------------------------------------
+   Cubre toda la pantalla y bloquea interacción mientras isLoading() === true.
+   Se usa junto con loading.html y loading.component.ts.
+   ---------------------------------------------------------------------------
+   - position: fixed → queda por encima de todo el contenido.
+   - inset: 0 → atajo para top/right/bottom/left: 0.
+   - fondo semi-transparente → sensación de modal no intrusivo.
+   - z-index alto (1200) → compatible con Bootstrap (modal usa 1055+).
+   - display flex → centra el spinner vertical + horizontalmente.
+   ============================================================================
+*/
+
+.loading-overlay {
+  position: fixed;           /* Mantiene el overlay cubriendo toda la pantalla */
+  inset: 0;                  /* Equivalente a top:0; right:0; bottom:0; left:0 */
+  background: rgba(0,0,0,.45); /* Oscurece ligeramente sin tapar todo */
+  display: flex;             /* Permite centrar el spinner */
+  align-items: center;       /* Centrado vertical */
+  justify-content: center;   /* Centrado horizontal */
+  z-index: 1200;             /* Por encima de navbars, cards, banners, etc. */
+}
+
+.loading-overlay {
+  animation: fadeIn .25s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.loading-overlay {
+  backdrop-filter: blur(4px);
+}
+
+.spinner-border {
+  width: 3rem;
+  height: 3rem;
+  color: var(--bs-primary);
+}

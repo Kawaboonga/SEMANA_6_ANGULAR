@@ -1,0 +1,29 @@
+<!-- src/app/featured/noticias/noticias.html -->
+
+<div class="py-4">
+
+  <!-- ============================================================
+        TÍTULO PRINCIPAL DE LA SECCIÓN
+       ============================================================ -->
+  <h2 class="mb-4 display-6">Novedades</h2>
+
+  <!-- ============================================================
+        GRID DE NOTICIAS
+        - appFadeUp aplica la animación al entrar en viewport
+        - Se recorre la lista de noticias proveniente del TS
+       ============================================================ -->
+  <div class="row g-4" appFadeUp>
+
+    <!--
+      Cada noticia se muestra mediante el componente NewsCard
+      (componente reutilizable para tarjetas de noticias).
+    -->
+    <div
+      class="col-12 col-md-6 col-lg-4"
+      *ngFor="let n of noticias"
+    >
+      <app-news-card [item]="n"></app-news-card>
+    </div>
+
+  </div>
+</div>

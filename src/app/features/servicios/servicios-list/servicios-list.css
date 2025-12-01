@@ -1,0 +1,47 @@
+/*
+.service-card {
+  border-radius: 1rem;
+  overflow: hidden;
+  position: relative;
+  background: linear-gradient(135deg, #151928, #1b2140, #262a48);
+  background-size: 200% 200%;
+  transition:
+    background-position 0.6s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+  color: #f5f5f5;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.service-card-inner {
+  padding: 1.5rem;
+}
+
+.service-card-header h2 {
+  color: #ffffff;
+}
+
+.service-card-text {
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.service-card-cta {
+  color: #d6ff7f;
+}
+
+.service-card:hover {
+  background-position: 100% 0;
+  transform: translateY(-4px);
+  box-shadow: 0 18px 35px rgba(0, 0, 0, 0.35);
+}
+
+.service-card:hover .service-card-cta {
+  text-decoration: underline;
+}
+*/
+/* Mobile: que respire un poco más */
+@media (max-width: 575.98px) {
+  .service-card-inner {
+    padding: 1.25rem;
+  }
+}

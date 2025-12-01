@@ -1,0 +1,201 @@
+/* src/app/shared/components/carousel/carousel.css */
+
+.carousel {
+  margin-bottom: 2rem;
+}
+
+.carousel-card img {
+  height: 150px;
+  object-fit: cover;
+}
+
+.badge-pill {
+  background: #6a0b8a;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  padding: 0.35rem 0.7rem;
+}
+
+.date-badge {
+  background: rgba(126, 196, 35, 0.9);
+  color: #fff;
+  font-size: 0.75rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 0.05rem;
+}
+
+.btn-cta {
+  background: #0d6efd;
+  border: none;
+  color: #fff;
+  border-radius: 8px;
+  padding-inline: 1.25rem;
+}
+
+.btn-cta:hover {
+  opacity: 0.9;
+  color: #fff;
+}
+
+.price {
+  color: #0772d6;
+}
+
+.carousel-indicators [data-bs-target] {
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 50%;
+}
+
+.carousel-indicators .active {
+  background-color: #4fcaff;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.5));
+}
+
+/* Columnas responsivas según cantidad de items */
+@media (min-width: 768px) {
+  .carousel-col.col-md-4 {
+    flex: 0 0 auto;
+    max-width: 33.3333%;
+  }
+  .carousel-col.col-md-3 {
+    flex: 0 0 auto;
+    max-width: 25%;
+  }
+}
+
+
+/* ====== TUTORES: jerarquía tipográfica ====== */
+.tutor-name {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #181b24;
+  line-height: 1.25;
+}
+
+.tutor-specialty {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #4b4f5c;
+}
+
+.tutor-meta {
+  font-size: 0.9rem;
+  color: #6c727f;
+}
+
+.tutor-level {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #2b3240;
+}
+
+.tutor-description {
+  font-size: 0.9rem;
+  color: #373c48;
+}
+
+/* Rating alineado con el botón inferior */
+.rating-row {
+  color: #363b47;
+}
+
+.rating-icon {
+  font-size: 0.95rem;
+}
+
+.rating-text {
+  font-size: 0.85rem;
+}
+
+.carousel-card {
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.carousel-col {
+  padding-top: 4px;          
+}
+
+
+
+/*************************************/
+
+/* El contenedor principal del carrusel debe ser relativo
+   para posicionar los botones inferiores */
+.ss-carousel {
+  position: relative;
+  overflow: visible;
+}
+
+/* Contenedor de los dos botones (centro abajo) */
+.ss-bottom-controls {
+  position: absolute;
+  left: 50px;
+  bottom: -8px;           /* ajusta si quieres más cerca/lejos del carrusel */
+  transform: translateX(-50%);
+  display: flex;
+  gap: 12px;
+  z-index: 15;
+}
+
+/* Botón base (círculo) */
+.ss-nav-pill {
+  width: 34px;
+  height: 34px;
+  padding: 10px;
+  border-radius: 50%;
+  border: 1px solid hsl(0, 0%, 100%);         /* gris muy suave */
+  background: #082e6c;
+  color: #ffffff;                    /* gris oscuro */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition:
+    0.2s background,
+    0.2s border-color,
+    0.2s transform,
+    0.2s box-shadow;
+  box-shadow: 0 0 0 rgba(2, 48, 121, 0);
+}
+
+/* Icono */
+.ss-nav-pill i {
+  font-size: 1.2rem;
+}
+
+/* Hover general */
+.ss-nav-pill:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.18);
+}
+
+/* Estilo tipo “outline” para el anterior */
+.ss-nav-pill-prev {
+  background:  #082e6c;
+  border-color: #e2e8f0;
+}
+.ss-nav-pill-prev:hover {
+  background:  #082e6c;
+  border-color: #ffffff;
+}
+
+/* Estilo tipo “filled” para el siguiente */
+.ss-nav-pill-next {
+  background:  #082e6c;           /* verde agua */
+  border-color: #ffffff;
+  color: #ffffff;
+}
+.ss-nav-pill-next:hover {
+  background:  #082e6c;
+  border-color: #ffffff;
+}
+
+.ss-carousel .row {
+  padding-top: 4px;
+}

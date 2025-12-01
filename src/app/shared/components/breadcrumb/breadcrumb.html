@@ -1,0 +1,56 @@
+<!--
+  NAV BREADCRUMB
+  --------------
+  Solo se muestra si hay elementos en el array `breadcrumbs`.
+-->
+<nav *ngIf="breadcrumbs.length" aria-label="breadcrumb" class="mb-3">
+
+  <!--
+    <ol> principal del breadcrumb.
+    - `#bcRef` → se usa en el componente TS para aplicar la animación fade-out/fade-in.
+    - `breadcrumb-fade` / `is-visible` → clases de animación CSS.
+
+    NO ESTA FUNCIONADO REVISAR!!!
+  -->
+  <ol class="breadcrumb my-breadcrumb breadcrumb-fade is-visible" #bcRef>
+
+    <!--
+      Miga fija de "Inicio".
+      Siempre apunta a la raíz del sitio.
+    -->
+    <li class="breadcrumb-item">
+      <a routerLink="/">Inicio</a>
+    </li>
+
+    <!--
+      Resto de migas dinámicas:
+      - Recorremos el array `breadcrumbs`.
+      - `last` = true en el último elemento → se marca como `.active` y
+        se muestra como texto sin enlace.
+    -->
+    <li
+      *ngFor="let bc of breadcrumbs; let last = last"
+      class="breadcrumb-item"
+      [class.active]="last"
+      aria-current="page"
+    >
+      <!--
+        Si NO es la última miga:
+        - Mostrar como enlace (permite navegar hacia atrás en la jerarquía).
+      -->
+      <ng-container *ngIf="!last; else lastCrumb">
+        <a [routerLink]="bc.url">{{ bc.label }}</a>
+      </ng-container>
+
+      <!--
+        Última miga:
+        - Solo texto, sin enlace.
+        - Representa la página actual.
+      -->
+      <ng-template #lastCrumb>
+        {{ bc.label }}
+      </ng-template>
+    </li>
+
+  </ol>
+</nav>

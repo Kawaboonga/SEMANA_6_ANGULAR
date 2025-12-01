@@ -1,0 +1,33 @@
+/* src/app/features/admin/layout/admin-layout.component.scss */
+
+.admin-layout {
+  min-height: 100vh;
+  border-radius: 1rem;
+}
+
+.admin-sidebar {
+  width: 260px;
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-main {
+  background-color: #f8fafc;
+  border-radius:  0rem 0rem 1rem 1rem;
+}
+
+.admin-main-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  border-radius: 1rem;
+}
+
+.nav-link.active {
+  background-color: #0d6efd;
+}
+
+.navbar-border  {
+  border: 1px solid #7b7b7b;
+  border-radius: 1rem 1rem 0rem 0rem;
+}

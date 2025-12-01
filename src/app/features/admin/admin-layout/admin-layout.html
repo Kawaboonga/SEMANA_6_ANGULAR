@@ -1,0 +1,119 @@
+<!-- ============================================================
+     ADMIN LAYOUT – NAVBAR SUPERIOR
+     Estructura principal del layout del panel de administración.
+     Incluye navegación, usuario actual y botón de logout.
+============================================================ -->
+
+<div class="admin-layout pt-5">
+
+  <!-- ============================================================
+       NAVBAR SUPERIOR DEL ADMIN
+       Fijo arriba, separa el panel del contenido principal.
+  ============================================================ -->
+  <nav class="navbar navbar-border navbar-expand-lg navbar-dark bg-dark px-3 border-bottom border-secondary">
+    <div class="container-fluid">
+
+      <!-- LOGO / TÍTULO DEL PANEL -->
+      <a class="navbar-brand fw-bold">SoundSeeker Admin</a>
+
+      <!-- BOTÓN PARA VOLVER AL HOME PÚBLICO -->
+      <button class="btn btn-sm btn-outline-light me-3" (click)="goToHome()">
+        <i class="bi bi-house"></i>
+      </button>
+
+      <!-- BOTÓN PARA ABRIR/CERRAR EL MENÚ EN MÓVIL -->
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#adminNav"
+        aria-controls="adminNav"
+        aria-expanded="false"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- CONTENEDOR DE MENÚ -->
+      <div class="collapse navbar-collapse" id="adminNav">
+
+        <!-- ============================================================
+             ZONA IZQUIERDA: MENÚ PRINCIPAL DE SECCIONES DEL ADMIN
+        ============================================================ -->
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+          <!-- DASHBOARD -->
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              routerLink="/admin"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+            >
+              <i class="bi bi-speedometer2 me-1"></i> Dashboard
+            </a>
+          </li>
+
+          <!-- TUTORES -->
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/admin/tutores" routerLinkActive="active">
+              <i class="bi bi-people me-1"></i> Tutores
+            </a>
+          </li>
+
+          <!-- PRODUCTOS -->
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/admin/productos" routerLinkActive="active">
+              <i class="bi bi-music-note-beamed me-1"></i> Productos
+            </a>
+          </li>
+
+          <!-- CURSOS -->
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/admin/cursos" routerLinkActive="active">
+              <i class="bi bi-journal-bookmark me-1"></i> Cursos
+            </a>
+          </li>
+
+          <!-- USUARIOS -->
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/admin/usuarios" routerLinkActive="active">
+              <i class="bi bi-person-gear me-1"></i> Usuarios
+            </a>
+          </li>
+        </ul>
+
+        <!-- ============================================================
+             ZONA DERECHA: INFORMACIÓN DEL USUARIO + LOGOUT
+        ============================================================ -->
+        <div class="d-flex align-items-center text-white small">
+
+          <!-- Datos del usuario actual (nombre, correo, rol).
+               Se muestran cuando haya un usuario logueado. -->
+          <!--
+          <div class="me-3 text-end" *ngIf="currentUser() as user">
+            <div class="fw-semibold">{{ user.firstName }} {{ user.lastName }}</div>
+            <div class="text-muted">{{ user.email }}</div>
+            <span class="badge bg-primary text-uppercase">
+              {{ user.role }}
+            </span>
+          </div>
+          -->
+
+          <!-- Botón de cerrar sesión -->
+          <button class="btn btn-outline-light btn-sm" (click)="onLogout()">
+            <i class="bi bi-box-arrow-right"></i>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </nav>
+
+  <!-- ============================================================
+       CONTENIDO PRINCIPAL DEL ADMIN
+       Renderiza la sección seleccionada mediante router-outlet.
+  ============================================================ -->
+  <main class="admin-main container-fluid py-4">
+    <router-outlet></router-outlet>
+  </main>
+</div>

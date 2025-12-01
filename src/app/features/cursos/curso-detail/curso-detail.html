@@ -1,0 +1,209 @@
+<!-- src/app/featured/cursos/curso-detail/curso-detail.html -->
+
+<section class="py-4" *ngIf="course as c">
+  <div class="row gx-5 gy-4" appFadeUp>
+
+    <!-- ============================================================
+         COLUMNA PRINCIPAL: DETALLE DEL CURSO
+    ============================================================ -->
+    <div class="col-lg-8">
+      <div class="card p-0 h-100">
+
+        <!-- Imagen principal -->
+        <img
+          *ngIf="c.imageUrl"
+          [src]="c.imageUrl"
+          [alt]="c.title"
+          class="card-img-top object-fit-cover"
+        />
+
+        <!-- Contenido del curso -->
+        <div class="p-3 p-md-4">
+
+          <!-- HEADER: título, tutor, meta, rating -->
+          <header class="mb-3">
+            <h1 class="h3 mb-1">{{ c.title }}</h1>
+
+            <p class="text-body-secondary mb-1">
+              Impartido por
+              <a
+                [routerLink]="['/tutores', c.tutorId]"
+                class="fw-semibold text-decoration-none"
+              >
+                {{ c.tutorName }}
+              </a>
+            </p>
+
+            <p class="text-body-secondary small mb-0">
+              {{ meta }}
+            </p>
+
+            <div
+              class="d-flex align-items-center gap-1 small text-warning mt-2"
+              *ngIf="c.rating"
+            >
+              <i class="bi bi-star-fill"></i>
+              <span>{{ c.rating | number: '1.1-1' }}</span>
+              <span class="text-secondary" *ngIf="c.ratingCount">
+                ({{ c.ratingCount }})
+              </span>
+            </div>
+          </header>
+
+          <!-- Descripción -->
+          <hr class="my-3" />
+          <section class="mb-4">
+            <h2 class="h6 mb-2">Descripción del curso</h2>
+            <p class="text-body-secondary">
+              {{ c.description }}
+            </p>
+          </section>
+
+          <!-- Etapas del curso -->
+          <hr class="my-3" />
+          <section class="mb-4" *ngIf="c.stages && c.stages.length">
+            <h2 class="h6 mb-2">Etapas del curso</h2>
+            <ol class="text-body-secondary small ps-3">
+              <li *ngFor="let stage of c.stages">{{ stage }}</li>
+            </ol>
+          </section>
+
+          <!-- Qué aprenderás -->
+          <hr class="my-3" />
+          <section class="mb-4" *ngIf="c.learnOutcomes && c.learnOutcomes.length">
+            <h2 class="h6 mb-2">Qué aprenderás al finalizar</h2>
+            <ul class="text-body-secondary small ps-3">
+              <li *ngFor="let item of c.learnOutcomes">{{ item }}</li>
+            </ul>
+          </section>
+
+          <!-- Modalidad (chips con íconos) -->
+          <hr class="my-3" />
+          <section class="mb-4">
+            <h2 class="h6 mb-2">Modalidad</h2>
+
+            <div class="d-flex flex-wrap gap-3">
+              <span
+                *ngFor="let m of c.modalities"
+                class="d-inline-flex align-items-center gap-2 text-body-secondary small"
+              >
+                <i
+                  class="bi"
+                  [ngClass]="{
+                    'bi-person-walking': m === 'Presencial',
+                    'bi-camera-video': m === 'Online',
+                    'bi-arrows-move': m === 'Híbrido'
+                  }"
+                ></i>
+                {{ m | titlecase }}
+              </span>
+            </div>
+          </section>
+
+          <!-- Más cursos del mismo tutor -->
+          <section *ngIf="moreCoursesFromTutor.length" class="mt-5">
+            <h2 class="h6 mb-3">
+              Más cursos de {{ c.tutorName }}
+            </h2>
+
+            <div class="row g-3">
+              <div class="col-md-6" *ngFor="let other of moreCoursesFromTutor">
+                <article class="card h-100 bg-darky text-light hover-lift">
+
+                  <div class="ratio ratio-16x9" *ngIf="other.imageUrl">
+                    <img
+                      [src]="other.imageUrl"
+                      [alt]="other.title"
+                      class="card-img-top object-fit-cover"
+                    />
+                  </div>
+
+                  <div class="card-body">
+                    <h3 class="h6 mb-1">
+                      <a
+                        href
+                        (click)="onRelatedCourseClick(other.slug, $event)"
+                        class="stretched-link text-decoration-none text-light"
+                      >
+                        {{ other.title }}
+                      </a>
+                    </h3>
+
+                    <p class="text-light small mb-1">
+                      {{ other.difficulty }} · {{ other.duration }}
+                    </p>
+
+                    <div
+                      class="d-flex align-items-center gap-1 small text-warning mb-1"
+                      *ngIf="other.rating"
+                    >
+                      <i class="bi bi-star-fill text-light"></i>
+                      <span>{{ other.rating | number: '1.1-1' }}</span>
+                      <span class="text-secondary" *ngIf="other.ratingCount">
+                        ({{ other.ratingCount }})
+                      </span>
+                    </div>
+
+                    <p class="text-light small mb-0 description">
+                      {{ other.shortDescription }}
+                    </p>
+                  </div>
+                </article>
+              </div>
+            </div>
+          </section>
+
+        </div> <!-- /p-3 p-md-4 -->
+      </div> <!-- /card -->
+    </div> <!-- /col-lg-8 -->
+
+    <!-- ============================================================
+         SIDEBAR: PRECIO + CTA + INFO
+    ============================================================ -->
+    <aside class="col-lg-4">
+      <div class="card sticky-card">
+        <div class="card-body">
+
+          <!-- Precio -->
+          <div class="d-flex justify-content-between align-items-baseline mb-3">
+            <h6 class="text-muted text-uppercase small mb-0">
+              Valor del curso
+            </h6>
+            <h3 class="mb-0">
+              {{ priceLabel }}
+            </h3>
+          </div>
+
+          <!-- CTA -->
+          <button type="button" class="btn btn-primary w-100 mb-3">
+            Reservar cupo
+          </button>
+
+          <!-- Disponibilidad simulada -->
+          <div class="border-top pt-3">
+            <h3 class="h6 mb-2">Disponibilidad</h3>
+            <p class="text-body-secondary small mb-1">
+              Próximos bloques disponibles:
+            </p>
+            <ul class="text-body-secondary small mb-0">
+              <li>Martes 19:00 - 20:00 (2 cupos)</li>
+              <li>Jueves 20:00 - 21:00 (1 cupo)</li>
+              <li>Sábado 11:00 - 12:30 (3 cupos)</li>
+            </ul>
+          </div>
+
+          <hr class="my-3" />
+
+          <!-- Volver -->
+          <div class="d-grid gap-2 mt-4">
+            <a routerLink="/cursos" class="btn btn-dark" type="button">
+              Volver a cursos
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </aside>
+
+  </div>
+</section>

@@ -1,0 +1,150 @@
+<!-- src/app/admin/pages/admin-tutores/admin-tutores.html -->
+
+<div>
+
+  <!-- ============================================================
+       ENCABEZADO: total de tutores + botón para crear nuevo
+  ============================================================ -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <!-- Contador simple de tutores cargados -->
+      <p class="small text-muted mb-0">
+        Total tutores: <strong>{{ tutores.length }}</strong>
+      </p>
+    </div>
+
+    <!-- Botón que abre el formulario en modo "nuevo tutor" -->
+    <button class="btn btn-primary btn-sm" (click)="onNuevo()">
+      + Nuevo Tutor
+    </button>
+  </div>
+
+  <!-- ============================================================
+       FORMULARIO DE CREACIÓN / EDICIÓN
+       Se muestra solo cuando showForm = true
+  ============================================================ -->
+  <div *ngIf="showForm" class="card shadow-sm border-0 mt-3">
+    <div class="card-body">
+      <!-- Título dinámico según si estoy editando o creando -->
+      <h2 class="h5 mb-3">
+        {{ editingTutor ? 'Editar Tutor' : 'Nuevo Tutor' }}
+      </h2>
+
+      <!-- Componente de formulario reutilizable para tutores -->
+      <!-- [value] recibe el tutor a editar (o null para uno nuevo) -->
+      <!-- (save) emite el tutor completo listo para guardar -->
+      <!-- (cancel) cierra el formulario sin aplicar cambios -->
+      <app-tutor-form
+        [value]="editingTutor"
+        (save)="onSaveTutor($event)"
+        (cancel)="onCancelForm()
+        "
+      ></app-tutor-form>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       MENSAJE DE ERROR
+       Se muestra cuando la carga de tutores falla
+  ============================================================ -->
+  <div *ngIf="error" class="alert alert-danger small py-2">
+    {{ error }}
+  </div>
+
+  <!-- ============================================================
+       TABLA DE TUTORES
+       Solo se muestra si hay al menos un tutor en la lista
+  ============================================================ -->
+  <div class="table-responsive mb-4" *ngIf="tutores.length > 0">
+    <table class="table table-hover table-sm align-middle">
+      <thead class="table-light">
+        <tr>
+          <th>Nombre</th>
+          <th>Instrumentos</th>
+          <th>Estilos</th>
+          <th>Modalidades</th>
+          <th>Ciudad</th>
+          <th>Precio</th>
+          <th>Rating</th>
+          <th class="text-end">Acciones</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <!-- Fila por cada tutor disponible -->
+        <tr *ngFor="let t of tutores">
+          <!-- Nombre + avatar del tutor -->
+          <td class="fw-semibold">
+            <img
+              [src]="t.avatarUrl"
+              alt="Avatar"
+              class="rounded me-2"
+              style="width: 34px; height: 34px; object-fit: cover;"
+            />
+            {{ t.name }}
+          </td>
+
+          <!-- Instrumentos que enseña (badges) -->
+          <td>
+            <span
+              *ngFor="let inst of t.instruments"
+              class="badge bg-secondary-subtle text-secondary me-1"
+            >
+              {{ inst }}
+            </span>
+          </td>
+
+          <!-- Estilos musicales (badges) -->
+          <td>
+            <span
+              *ngFor="let st of t.styles"
+              class="badge bg-info-subtle text-info me-1"
+            >
+              {{ st }}
+            </span>
+          </td>
+
+          <!-- Modalidades (presencial/online) -->
+          <td>
+            <span
+              *ngFor="let mo of t.modalities"
+              class="badge bg-success-subtle text-success me-1"
+            >
+              {{ mo }}
+            </span>
+          </td>
+
+          <!-- Ciudad donde atiende el tutor -->
+          <td>{{ t.city }}</td>
+
+          <!-- Precio por hora, formateado en CLP -->
+          <td>{{ t.hourlyRate | currency:'$':'symbol':'1.0-0' }}</td>
+
+          <!-- Rating promedio + cantidad de reseñas -->
+          <td>
+            <span class="text-warning">
+              ★ {{ t.rating }}
+            </span>
+            <span class="text-muted small">({{ t.ratingCount }})</span>
+          </td>
+
+          <!-- ACCIONES: editar / eliminar -->
+          <td class="text-end">
+            <div class="btn-group btn-group-sm">
+              <!-- Editar tutor → rellena el formulario con sus datos -->
+              <button class="btn btn-outline-secondary" (click)="onEdit(t)">
+                <i class="bi bi-pencil"></i>
+              </button>
+
+              <!-- Eliminar tutor → confirma antes de borrar -->
+              <button class="btn btn-outline-danger" (click)="onDelete(t)">
+                <i class="bi bi-trash"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>

@@ -1,0 +1,260 @@
+<!-- src/app/shared/forms/user-form/user-form.component.html -->
+
+<!-- =======================================================================
+FORMULARIO DE USUARIO (ADMIN)
+----------------------------------------------------------------------------
+Este template se conecta al UserFormComponent:
+
+- [formGroup]="form" une todos los controles al FormGroup creado en el TS.
+- (ngSubmit)="onSubmit()" dispara la lógica que arma el objeto User final.
+- Los mensajes de error dependen del helper hasError(control, errorCode).
+
+Pensado para:
+- Crear y editar usuarios de la plataforma.
+- Controlar nombre, correo, rol, fecha de nacimiento, contraseña y estado.
+=========================================================================== -->
+<form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+
+  <!-- --------------------------------------------------------------------
+  ACCIONES SUPERIORES
+  Botones de Cancelar / Guardar arriba del formulario para no obligar a
+  scrollear hasta el final cuando se hacen pequeñas ediciones.
+  ------------------------------------------------------------------------ -->
+  <div class="mt-4 d-flex justify-content-end gap-2">
+    <button
+      type="button"
+      class="btn btn-outline-secondary btn-sm"
+      (click)="onCancel()"
+    >
+      Cancelar
+    </button>
+    <button type="submit" class="btn btn-primary btn-sm">
+      Guardar
+    </button>
+  </div>
+
+  <div class="row g-3">
+    <!-- --------------------------------------------------------------------
+    NOMBRE
+    - Campo obligatorio.
+    - Validaciones:
+        • required  → no puede ir vacío.
+        • minlength → mínimo 2 caracteres para evitar nombres ridículamente cortos.
+    - Se guarda en firstName.
+    -------------------------------------------------------------------- -->
+    <div class="col-md-6">
+      <label class="form-label">Nombre</label>
+      <input
+        type="text"
+        class="form-control"
+        formControlName="firstName"
+        [class.is-invalid]="
+          hasError('firstName', 'required') ||
+          hasError('firstName', 'minlength')
+        "
+      />
+      <div class="invalid-feedback" *ngIf="hasError('firstName', 'required')">
+        El nombre es obligatorio.
+      </div>
+      <div class="invalid-feedback" *ngIf="hasError('firstName', 'minlength')">
+        El nombre debe tener al menos 2 caracteres.
+      </div>
+    </div>
+
+    <!-- --------------------------------------------------------------------
+    APELLIDOS
+    - También obligatorio.
+    - Igual lógica de validación que el nombre:
+        • required
+        • minlength (al menos 2 caracteres).
+    - Se guarda en lastName.
+    -------------------------------------------------------------------- -->
+    <div class="col-md-6">
+      <label class="form-label">Apellidos</label>
+      <input
+        type="text"
+        class="form-control"
+        formControlName="lastName"
+        [class.is-invalid]="
+          hasError('lastName', 'required') ||
+          hasError('lastName', 'minlength')
+        "
+      />
+      <div class="invalid-feedback" *ngIf="hasError('lastName', 'required')">
+        Los apellidos son obligatorios.
+      </div>
+      <div class="invalid-feedback" *ngIf="hasError('lastName', 'minlength')">
+        Los apellidos deben tener al menos 2 caracteres.
+      </div>
+    </div>
+
+    <!-- --------------------------------------------------------------------
+    CORREO
+    - Campo obligatorio.
+    - Validaciones:
+        • required → no puede quedar en blanco.
+        • email    → debe tener formato de correo válido.
+    - Se guarda en email y se usa después para login / contacto.
+    -------------------------------------------------------------------- -->
+    <div class="col-md-6">
+      <label class="form-label">Correo</label>
+      <input
+        type="email"
+        class="form-control"
+        formControlName="email"
+        [class.is-invalid]="
+          hasError('email', 'required') || hasError('email', 'email')
+        "
+      />
+      <div class="invalid-feedback" *ngIf="hasError('email', 'required')">
+        El correo es obligatorio.
+      </div>
+      <div class="invalid-feedback" *ngIf="hasError('email', 'email')">
+        Debes ingresar un correo válido.
+      </div>
+    </div>
+
+    <!-- --------------------------------------------------------------------
+    ROL
+    - Define el tipo de acceso del usuario:
+        • admin
+        • instructor
+        • user
+      (o los que se entreguen desde @Input() roles)
+    - Campo obligatorio.
+    - Se usa para mostrar/ocultar secciones del admin, permisos, etc.
+    -------------------------------------------------------------------- -->
+    <div class="col-md-3">
+      <label class="form-label">Rol</label>
+      <select
+        class="form-select"
+        formControlName="role"
+        [class.is-invalid]="hasError('role', 'required')"
+      >
+        <option *ngFor="let r of roles" [ngValue]="r">
+          {{ r | titlecase }}
+        </option>
+      </select>
+      <div class="invalid-feedback" *ngIf="hasError('role', 'required')">
+        El rol es obligatorio.
+      </div>
+    </div>
+
+    <!-- --------------------------------------------------------------------
+    FECHA DE NACIMIENTO
+    - Campo obligatorio.
+    - Validaciones:
+        • required  → no puede ir vacío.
+        • tooYoung  → validator personalizado que exige mínimo 13 años.
+    - Se guarda en dateOfBirth. Útil para segmentar usuarios por edad
+      o políticas de menor de edad.
+    -------------------------------------------------------------------- -->
+    <div class="col-md-3">
+      <label class="form-label">Fecha de nacimiento</label>
+      <input
+        type="date"
+        class="form-control"
+        formControlName="dateOfBirth"
+        [class.is-invalid]="
+          hasError('dateOfBirth', 'required') || hasError('dateOfBirth', 'tooYoung')
+        "
+      />
+      <div class="invalid-feedback" *ngIf="hasError('dateOfBirth', 'required')">
+        Obligatorio.
+      </div>
+      <div class="invalid-feedback" *ngIf="hasError('dateOfBirth', 'tooYoung')">
+        Debe tener al menos 13 años.
+      </div>
+    </div>
+
+    <!-- --------------------------------------------------------------------
+    DIRECCIÓN (OPCIONAL)
+    - Campo libre para dirección de envío / contacto.
+    - No tiene validaciones porque no es obligatorio.
+    - Se guarda en shippingAddress.
+    -------------------------------------------------------------------- -->
+    <div class="col-md-6">
+      <label class="form-label">Dirección (opcional)</label>
+      <input
+        type="text"
+        class="form-control"
+        formControlName="shippingAddress"
+      />
+    </div>
+
+    <!-- --------------------------------------------------------------------
+    CONTRASEÑA
+    - Campo sensible (en este contexto es solo "temporal" hasta tener backend).
+    - Validaciones (según lo definido en el FormGroup):
+        • required     → no puede quedar vacía.
+        • minlength    → al menos 6 caracteres.
+        • maxlength    → máximo 18 caracteres.
+        • weakPassword → validator personalizado: al menos un número
+                         y una mayúscula.
+    - Se guarda en password, pero la lógica de seguridad real debería
+      ir del lado del backend.
+    -------------------------------------------------------------------- -->
+    <div class="col-md-6">
+      <label class="form-label">Contraseña</label>
+      <input
+        type="password"
+        class="form-control"
+        formControlName="password"
+        [class.is-invalid]="
+          hasError('password', 'required') ||
+          hasError('password', 'minlength') ||
+          hasError('password', 'maxlength') ||
+          hasError('password', 'weakPassword')
+        "
+      />
+      <div class="invalid-feedback" *ngIf="hasError('password', 'required')">
+        La contraseña es obligatoria.
+      </div>
+      <div class="invalid-feedback" *ngIf="hasError('password', 'minlength')">
+        Debe tener al menos 6 caracteres.
+      </div>
+      <div class="invalid-feedback" *ngIf="hasError('password', 'maxlength')">
+        No puede exceder 18 caracteres.
+      </div>
+      <div class="invalid-feedback" *ngIf="hasError('password', 'weakPassword')">
+        Debe contener al menos un número y una mayúscula.
+      </div>
+    </div>
+
+    <!-- --------------------------------------------------------------------
+    USUARIO ACTIVO
+    - Checkbox que controla la propiedad isActive del usuario.
+    - Si está desmarcado, el usuario podría quedar "deshabilitado" para login,
+      pero sin eliminar sus datos.
+    -------------------------------------------------------------------- -->
+    <div class="col-md-6 d-flex align-items-end">
+      <div class="form-check small">
+        <input
+          type="checkbox"
+          class="form-check-input"
+          id="uIsActive"
+          formControlName="isActive"
+        />
+        <label class="form-check-label" for="uIsActive">Usuario activo</label>
+      </div>
+    </div>
+  </div>
+
+  <!-- ------------------------------------------------------------------------
+  ACCIONES INFERIORES
+  Repetición de los botones de Cancelar / Guardar al final del formulario.
+  Mejora la UX porque el usuario no tiene que volver arriba para guardar.
+  ------------------------------------------------------------------------ -->
+  <div class="mt-4 d-flex justify-content-end gap-2">
+    <button
+      type="button"
+      class="btn btn-outline-secondary btn-sm"
+      (click)="onCancel()"
+    >
+      Cancelar
+    </button>
+    <button type="submit" class="btn btn-primary btn-sm">
+      Guardar
+    </button>
+  </div>
+</form>

@@ -1,0 +1,22 @@
+
+
+/* Quita cualquier radius de la imagen — se maneja por media queries */
+.register-img {
+  border-radius: 0 !important;
+}
+
+/* En móvil la imagen va arriba → solo borde superior */
+@media (max-width: 767.98px) {
+  .register-img {
+    border-top-left-radius: 0.5rem !important;
+    border-top-right-radius: 0.5rem !important;
+  }
+}
+
+/* En pantallas medianas en adelante: SIN radios internos */
+@media (min-width: 768px) {
+  .register-img {
+    border-radius: 0 !important;  
+  }
+}
+

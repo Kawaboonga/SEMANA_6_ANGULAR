@@ -1,0 +1,117 @@
+<!-- src/app/featured/noticias/noticias-detail/noticias-detail.html -->
+
+<!-- ============================================================
+     CONTENEDOR PRINCIPAL — se muestra solo si existe `noticia`
+============================================================ -->
+<div class="container py-4" *ngIf="noticia as n">
+
+  <div class="row g-4" appFadeUp>
+
+    <!-- ============================================================
+         COLUMNA IZQUIERDA: CONTENIDO PRINCIPAL DE LA NOTICIA
+    ============================================================ -->
+    <div class="col-12 col-lg-8">
+
+      <!-- Imagen destacada -->
+      <img
+        [src]="n.imageUrl"
+        [alt]="n.title"
+        class="img-fluid rounded-4 mb-4 w-100"
+      />
+
+      <!-- Título de la noticia -->
+      <h1>{{ n.title }}</h1>
+
+      <!-- Fecha + subtítulo (si existen) -->
+      <p class="text-muted" *ngIf="n.date || n.subtitle">
+        {{ n.date }}
+        <span *ngIf="n.subtitle"> · {{ n.subtitle }}</span>
+      </p>
+
+      <!-- Bajada / extracto -->
+      <p class="lead mb-4">
+        {{ n.excerpt }}
+      </p>
+
+      <!-- Párrafos del contenido (array de strings) -->
+      <p *ngFor="let p of n.content" class="mb-3">
+        {{ p }}
+      </p>
+    </div>
+
+    <!-- ============================================================
+         SIDEBAR DERECHA — LISTADO + PAGINACIÓN
+    ============================================================ -->
+    <div class="col-12 col-lg-4 text-white">
+
+      <!-- Título Sidebar -->
+      <h5 class="mb-3">Otras noticias</h5>
+
+      <!-- Listado de noticias relacionadas (paginadas) -->
+      <ul class="list-unstyled">
+        <li *ngFor="let other of otrasNoticias" class="mb-2">
+          <a
+            [routerLink]="['/noticias', other.id]"
+            class="sidebar-link"
+          >
+            {{ other.title }}
+          </a>
+        </li>
+      </ul>
+
+      <!-- ========================================================
+           Paginación del sidebar (máx 10 por página)
+      ======================================================== -->
+      <nav *ngIf="totalPages > 1" class="mt-3">
+        <ul class="pagination pagination-sm mb-0">
+
+          <!-- Botón Anterior -->
+          <li class="page-item" [class.disabled]="page === 1">
+            <button
+              class="page-link"
+              type="button"
+              (click)="goPrev()"
+              [disabled]="page === 1"
+            >
+              Anterior
+            </button>
+          </li>
+
+          <!-- Estado actual -->
+          <li class="page-item disabled">
+            <span class="page-link">
+              Página {{ page }} de {{ totalPages }}
+            </span>
+          </li>
+
+          <!-- Botón Siguiente -->
+          <li class="page-item" [class.disabled]="page === totalPages">
+            <button
+              class="page-link"
+              type="button"
+              (click)="goNext()"
+              [disabled]="page === totalPages"
+            >
+              Siguiente
+            </button>
+          </li>
+
+        </ul>
+      </nav>
+
+      <!-- Botón Volver -->
+      <div class="d-grid gap-2 mt-3">
+        <a
+          routerLink="/noticias"
+          class="btn btn-primary"
+          type="button"
+        >
+          Volver a noticias
+        </a>
+      </div>
+
+    </div>
+    <!-- /SIDEBAR -->
+
+  </div>
+</div>

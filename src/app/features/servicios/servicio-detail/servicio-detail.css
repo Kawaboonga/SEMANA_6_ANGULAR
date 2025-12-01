@@ -1,0 +1,128 @@
+
+/*
+.service-main {
+  background: linear-gradient(180deg, #0d1323, #0b111e);
+  border: 1px solid rgba(214, 204, 204, 0.08);
+}
+
+.service-main-image {
+  max-height: 320px;
+  width: 100%;
+  object-fit: cover;
+}
+
+.service-content p {
+  color: rgba(255, 255, 255, 0.84);
+}
+
+
+.service-sidebar {
+  background: #101626;
+  border: 1px solid rgba(214, 204, 204, 0.12);
+}
+
+.service-sidebar-link {
+  padding: 0.6rem 0.75rem;
+  border-radius: 0.75rem;
+  text-decoration: none;
+  background: transparent;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.15s ease;
+  color: #e0e3ff;
+}
+
+.service-sidebar-link:hover {
+  background-color: rgba(110, 134, 255, 0.12);
+  transform: translateX(2px);
+}
+
+.service-sidebar-link.active {
+  background: linear-gradient(135deg, #6e86ff, #b48bff);
+  color: #050712;
+}
+
+.service-sidebar-link.active span:last-child {
+  color: #050712;
+}
+
+@media (max-width: 991.98px) {
+  .service-main-image {
+    max-height: 240px;
+  }
+
+  .service-sidebar {
+    margin-top: 0.5rem;
+  }
+}
+*/
+
+/* Imagen principal: ocupar ancho y mantener proporción */
+.service-main-image {
+  max-height: 320px;
+  object-fit: cover;
+}
+
+/* Badge superior del servicio */
+.service-badge {
+  letter-spacing: 0.08em;
+  background: rgba(139, 92, 246, 0.1);
+  color: #c4b5fd;
+  border: 1px solid rgba(139, 92, 246, 0.4);
+}
+
+/* Bloque principal del servicio */
+.service-main {
+  border: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+/* Highlight “cómo funciona / para quién es” */
+.service-highlight {
+  border-radius: 1rem;
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  padding: 1rem 1.25rem;
+  color: white;
+}
+
+/* Sidebar */
+.service-sidebar-card,
+.service-sidebar {
+  background: rgba(15, 23, 42, 0.95);
+  border: 1px solid rgba(148, 163, 184, 0.25);
+}
+
+/* Links otros servicios */
+.service-sidebar-link {
+  transition: background-color 0.18s ease, transform 0.18s ease, border-color 0.18s ease;
+  border: 1px solid transparent;
+}
+
+.service-sidebar-link:hover {
+  background-color: rgba(148, 163, 184, 0.08);
+  border-color: rgba(148, 163, 184, 0.4);
+  transform: translateY(-1px);
+  text-decoration: none;
+}
+
+.service-sidebar-link.active {
+  background: linear-gradient(90deg, rgba(139, 92, 246, 0.25), rgba(30, 64, 175, 0.3));
+  border-color: rgba(129, 140, 248, 0.9);
+}
+
+/* Tamaño de texto extra pequeño reutilizable */
+.xsmall {
+  font-size: 0.75rem;
+}
+
+/* Sticky en desktop */
+@media (min-width: 992px) {
+  .position-lg-sticky {
+    position: sticky;
+  }
+
+  .top-lg-0 {
+    top: 1.5rem;
+  }
+}

@@ -1,0 +1,12 @@
+img {
+  border-radius: 12px;
+}
+
+.sidebar-link {
+  text-decoration: none;
+  color: #d4e4ff;
+}
+
+.sidebar-link:hover {
+  text-decoration: underline;
+}

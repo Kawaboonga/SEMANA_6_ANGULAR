@@ -1,0 +1,472 @@
+<!--
+  Formulario reactivo para crear / editar un curso.
+  Uso [formGroup] para enlazar con el FormGroup definido en el componente TS.
+-->
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="course-form">
+
+  <!--
+    Botones principales del formulario (arriba):
+    - Cancelar: vuelve al listado / cierra el formulario.
+    - Guardar curso: dispara el submit del formulario.
+  -->
+  <div class="d-flex justify-content-end gap-2 mb-4">
+    <button type="button" class="btn btn-outline-secondary btn-sm" (click)="onCancel()">
+      Cancelar
+    </button>
+    <button type="submit" class="btn btn-primary btn-sm">
+      Guardar curso
+    </button>
+  </div>
+
+  <!--
+    Aviso global de validación:
+    Solo se muestra cuando ya intenté enviar (submitted)
+    y el formulario sigue siendo inválido.
+  -->
+  <div
+    *ngIf="submitted && form.invalid"
+    class="alert alert-danger mb-3"
+    role="alert"
+  >
+    Hay campos obligatorios incompletos o con errores. Revisa los mensajes en cada sección.
+  </div>
+
+  <!-- ================== Datos básicos ================== -->
+  <!--
+    Card con los datos principales del curso:
+    título, tutorId y nombre del tutor.
+  -->
+  <div class="card mb-3">
+    <div class="card-body">
+      <h5 class="card-title mb-3">Datos del curso</h5>
+
+      <div class="row g-3">
+        <!-- Título del curso -->
+        <div class="col-md-4">
+          <label class="form-label">Título *</label>
+          <input
+            type="text"
+            class="form-control"
+            formControlName="title"
+            placeholder="Curso intensivo de guitarra rock"
+          />
+          <div class="invalid-feedback d-block" *ngIf="hasError('title','required')">
+            El título es obligatorio.
+          </div>
+        </div>
+
+        <!--
+          Slug:
+          El control existe en el FormGroup, pero no lo muestro aquí.
+          Si en el futuro necesito editarlo a mano, puedo agregar un input extra.
+        -->
+
+        <!-- ID interno del tutor (para relacionarlo con el modelo de tutores) -->
+        <div class="col-md-4">
+          <label class="form-label">Tutor (ID) *</label>
+          <input
+            type="text"
+            class="form-control"
+            formControlName="tutorId"
+            placeholder="marco-vidal"
+          />
+          <div class="invalid-feedback d-block" *ngIf="hasError('tutorId','required')">
+            El ID del tutor es obligatorio.
+          </div>
+        </div>
+
+        <!-- Nombre visible del tutor en la card / detalle -->
+        <div class="col-md-4">
+          <label class="form-label">Nombre del tutor *</label>
+          <input
+            type="text"
+            class="form-control"
+            formControlName="tutorName"
+            placeholder="Marco Vidal"
+          />
+          <div class="invalid-feedback d-block" *ngIf="hasError('tutorName','required')">
+            El nombre del tutor es obligatorio.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================== Nivel, duración y modalidad ================== -->
+  <!--
+    Sección para configurar la dificultad, la duración (preset)
+    y la modalidad del curso.
+  -->
+  <div class="card mb-3">
+    <div class="card-body">
+      <h5 class="card-title mb-3">Nivel, duración y modalidad</h5>
+
+      <div class="row g-3">
+        <!-- Dificultad: se carga desde el arreglo difficultyOptions -->
+        <div class="col-md-4">
+          <label class="form-label">Dificultad *</label>
+          <select class="form-select" formControlName="difficulty">
+            <option *ngFor="let diff of difficultyOptions" [value]="diff">
+              {{ diff | titlecase }}
+            </option>
+          </select>
+          <div class="invalid-feedback d-block" *ngIf="hasError('difficulty','required')">
+            La dificultad es obligatoria.
+          </div>
+        </div>
+
+        <!--
+          Duración predefinida:
+          Al cambiar este select, onDurationPresetChange($event)
+          actualiza horas, número de clases y el texto de duración.
+        -->
+        <div class="col-md-4">
+          <label class="form-label">Duración (predefinida) *</label>
+          <select
+            class="form-select"
+            formControlName="durationPreset"
+            (change)="onDurationPresetChange($event)"
+          >
+            <option *ngFor="let d of durationPresets; let i = index" [value]="i">
+              {{ d.label }}
+            </option>
+          </select>
+          <div class="form-text">
+            Define horas y número de clases automáticamente.
+          </div>
+          <div class="invalid-feedback d-block" *ngIf="hasError('durationPreset','required')">
+            Debes seleccionar una duración.
+          </div>
+        </div>
+
+        <!--
+          Modalidad:
+          Usa presets que mapean a las modalidades que se muestran en el detalle
+          (presencial, online, presencial y online).
+        -->
+        <div class="col-md-4">
+          <label class="form-label">Modalidad *</label>
+          <select
+            class="form-select"
+            formControlName="modalityPreset"
+          >
+            <option *ngFor="let m of modalityPresets" [value]="m.value">
+              {{ m.label }}
+            </option>
+          </select>
+          <div class="invalid-feedback d-block" *ngIf="hasError('modalityPreset','required')">
+            Debes seleccionar una modalidad.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================== Contenido ================== -->
+  <!--
+    Textos que se muestran en la card y en el detalle del curso:
+    - shortDescription: resumen corto.
+    - description: texto más largo con detalles.
+  -->
+  <div class="card mb-3">
+    <div class="card-body">
+      <h5 class="card-title mb-3">Contenido</h5>
+
+      <div class="mb-3">
+        <label class="form-label">Descripción corta *</label>
+        <input
+          type="text"
+          class="form-control"
+          formControlName="shortDescription"
+        />
+        <div class="invalid-feedback d-block" *ngIf="hasError('shortDescription','required')">
+          La descripción corta es obligatoria.
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Descripción larga *</label>
+        <textarea
+          rows="3"
+          class="form-control"
+          formControlName="description"
+        ></textarea>
+        <div class="invalid-feedback d-block" *ngIf="hasError('description','required')">
+          La descripción larga es obligatoria.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================== Imagen ================== -->
+  <!--
+    URL de la imagen principal del curso.
+    Si está vacía, la card se puede mostrar sin imagen o con un placeholder.
+  -->
+  <div class="card mb-3">
+    <div class="card-body">
+      <h5 class="card-title mb-3">Imagen del curso</h5>
+
+      <div class="mb-3">
+        <label class="form-label">URL imagen principal</label>
+        <input
+          type="text"
+          class="form-control"
+          formControlName="imageUrl"
+          placeholder="assets/img/courses/guitarra-rock.jpg"
+        />
+        <div class="form-text">
+          Si no agregas imagen, la card puede mostrarse sin foto.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================== Estructura del curso ================== -->
+  <!--
+    Aquí defino la estructura interna del curso:
+    - stagesText: lista de módulos (cada línea es un ítem).
+    - learnOutcomesText: lista de aprendizajes (cada línea es un ítem).
+    En el TS convierto estos textos en arrays antes de guardar.
+  -->
+  <div class="card mb-3">
+    <div class="card-body">
+      <h5 class="card-title mb-3">Estructura del curso</h5>
+
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label class="form-label">Etapas / Módulos (uno por línea)</label>
+          <textarea
+            rows="3"
+            class="form-control"
+            formControlName="stagesText"
+          ></textarea>
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label">Qué aprenderá el estudiante (uno por línea)</label>
+          <textarea
+            rows="3"
+            class="form-control"
+            formControlName="learnOutcomesText"
+          ></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================== Rating + Precio ================== -->
+  <!--
+    Sección para rating y precios del curso.
+    - Rating: se puede dejar manual o usar presets.
+    - Precio total CLP: obligatorio (select con valores predefinidos).
+    - Precio por hora: opcional, también con presets.
+  -->
+  <div class="card mb-3">
+    <div class="card-body">
+      <h5 class="card-title mb-3">Rating y precio</h5>
+
+      <div class="row g-3">
+        <!-- Rating usando presets -->
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Rating (preset)</label>
+          <select class="form-select" (change)="onRatingPresetChange($event)">
+            <option value="">Definir manualmente / sin rating</option>
+            <option *ngFor="let r of ratingPresets; let i = index" [value]="i">
+              {{ r.label }}
+            </option>
+          </select>
+
+          <!--
+            Controles para rating manual:
+            Están comentados porque por ahora estoy usando solo presets.
+            Si más adelante quiero editar rating a mano, los puedo reactivar.
+          -->
+          <!--
+          <div class="row g-2 mt-2">
+            <div class="col-6">
+              <label class="form-label small mb-0">Rating promedio</label>
+              <input
+                type="number"
+                step="0.1"
+                class="form-control form-control-sm"
+                formControlName="rating"
+              />
+            </div>
+            <div class="col-6">
+              <label class="form-label small mb-0">Cantidad de reseñas</label>
+              <input
+                type="number"
+                class="form-control form-control-sm"
+                formControlName="ratingCount"
+              />
+            </div>
+          </div>
+          -->
+        </div>
+
+        <!-- Precio total del curso -->
+        <div class="col-md-3">
+          <label class="form-label">Precio total (CLP) *</label>
+          <select class="form-select" formControlName="priceCLP">
+            <option *ngFor="let p of presetPricesCLP" [ngValue]="p">
+              {{ p | currency:'CLP':'symbol':'1.0-0' }}
+            </option>
+          </select>
+          <div class="invalid-feedback d-block" *ngIf="hasError('priceCLP','required')">
+            El precio total es obligatorio.
+          </div>
+        </div>
+
+        <!-- Precio por hora (opcional) -->
+        <div class="col-md-3">
+          <label class="form-label">Precio por hora (opcional)</label>
+          <select
+            class="form-select"
+            formControlName="pricePerHour"
+            (change)="onPricePerHourPreset($event)"
+          >
+            <option [ngValue]="null">Sin definir</option>
+            <option *ngFor="let p of pricePerHourPresets" [ngValue]="p">
+              {{ p | currency:'CLP':'symbol':'1.0-0' }}
+            </option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================== Tags ================== -->
+  <!--
+    Selector de tags:
+    - allTags: lista de todos los tags disponibles.
+    - selectedTags: array con los tags actualmente elegidos.
+    El método onToggleTag(tag, checked) se encarga de agregarlos o quitarlos.
+  -->
+  <div class="card mb-3">
+    <div class="card-body">
+      <h5 class="card-title mb-3">Tags</h5>
+      <p class="small text-muted">
+        Selecciona los tags que describen este curso.
+      </p>
+
+      <div class="d-flex flex-wrap gap-2">
+        <label
+          *ngFor="let tag of allTags"
+          class="badge rounded-pill bg-secondary-subtle text-light px-3 py-2 d-flex align-items-center gap-2"
+          style="cursor:pointer"
+        >
+          <input
+            type="checkbox"
+            class="form-check-input m-0"
+            [checked]="selectedTags.includes(tag)"
+            (change)="onToggleTag(tag, $event.target.checked)"
+          />
+          {{ tag }}
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================== Flags admin ================== -->
+  <!--
+    Flags de visibilidad para el curso:
+    - showInCarousel: aparece en carruseles de la home.
+    - isFeatured: se muestra como destacado.
+    - isOffer: marcado como oferta.
+    - isNew: etiquetado como nuevo.
+    - isActive: controla si se muestra o no en el sitio público.
+  -->
+  <div class="card mb-3">
+    <div class="card-body">
+      <h5 class="card-title mb-3">Visibilidad</h5>
+
+      <div class="row g-3">
+        <div class="col-md-2 col-6">
+          <div class="form-check form-switch">
+            <input
+              type="checkbox"
+              class="form-check-input"
+              id="showInCarousel"
+              formControlName="showInCarousel"
+            />
+            <label class="form-check-label" for="showInCarousel">
+              En carruseles
+            </label>
+          </div>
+        </div>
+
+        <div class="col-md-2 col-6">
+          <div class="form-check form-switch">
+            <input
+              type="checkbox"
+              class="form-check-input"
+              id="isFeatured"
+              formControlName="isFeatured"
+            />
+            <label class="form-check-label" for="isFeatured">
+              Destacado
+            </label>
+          </div>
+        </div>
+
+        <div class="col-md-2 col-6">
+          <div class="form-check form-switch">
+            <input
+              type="checkbox"
+              class="form-check-input"
+              id="isOffer"
+              formControlName="isOffer"
+            />
+            <label class="form-check-label" for="isOffer">
+              Oferta
+            </label>
+          </div>
+        </div>
+
+        <div class="col-md-2 col-6">
+          <div class="form-check form-switch">
+            <input
+              type="checkbox"
+              class="form-check-input"
+              id="isNew"
+              formControlName="isNew"
+            />
+            <label class="form-check-label" for="isNew">
+              Nuevo
+            </label>
+          </div>
+        </div>
+
+        <div class="col-md-2 col-6">
+          <div class="form-check form-switch">
+            <input
+              type="checkbox"
+              class="form-check-input"
+              id="isActive"
+              formControlName="isActive"
+            />
+            <label class="form-check-label" for="isActive">
+              Activo
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================== BOTONES (pie del formulario) ================== -->
+  <!--
+    Mismos botones del inicio, pero al final del formulario
+    para no tener que volver arriba después de editar todo.
+  -->
+  <div class="d-flex justify-content-end gap-2 mb-4">
+    <button type="button" class="btn btn-outline-secondary" (click)="onCancel()">
+      Cancelar
+    </button>
+    <button type="submit" class="btn btn-primary">
+      Guardar curso
+    </button>
+  </div>
+
+</form>

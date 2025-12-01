@@ -1,0 +1,128 @@
+<!-- =========================================================================
+     TUTOR FILTER BAR TEMPLATE
+     -------------------------------------------------------------------------
+     Esta barra de filtros controla la búsqueda de instructores.
+     El estado se guarda localmente en `local`, y cada cambio ejecuta onChange().
+     El componente padre envía el filtro original y recibe los cambios vía 
+     (filterChange), delegando al TutorService el filtrado real.
+   ========================================================================= -->
+
+<div class="filter-shell mb-5">
+
+  <!-- Grid principal de filtros -->
+  <div class="row gy-3 gx-3 align-items-end">
+
+    <!-- ==============================================================
+         FILTRO: INSTRUMENTO
+         ============================================================== -->
+    <div class="col-12 col-md-2">
+      <label class="form-label text-light">Instrumento</label>
+
+      <!-- ngModel → trabaja sobre la copia local del filtro -->
+      <select 
+        class="form-select"
+        [(ngModel)]="local.instrument"
+        (ngModelChange)="onChange()">
+
+        <option value="todos">Todos</option>
+        <option value="guitarra-electrica">Guitarra eléctrica</option>
+        <option value="guitarra-acustica">Guitarra acústica</option>
+        <option value="bajo">Bajo</option>
+        <option value="teoria">Teoría</option>
+      </select>
+    </div>
+
+
+    <!-- ==============================================================
+         FILTRO: NIVEL
+         ============================================================== -->
+    <div class="col-12 col-md-2">
+      <label class="form-label text-light">Nivel</label>
+
+      <select 
+        class="form-select"
+        [(ngModel)]="local.level"
+        (ngModelChange)="onChange()">
+        
+        <option value="todos">Todos</option>
+        <option value="principiante">Principiante</option>
+        <option value="intermedio">Intermedio</option>
+        <option value="avanzado">Avanzado</option>
+      </select>
+    </div>
+
+
+    <!-- ==============================================================
+         FILTRO: ESTILO MUSICAL
+         ============================================================== -->
+    <div class="col-12 col-md-2">
+      <label class="form-label text-light">Estilo</label>
+
+      <select 
+        class="form-select"
+        [(ngModel)]="local.style"
+        (ngModelChange)="onChange()">
+        
+        <option value="todos">Todos</option>
+        <option value="rock">Rock</option>
+        <option value="blues">Blues</option>
+        <option value="jazz">Jazz</option>
+        <option value="indie">Indie</option>
+        <option value="metal">Metal</option>
+        <option value="pop">Pop</option>
+      </select>
+    </div>
+
+
+    <!-- ==============================================================
+         FILTRO: MODALIDAD (presencial, online, mixta)
+         ============================================================== -->
+    <div class="col-12 col-md-2">
+      <label class="form-label text-light">Modalidad</label>
+
+      <select 
+        class="form-select"
+        [(ngModel)]="local.modality"
+        (ngModelChange)="onChange()">
+        
+        <option value="todos">Todas</option>
+        <option value="presencial">Presencial</option>
+        <option value="online">Online</option>
+        <option value="mixta">Mixta</option>
+      </select>
+    </div>
+
+
+    <!-- ==============================================================
+         FILTRO: ORDENAR POR PRECIO
+         ============================================================== -->
+    <div class="col-12 col-md-2">
+      <label class="form-label text-light">Ordenar por precio</label>
+
+      <select 
+        class="form-select"
+        [(ngModel)]="local.sortByPrice"
+        (ngModelChange)="onChange()">
+        
+        <!-- null → sin orden (valor real null, no string) -->
+        <option [ngValue]="null">Sin orden</option>
+        <option value="asc">Menor a mayor</option>
+        <option value="desc">Mayor a menor</option>
+      </select>
+    </div>
+
+
+    <!-- ==============================================================
+         BOTÓN: LIMPIAR TODOS LOS FILTROS
+         ============================================================== -->
+    <div class="col-12 col-md-auto ms-auto text-md-end">
+      <button 
+        type="button" 
+        class="btn btn-outline-light mt-2 mt-md-0"
+        (click)="onReset()">
+        Limpiar filtros
+      </button>
+    </div>
+
+  </div>
+</div>

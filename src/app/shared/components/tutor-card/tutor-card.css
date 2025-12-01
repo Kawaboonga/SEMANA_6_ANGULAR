@@ -1,0 +1,184 @@
+/*.tutor-card img {
+  height: 220px;
+  object-fit: cover;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+}
+
+.tutor-card {
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+/* Jerarquía visual 
+.tutor-name {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #181b24;
+  line-height: 1.25;
+}
+
+.tutor-specialty {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #4b4f5c;
+}
+
+.tutor-meta {
+  font-size: 0.9rem;
+  color: #6c727f;
+}
+
+.tutor-level {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #2b3240;
+}
+
+.tutor-description {
+  font-size: 0.9rem;
+  color: #373c48;
+}
+
+/* Rating 
+.rating-row {
+  color: #363b47;
+}
+
+.rating-icon {
+  font-size: 0.95rem;
+}
+
+.rating-text {
+  font-size: 0.85rem;
+}
+
+/* Botón CTA 
+.btn-cta {
+  background: #2563eb;
+  border: none;
+  color: #fff;
+  border-radius: 999px;
+  padding-inline: 1.25rem;
+}
+
+.btn-cta:hover {
+  opacity: 0.95;
+  color: #fff;
+}
+
+ Si usa hover-lift global, esto ya lo tienes:
+.hover-lift { transition: .25s transform, .25s box-shadow; }
+.hover-lift:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+*/
+
+
+/*
+
+.tutor-card {
+  border-radius: var(--radius, 1rem);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  transition: 0.25s transform, 0.25s box-shadow, 0.25s border-color;
+}
+
+.tutor-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow, 0 18px 45px rgba(0, 0, 0, 0.5));
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+
+
+
+.tutor-avatar {
+  width: 60px;
+  height: 60px;
+  overflow: hidden;
+}
+
+.tutor-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}*/
+/*
+.tutor-avatar {
+  width: 120px;
+  height: 120px;
+  overflow: hidden;
+  margin-bottom: 30px;
+
+  position: absolute;       
+  top: 10px;               
+  left: 50%;                 
+  transform: translateX(-50%);    
+
+  z-index: 10;               
+  border-radius: 50%;       
+  background: #000;
+}
+
+.tutor-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.card-tutor {position: relative;
+}*/
+
+
+.tutor-description {
+  font-size: 0.9rem;
+  color: #373c48;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 3;      /* máximo 3 líneas */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.card-title {
+  min-height: 1.5em;    /*~2 líneas */
+  line-height: 1.2;
+}
+
+.btn-cta {
+  background: #0d6efd;
+  border: none;
+  color: #fff;
+  border-radius: 8px;
+  padding-inline: 1.25rem;
+}
+
+.btn-cta:hover {
+  opacity: 0.9;
+  color: #fff;
+}
+
+.card-header {
+  height: 120px;
+  background: linear-gradient(180deg,#0d1323,#0b111e);
+  position: relative;
+  border-radius: 16px 16px 0px 0px;
+}
+
+
+
+.tutor-avatar-sm {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  border: 6px solid #fff;
+  object-fit: cover;
+
+  position: absolute;
+  left: 50%;
+  top: 20px;
+  transform: translateX(-50%);
+  z-index: 10;
+}
+
+.card-title {
+  margin-top: 50px; 
+}

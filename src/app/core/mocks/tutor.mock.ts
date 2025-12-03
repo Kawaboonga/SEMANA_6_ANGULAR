@@ -1,12 +1,35 @@
-// =========================================================
-// MOCK DE TUTORES 
-// ---------------------------------------------------------
-// 16 perfiles realistas, con estilos, niveles, modalidades,
-// disponibilidad, experiencia y educación.
-// =========================================================
 
 import { Tutor } from '@core/models/tutor.model';
 
+/**
+ * Listado estático de tutores disponibles en SoundSeeker.
+ *
+ * Este mock reúne perfiles completos de profesores reales: instrumentos,
+ * estilos, niveles, modalidades, experiencia, educación, disponibilidad,
+ * cursos asociados y equipo. Sirve para construir toda la sección de tutores,
+ * probar fichas individuales, filtros, grillas y páginas de detalle.
+ *
+ * La estructura sigue exactamente el modelo `Tutor`, lo que permite:
+ * - Crear una experiencia creíble mientras no existe un backend.
+ * - Probar búsqueda por estilos, instrumentos, nivel y comuna.
+ * - Renderizar horarios, valor por hora, reviews y equipo real de cada tutor.
+ *
+ * @usageNotes
+ * - Si agregas propiedades nuevas al modelo `Tutor`, mantenlas también aquí.
+ * - Ideal para probar UI como listas, cards, detalles, availability pickers,
+ *   sliders de cursos y paneles de reviews.
+ * - Puedes aumentar o reducir la cantidad de tutores sin romper la estructura.
+ * - Los datos son realistas, pero simplificados para el proyecto.
+ *
+ * @example
+ * // Ejemplo en TutorService:
+ * getAll(): Tutor[] {
+ *   return TUTORS_MOCK;
+ * }
+ *
+ * // Ejemplo en un componente:
+ * this.tutores = this.tutorService.getAll();
+ */
 
 export const TUTORS_MOCK: Tutor[] = [
 

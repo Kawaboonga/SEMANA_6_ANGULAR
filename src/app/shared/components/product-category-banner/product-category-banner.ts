@@ -1,32 +1,39 @@
 // ============================================================================
 // PRODUCT CATEGORY BANNER COMPONENT
 // ----------------------------------------------------------------------------
-// Barra superior de categorías para filtrar productos (Guitarras, Bajos,
-// Pedales, Amplificadores, Accesorios, Otros).
+// Componente de UI que muestra el banner superior con categorías:
+//   Guitarras, Bajos, Pedales, Amplificadores, Accesorios, Otros.
 //
-// - Se usa en la página de productos como filtro visual principal.
-// - Maneja su propio estado de selección a través de @Input y @Output.
-// - Soporta la categoría especial "todos" y el estado null (sin filtro).
-// - Todas las claves están en plural para ser 100% consistentes con ProductCategory.
+// Su misión es exclusivamente visual:
+//   - Mostrar categorías disponibles
+//   - Marcar cuál está activa
+//   - Emitir eventos cuando el usuario selecciona una categoría
 //
-// Uso:
+// No contiene NINGUNA lógica de filtrado.  
+// La lógica vive completamente en ProductListComponent.
+//
+// Uso recomendado:
 //   <app-product-category-banner
 //        [activeCategory]="bannerCategory()"
 //        (categoryChange)="onBannerCategoryChange($event)">
 //   </app-product-category-banner>
 //
-// Este componente NO usa servicios ni lógica de negocio. Es “tonto”,
-// totalmente presentacional. La lógica vive en ProductList.
 // ============================================================================
 
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProductCategory } from '@core/models/product-category.model';
 
-// Tipo público para el estado del banner
-// - Puede ser una categoría real del producto
-// - 'todos' para desactivar filtros
-// - null para estado inicial
+/**
+ * @typedef ProductBannerCategory
+ * @description
+ * Representa el estado global del filtro de categoría visual del banner.
+ *
+ * Puede ser:
+ *  - una categoría real de productos (`ProductCategory`)
+ *  - `'todos'` para mostrar todo el catálogo
+ *  - `null` cuando no hay filtro activo (estado inicial)
+ */
 export type ProductBannerCategory = ProductCategory | 'todos' | null;
 
 @Component({
@@ -38,23 +45,56 @@ export type ProductBannerCategory = ProductCategory | 'todos' | null;
 })
 export class ProductCategoryBannerComponent {
 
-  // --------------------------------------------------------------------------
-  // Input: categoría actualmente seleccionada (viene desde ProductList)
-  // --------------------------------------------------------------------------
+  // ==========================================================================
+  // INPUT
+  // ==========================================================================
+  /**
+   * @input activeCategory
+   * @description
+   * Categoría actualmente seleccionada en el banner.
+   *
+   * Este valor viene desde ProductListComponent (signal/bannerCategory).
+   *
+   * @example
+   * <app-product-category-banner [activeCategory]="bannerCategory()">
+   *
+   * @usageNotes
+   * Cuando es `null`, el banner muestra estado “sin filtro”.
+   */
   @Input() activeCategory: ProductBannerCategory = null;
 
-  // --------------------------------------------------------------------------
-  // Output: emite la categoría seleccionada cuando el usuario hace click
-  // --------------------------------------------------------------------------
+
+  // ==========================================================================
+  // OUTPUT
+  // ==========================================================================
+  /**
+   * @output categoryChange
+   * @description
+   * Emite la categoría seleccionada por el usuario.
+   *
+   * Puede emitir:
+   *  - `'guitarras' | 'bajos' | …'` (categoría seleccionada)
+   *  - `null` si el usuario hace click en la categoría ya activa → deselect
+   *
+   * @event
+   * @example
+   * (categoryChange)="onBannerCategoryChange($event)"
+   */
   @Output() categoryChange = new EventEmitter<ProductBannerCategory>();
 
 
-  // --------------------------------------------------------------------------
-  // Categorías visibles en el banner (claves en plural)
-  // --------------------------------------------------------------------------
-  // Estas claves deben coincidir EXACTAMENTE con las del modelo ProductCategory,
-  // ya que se filtra usando p.category === key.
-  // --------------------------------------------------------------------------
+  // ==========================================================================
+  // DATA: LISTADO DE CATEGORÍAS
+  // ==========================================================================
+  /**
+   * @description
+   * Arreglo con todas las categorías visibles del banner.
+   *
+   * Las claves (`key`) deben coincidir exactamente con `ProductCategory`,
+   * ya que ProductListComponent filtra usando:
+   *
+   *   product.category === key
+   */
   categories = [
     { key: 'guitarras',       label: 'Guitarras' },
     { key: 'bajos',           label: 'Bajos' },
@@ -65,20 +105,42 @@ export class ProductCategoryBannerComponent {
   ] as const;
 
 
-  // --------------------------------------------------------------------------
-  // selectCategory(key)
-  // --------------------------------------------------------------------------
-  // Lógica mínima:
-  // - Si se hace click en la categoría activa, se deselecciona → emit(null)
-  // - Si se hace click en otra, se selecciona y se emite
-  // --------------------------------------------------------------------------
+  // ==========================================================================
+  // MÉTODO PRINCIPAL: selectCategory()
+  // ==========================================================================
+  /**
+   * @method selectCategory
+   * @description
+   * Maneja la selección de una categoría desde la UI.
+   *
+   * Lógica:
+   *  - Si la categoría clickeada YA está activa:
+   *        → se deselecciona y se emite `null`
+   *
+   *  - Si la categoría es distinta:
+   *        → se activa y se emite la nueva clave
+   *
+   * @param {ProductCategory} key - Categoría presionada por el usuario.
+   *
+   * @return void
+   *
+   * @example
+   * // Usuario hace click en "bajos"
+   * selectCategory('bajos') → categoryChange.emit('bajos')
+   *
+   * @example
+   * // Usuario hace click nuevamente en "bajos"
+   * selectCategory('bajos') → categoryChange.emit(null)
+   *
+   * @usageNotes
+   * Este método NO muta nada internamente.
+   * Toda la sincronización externa ocurre en ProductListComponent.
+   */
   selectCategory(key: ProductCategory): void {
     if (this.activeCategory === key) {
-      // Deseleccionar si se vuelve a hacer click en la misma categoría
-      this.categoryChange.emit(null);
+      this.categoryChange.emit(null);       // Deseleccionar
     } else {
-      // Seleccionar una nueva categoría
-      this.categoryChange.emit(key);
+      this.categoryChange.emit(key);        // Activar nueva categoría
     }
   }
 }

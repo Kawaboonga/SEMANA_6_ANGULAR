@@ -1,4 +1,3 @@
-// src/app/features/admin/admin-tutores/admin-tutores.ts
 
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -13,30 +12,56 @@ import { TutorFormComponent } from '@shared/forms/tutor-form/tutor-form';
   templateUrl: './admin-tutores.html',
   imports: [CommonModule, TutorFormComponent],
 })
+/**
+ * Panel de administración para tutores.
+ *
+ * Permite gestionar el ciclo completo de un tutor:
+ * - Listar tutores cargados en el sistema.
+ * - Crear un nuevo perfil de tutor.
+ * - Editar información existente.
+ * - Eliminar tutores.
+ *
+ * Se apoya en `TutorService`, que contiene:
+ * - Toda la data del mock local.
+ * - CRUD simplificado.
+ * - Lógica reactiva basada en signals.
+ *
+ * @usageNotes
+ * - `editingTutor = null` activa el modo “crear”.
+ * - `editingTutor = Tutor` activa el modo “editar”.
+ * - `cargarTutores()` refresca siempre la tabla central.
+ */
 export class AdminTutores {
+
   // ============================================================
   // 1) Servicios
   // ============================================================
-  // Servicio centralizado de tutores (mock local con signals + CRUD).
+
+  /** Servicio centralizado que mantiene la lista de tutores (signals + CRUD). */
   private tutorService = inject(TutorService);
 
   // ============================================================
   // 2) State local del componente
   // ============================================================
-  // Lista que se muestra en la tabla del admin.
+
+  /** Lista de tutores visibles en la tabla del admin. */
   tutores: Tutor[] = [];
 
-  // Flags simples para manejar estado de carga y errores.
+  /** Flags básicos de interfaz. */
   loading = false;
   error = '';
 
-  // Control del formulario (modal/panel):
-  // - showForm: abre/cierra el formulario
-  // - editingTutor: tutor actual en edición (null → modo "nuevo")
+  /**
+   * Control de formulario:
+   * - `showForm` → abre/cierra el panel.
+   * - `editingTutor` → tutor cargado en el formulario (o null si es nuevo).
+   */
   showForm = false;
   editingTutor: Tutor | null = null;
 
-  // Al crear el componente, se cargan los tutores existentes.
+  /**
+   * Carga inicial de tutores al instanciar el componente.
+   */
   constructor() {
     this.cargarTutores();
   }
@@ -44,7 +69,11 @@ export class AdminTutores {
   // ============================================================
   // 3) Cargar tutores desde el servicio
   // ============================================================
-  // Método centralizado para actualizar la lista desde el TutorService.
+
+  /**
+   * Actualiza la lista local desde `TutorService`.
+   * Maneja loading y captura errores simples.
+   */
   cargarTutores(): void {
     this.loading = true;
     this.error = '';
@@ -62,7 +91,14 @@ export class AdminTutores {
   // ============================================================
   // 4) Crear nuevo tutor
   // ============================================================
-  // Abre el formulario en modo "nuevo" (sin tutor seleccionado).
+
+  /**
+   * Activa el formulario en modo “nuevo tutor”.
+   * Limpia cualquier selección previa.
+   *
+   * @example
+   * <button (click)="onNuevo()">Nuevo tutor</button>
+   */
   onNuevo(): void {
     this.editingTutor = null;
     this.showForm = true;
@@ -71,18 +107,29 @@ export class AdminTutores {
   // ============================================================
   // 5) Editar tutor existente
   // ============================================================
-  // Recibe el tutor de la tabla, lo clona y lo pasa al formulario.
+
+  /**
+   * Abre el formulario en modo edición.
+   * Se clona el objeto para no mutar la fila visible en la tabla
+   * hasta que el usuario confirme los cambios.
+   *
+   * @param tutor Tutor seleccionado desde la tabla.
+   */
   onEdit(tutor: Tutor): void {
-    // Se clona el objeto para evitar mutar directamente la referencia
-    // que muestra la tabla mientras el usuario edita el formulario.
-    this.editingTutor = { ...tutor };
+    this.editingTutor = { ...tutor }; // evita mutaciones directas
     this.showForm = true;
   }
 
   // ============================================================
   // 6) Eliminar tutor
   // ============================================================
-  // Confirma y elimina el tutor desde el servicio, luego recarga lista.
+
+  /**
+   * Confirma y elimina un tutor según su id.
+   * Luego refresca la tabla.
+   *
+   * @param tutor Tutor a eliminar
+   */
   onDelete(tutor: Tutor): void {
     if (!tutor?.id) return;
 
@@ -96,32 +143,43 @@ export class AdminTutores {
   // ============================================================
   // 7) Guardar tutor (crear o actualizar)
   // ============================================================
-  // Recibe el tutor desde el formulario ya validado.
-  // Decide si crea uno nuevo o actualiza el existente.
+
+  /**
+   * Recibe el tutor validado desde el formulario.
+   * Decide si crear uno nuevo o actualizar uno existente:
+   *
+   * - Si `editingTutor` es null → modo creación.
+   * - Si `editingTutor` tiene id → modo edición (via upsertTutor).
+   *
+   * @param tutor Datos enviados desde el formulario.
+   */
   onSaveTutor(tutor: Tutor): void {
     if (this.editingTutor) {
-      // MODO EDICIÓN:
-      // upsertTutor actualiza si existe por id, o lo agrega si no está.
+      // MODO EDICIÓN (actualizar existente)
       this.tutorService.upsertTutor(tutor);
     } else {
-      // MODO CREACIÓN:
-      // createTutor genera un id nuevo internamente (crypto.randomUUID).
+      // MODO CREACIÓN (genera id internamente)
       const { id, ...dataSinId } = tutor as any;
       this.tutorService.createTutor(dataSinId);
     }
 
-    // Cerrar formulario y limpiar selección
+    // Cerrar form + refrescar tabla
     this.showForm = false;
     this.editingTutor = null;
-
-    // Refrescar la tabla para reflejar los cambios
     this.cargarTutores();
   }
 
   // ============================================================
   // 8) Cancelar formulario
   // ============================================================
-  // Cierra el formulario sin aplicar cambios.
+
+  /**
+   * Cierra el formulario sin aplicar cambios.
+   * Limpia cualquier tutor cargado en edición.
+   *
+   * @example
+   * <button (click)="onCancelForm()">Cancelar</button>
+   */
   onCancelForm(): void {
     this.showForm = false;
     this.editingTutor = null;

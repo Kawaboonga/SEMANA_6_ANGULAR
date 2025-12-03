@@ -1,3 +1,12 @@
+// ============================================================================
+// src/app/featured/servicios/servicios-list/servicios-list.ts
+//
+// Componente principal del listado de servicios.
+// - Obtiene todos los servicios desde ServiceService.
+// - Renderiza tarjetas simples con animación fade-up.
+// - Usa arquitectura standalone + inject().
+// ============================================================================
+
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -7,36 +16,51 @@ import { Service } from '@core/models/service.model';
 
 import { FadeUpDirective } from '@shared/directives/fade-up';
 
-
+/**
+ * Componente que muestra el listado completo de servicios disponibles.
+ *
+ * @remarks
+ * - Este componente es extremadamente simple: no filtra ni transforma datos.
+ * - Solo actúa como puente entre el ServiceService y la vista.
+ * - La navegación al detalle se maneja con `routerLink="/servicios/:slug"`.
+ *
+ * @usageNotes
+ * Se utiliza en la ruta:
+ * ```ts
+ * { path: 'servicios', loadComponent: () => import(...ServiciosList) }
+ * ```
+ */
 @Component({
   standalone: true,
   selector: 'app-servicios-list',
-
-  // Módulos necesarios para la vista:
-  // - CommonModule: *ngIf, *ngFor, estructuras comunes
-  // - RouterModule: routerLink para navegar al detalle
-  // - FadeUpDirective: animación de entrada
-  imports: [CommonModule, RouterModule, FadeUpDirective],
-
+  imports: [
+    CommonModule,     // *ngIf, *ngFor
+    RouterModule,     // routerLink
+    FadeUpDirective,  // animación de entrada
+  ],
   templateUrl: './servicios-list.html',
   styleUrl: './servicios-list.css'
 })
 export class ServiciosList {
 
-  // ============================================================
-  // 1) INYECCIÓN DEL SERVICIO
-  // ============================================================
-
-  // Usamos inject() (Angular 16+) en vez de constructor para un estilo moderno
+  /**
+   * Servicio central que entrega la data de servicios.
+   * Se usa inject() para seguir el estándar Angular moderno.
+   *
+   * @private
+   */
   private serviceService = inject(ServiceService);
 
-  // ============================================================
-  // 2) LISTA DE SERVICIOS DISPONIBLES
-  // ============================================================
-
-  // El servicio retorna la data mockeada o la real según tu configuración.
-  // Esto alimenta automáticamente el *ngFor del template.
+  /**
+   * Lista completa de servicios disponibles.
+   * Esta colección se renderiza directamente en la vista mediante *ngFor.
+   *
+   * @type {Service[]}
+   */
   services: Service[] = this.serviceService.getAll();
 
-  // En esta vista no hay lógica adicional, solo mostramos el listado.
+  /**
+   * El componente no requiere métodos adicionales.
+   * La lógica se concentra en el detalle y en el servicio.
+   */
 }

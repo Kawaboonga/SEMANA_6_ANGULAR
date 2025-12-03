@@ -1,13 +1,7 @@
-// src/app/features/auth/recover-password/recover-password.component.ts
 
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  FormBuilder,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators,} from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '@core/services/auth.service';
 import { FadeUpDirective } from '@shared/directives/fade-up';
@@ -19,50 +13,80 @@ import { FadeUpDirective } from '@shared/directives/fade-up';
   templateUrl: './recover.html',
   styleUrls: ['./recover.css'],
 })
+
+/**
+ * Página de recuperación de contraseña.
+ *
+ * Flujo simple que simula el envío de instrucciones al correo del usuario.
+ * Este componente no realiza cambios reales porque el proyecto aún no
+ * cuenta con backend; en cambio, AuthService entrega un mensaje consistente
+ * y orientado a UX:
+ *
+ * - Si el correo existe → se muestra un mensaje de éxito.
+ * - Si no existe → muestra mensaje de error.
+ *
+ * Todo el objetivo es entregar un proceso claro y no bloquear al usuario.
+ *
+ * @usageNotes
+ * - El formulario es pequeño: solo un email con validación básica.
+ * - El resultado se maneja con `message` y `errorMessage`.
+ * - Después de éxito, se redirige automáticamente al login.
+ */
 export class Recover implements OnInit {
+
   // ============================================================
   // 1) Inyección de dependencias
   // ============================================================
-  // FormBuilder para armar el formulario reactivo.
+
+  /** FormBuilder para inicializar el formulario. */
   private fb = inject(FormBuilder);
-  // Servicio de autenticación que expone recoverPassword().
+
+  /** Servicio de autenticación encargado de `recoverPassword()`. */
   private auth = inject(AuthService);
-  // Router para redirigir de vuelta al login después del flujo.
+
+  /** Router para redirigir a /auth/login después del flujo. */
   private router = inject(Router);
 
   // ============================================================
   // 2) State del formulario
   // ============================================================
-  // FormGroup con el campo de correo.
+
+  /** Formulario con un único campo: email. */
   form!: FormGroup;
 
-  // Flag para saber si ya se intentó enviar el formulario.
+  /** Flag para saber si ya se intentó enviar el formulario. */
   submitted = false;
 
-  // Mensaje informativo cuando el flujo se completa correctamente.
+  /** Mensaje de éxito luego del flujo. */
   message = '';
 
-  // Mensaje de error cuando no se encuentra el correo u otro problema.
+  /** Mensaje de error cuando el correo no es reconocido. */
   errorMessage = '';
 
   // ============================================================
   // 3) Inicialización del formulario
   // ============================================================
+
+  /**
+   * Construye el formulario con validación de email.
+   */
   ngOnInit(): void {
-    // Formulario simple de un solo campo:
-    // email → requerido + formato de correo.
     this.form = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
     });
   }
 
-  // Acceso rápido a los controles del formulario desde el template.
+  /** Acceso directo a los controles del formulario. */
   get f() {
     return this.form.controls;
   }
 
-  // Helper genérico para saber si un control tiene un error concreto
-  // y si ya debería mostrarse en pantalla.
+  /**
+   * Indica si un control tiene un error y si ya debería mostrarse.
+   *
+   * @param controlName Nombre del campo (ej: 'email')
+   * @param error Tipo de error (ej: 'required')
+   */
   hasError(controlName: string, error: string): boolean {
     const control = this.form.get(controlName);
     if (!control) return false;
@@ -76,38 +100,45 @@ export class Recover implements OnInit {
   // ============================================================
   // 4) Envío del formulario de recuperación
   // ============================================================
+
+  /**
+   * Flujo completo de recuperación:
+   * - Valida el formulario
+   * - Llama a AuthService.recoverPassword
+   * - Muestra mensajes de error o éxito
+   * - Redirige a login luego de una pequeña espera
+   *
+   * @example
+   * <button (click)="onSubmit()">Recuperar contraseña</button>
+   */
   onSubmit(): void {
     this.submitted = true;
-    // Reset de mensajes cada vez que se intenta un submit.
+
+    // reset interno
     this.message = '';
     this.errorMessage = '';
 
-    // Si el formulario no es válido, marco todo como tocado para
-    // que se muestren los mensajes de error y corto el flujo.
+    // Si el formulario es inválido → mostrar errores y detener
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
     }
 
-    // Extraigo el correo desde el formulario.
     const { email } = this.form.value;
 
-    // Llamada al método de recuperación en AuthService.
-    // En este contexto, solo simula el envío (no hay backend real).
+    // Llamada simulada (sin backend real)
     const result = this.auth.recoverPassword(email);
 
-    // Si la operación no fue exitosa, muestro el mensaje de error
-    // que entrega el servicio y dejo al usuario en la misma vista.
+    // ERROR → correo no encontrado
     if (!result.success) {
       this.errorMessage = result.message;
       return;
     }
 
-    // Si fue exitosa, muestro el texto informativo.
+    // ÉXITO → mostrar mensaje informativo
     this.message = result.message;
 
-    // Pequeño delay antes de redirigir al login,
-    // para que el mensaje se alcance a leer.
+    // Pequeño delay antes de redirigir
     setTimeout(() => {
       this.router.navigate(['/auth/login']);
     }, 1500);

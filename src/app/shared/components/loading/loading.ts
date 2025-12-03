@@ -1,12 +1,18 @@
-
-
 // ===========================================================================
 // LOADING COMPONENT (Standalone)
 // ---------------------------------------------------------------------------
-// Este componente escucha el estado global de carga expuesto por LoadingService.
-// Se renderiza únicamente cuando isLoading === true.
+// Componente visual global encargado de mostrar un overlay o spinner de carga.
+// 
+// Funciona escuchando el estado reactivo expuesto por LoadingService:
+//   - isLoading(): boolean (signal readonly)
+// 
+// Este componente es completamente "tonto" (presentacional). No administra
+// solicitudes ni lógica de carga; simplemente observa el servicio.
 //
-// Se utiliza para overlays de carga, spinners globales o transiciones entre páginas.
+// Uso típico:
+//   <app-loading></app-loading>
+// 
+// Se recomienda incluirlo en app.component.html para que siempre esté disponible.
 // ===========================================================================
 
 import { Component, computed, inject } from '@angular/core';
@@ -21,23 +27,42 @@ import { LoadingService } from '@core/services/loading.service';
   styleUrls: ['./loading.css'],
 })
 export class LoadingComponent {
-  // -------------------------------------------------------------------------
+
+  // ---------------------------------------------------------------------------
   // INYECCIÓN DE SERVICIO
-  // -------------------------------------------------------------------------
-  // LoadingService expone:
-  //   • isLoading(): boolean — estado actual
-  //   • setLoading(true/false) — para activar/desactivar
-  //
-  // Aquí lo consumimos para reaccionar de forma reactiva.
+  // ---------------------------------------------------------------------------
+
+  /**
+   * @description
+   * Servicio global encargado de manejar el estado de carga de la aplicación.
+   * Expone un signal `isLoading` que indica si existen procesos pendientes.
+   */
   private loadingService = inject(LoadingService);
 
-  // -------------------------------------------------------------------------
-  // PROP: isLoading (computed)
-  // -------------------------------------------------------------------------
-  // Se usa computed() para recalcular automáticamente cuando cambia el estado
-  // del servicio. Esto permite renderizar el componente sin suscripciones manuales.
-  //
-  // Ideal para un overlay global que aparece/desaparece instantáneamente.
-  // -------------------------------------------------------------------------
+
+  // ---------------------------------------------------------------------------
+  // COMPUTED: isLoading
+  // ---------------------------------------------------------------------------
+
+  /**
+   * @description
+   * Estado reactivo que indica si debe mostrarse el overlay de carga.
+   * 
+   * Este computed se recalcula automáticamente cuando el LoadingService
+   * incrementa o decrementa su contador interno.
+   * 
+   * @return boolean — `true` cuando la aplicación está en estado de carga.
+   * 
+   * @example
+   * <!-- loading.html -->
+   * <div class="loading-backdrop" *ngIf="isLoading()">
+   *    <div class="loader"></div>
+   * </div>
+   * 
+   * @usageNotes
+   * - No requiere suscripciones manuales ni ngOnDestroy.
+   * - Funciona con cualquier llamada que haga `loadingService.show()` / `hide()`.
+   * - Ideal para cubrir toda la ventana con un overlay mientras se cargan datos.
+   */
   isLoading = computed(() => this.loadingService.isLoading());
 }

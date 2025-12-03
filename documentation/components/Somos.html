@@ -1,0 +1,578 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>proyecto-semana4 documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+          <script>
+              // --- Iframe navigation tracking for Template Playground ---
+              function sendCurrentUrlToParent() {
+                  if (window.parent && window.parent !== window) {
+                      window.parent.postMessage({
+                          type: 'compodoc-iframe-navigate',
+                          url: window.location.pathname + window.location.hash
+                      }, '*');
+                  }
+              }
+              window.addEventListener('hashchange', sendCurrentUrlToParent, false);
+              window.addEventListener('popstate', sendCurrentUrlToParent, false);
+              window.addEventListener('DOMContentLoaded', sendCurrentUrlToParent, false);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">proyecto-semana4 documentation</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Components</li>
+  <li class="breadcrumb-item"
+  >
+  Somos</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" class="nav-link"
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+        <li class="nav-item">
+            <a href="#templateData" class="nav-link"
+                role="tab" id="templateData-tab" data-bs-toggle="tab" data-link="template">Template</a>
+        </li>
+        <li class="nav-item">
+            <a href="#tree" class="nav-link"
+                role="tab" id="tree-tab" data-bs-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info"><p class="comment">
+    <h3>File</h3>
+</p>
+<p class="comment">
+    <code>src/app/features/somos/somos.ts</code>
+</p>
+
+
+    <p class="comment">
+        <h3>Description</h3>
+    </p>
+    <p class="comment">
+        <p>Componente de la página &quot;Somos&quot;.</p>
+<p>Página estática orientada a presentar:</p>
+<ul>
+<li>Identidad del proyecto</li>
+<li>Filosofía SoundSeeker</li>
+<li>Objetivos, misión y visión</li>
+<li>Texto narrativo con animaciones suaves</li>
+</ul>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-html">&lt;app-somos&gt;&lt;/app-somos&gt;</code></pre></div><ul>
+<li>No requiere lógica en TypeScript por ahora.</li>
+<li>Puede extenderse con signals o servicios si deseas
+cargar contenido dinámico más adelante.</li>
+<li>El estilo visual y las animaciones se controlan
+exclusivamente desde el HTML + CSS.</li>
+</ul>
+
+    </p>
+
+
+
+
+<section data-compodoc="block-metadata">
+    <h3>Metadata</h3>
+    <table class="table table-sm table-hover metadata">
+        <tbody>
+
+
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>app-somos</code></td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-3">imports</td>
+                <td class="col-md-9">
+                                <code><a href="../directives/FadeUpDirective.html" target="_self" >FadeUpDirective</a></code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./somos.html</code></td>
+            </tr>
+
+
+
+            <tr>
+                <td class="col-md-3">styleUrl</td>
+                <td class="col-md-9"><code>./somos.css</code></td>
+            </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+
+
+
+
+
+
+
+
+</div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component } from &#x27;@angular/core&#x27;;
+import { FadeUpDirective } from &#x27;@shared/directives/fade-up&#x27;;
+
+/**
+ * Componente de la página &quot;Somos&quot;.
+ *
+ * Página estática orientada a presentar:
+ * - Identidad del proyecto
+ * - Filosofía SoundSeeker
+ * - Objetivos, misión y visión
+ * - Texto narrativo con animaciones suaves
+ *
+ * @component
+ * @example
+ * &lt;app-somos&gt;&lt;/app-somos&gt;
+ *
+ * @usageNotes
+ * - No requiere lógica en TypeScript por ahora.
+ * - Puede extenderse con signals o servicios si deseas
+ *   cargar contenido dinámico más adelante.
+ * - El estilo visual y las animaciones se controlan
+ *   exclusivamente desde el HTML + CSS.
+ */
+@Component({
+  selector: &#x27;app-somos&#x27;,
+
+  /**
+   * Módulos y directivas utilizadas por el componente.
+   *
+   * FadeUpDirective → permite usar &#x60;appFadeUp&#x60;
+   * para animaciones de entrada basadas en scroll.
+   */
+  imports: [FadeUpDirective],
+
+  /**
+   * Vistas asociadas.
+   * - templateUrl → estructura HTML
+   * - styleUrl    → estilos específicos del componente
+   */
+  templateUrl: &#x27;./somos.html&#x27;,
+  styleUrl: &#x27;./somos.css&#x27;,
+})
+export class Somos {
+  /**
+   * Componente sin lógica interna.
+   *
+   * @remarks
+   * Este componente funciona como un contenedor estático de contenido
+   * visual/textual. Se deja preparado para ampliaciones futuras, como:
+   *  - Carga de testimonios desde un servicio
+   *  - Timeline interactivo sobre la historia del proyecto
+   *  - Sección dinámica usando signals
+   *  - Animaciones avanzadas
+   */
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;!-- &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+     SECCIÓN PRINCIPAL: QUIÉNES SOMOS / IDENTIDAD DEL PROYECTO
+     ------------------------------------------------------------
+     - Presenta la misión de SoundSeeker.
+     - Combina imagen + texto + bloques de valor.
+     - Incluye CTA hacia las secciones clave: tutores, productos y contacto.
+&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D; --&gt;
+&lt;section class&#x3D;&quot;pt-4&quot;&gt;
+
+  &lt;!-- ------------------------------------------------------------
+       ENCABEZADO DE LA PÁGINA
+       ------------------------------------------------------------
+       - Título principal sin subtítulo (ya se comunica en el contenido).
+       - display-6 → jerarquía visual uniforme con páginas similares.
+  -------------------------------------------------------------- --&gt;
+  &lt;div class&#x3D;&quot;d-flex justify-content-between align-items-center mb-5&quot;&gt;
+    &lt;div&gt;
+      &lt;h2 class&#x3D;&quot;mb-0 page-title display-6&quot;&gt;
+        Conectamos música, personas e instrumentos
+      &lt;/h2&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+       CARD PRINCIPAL: IMAGEN IZQUIERDA + CONTENIDO DERECHO
+       ------------------------------------------------------------
+       - Utiliza Bootstrap grid para asegurar responsividad.
+       - appFadeUp → animación de entrada desde el viewport.
+  &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D; --&gt;
+  &lt;div class&#x3D;&quot;card shadow-sm overflow-hidden&quot; appFadeUp&gt;
+    &lt;div class&#x3D;&quot;row g-0&quot;&gt;
+
+      &lt;!-- --------------------------------------------------------
+           COLUMNA IZQUIERDA: IMAGEN PRINCIPAL
+           --------------------------------------------------------
+           - Imagen de amplia resolución, ocupando todo el alto.
+           - object-fit: cover; para evitar deformaciones.
+      ---------------------------------------------------------- --&gt;
+      &lt;div class&#x3D;&quot;col-12 col-md-6&quot;&gt;
+        &lt;div class&#x3D;&quot;h-100&quot;&gt;
+          &lt;img
+            src&#x3D;&quot;assets/img/home/slider2.jpg&quot;
+            alt&#x3D;&quot;Clases de música e intercambio de instrumentos&quot;
+            class&#x3D;&quot;img-fluid w-100 h-100&quot;
+            style&#x3D;&quot;object-fit: cover;&quot;
+          /&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;!-- --------------------------------------------------------
+           COLUMNA DERECHA: CONTENIDO DEL PROYECTO
+           --------------------------------------------------------
+           - Intro → explicación corta del proyecto.
+           - Bloques de valor → beneficios y promesas del servicio.
+           - CTA al final.
+      ---------------------------------------------------------- --&gt;
+      &lt;div class&#x3D;&quot;col-12 col-md-6 d-flex flex-column&quot;&gt;
+        &lt;div class&#x3D;&quot;card-body p-4 p-lg-5 d-flex flex-column h-100&quot;&gt;
+
+          &lt;!-- INTRO DEL PROYECTO --&gt;
+          &lt;p class&#x3D;&quot;text-secondary mb-3&quot;&gt;
+            SoundSeeker nace como un proyecto local para &lt;strong&gt;Santiago&lt;/strong&gt;, pensado para quienes
+            quieren aprender, mejorar o retomar la música sin perderse entre plataformas genéricas.
+          &lt;/p&gt;
+
+          &lt;p class&#x3D;&quot;text-secondary mb-4&quot;&gt;
+            Reunimos a &lt;strong&gt;tutores de guitarra, bajo y otros instrumentos&lt;/strong&gt; con estudiantes reales, y al mismo tiempo
+            impulsamos la &lt;strong&gt;recirculación de instrumentos, amplificadores y pedales de segunda mano&lt;/strong&gt; para que sigan
+            sonando en nuevas manos.
+          &lt;/p&gt;
+
+          &lt;!-- &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+               BLOQUES DE VALOR (4 atributos principales)
+               ----------------------------------------------------
+               - Íconos de Bootstrap Icons.
+               - Layout responsivo en 2×2.
+          &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D; --&gt;
+          &lt;div class&#x3D;&quot;row g-3 mb-4&quot;&gt;
+
+            &lt;!-- TUTORES VERIFICADOS --&gt;
+            &lt;div class&#x3D;&quot;col-12 col-sm-6&quot;&gt;
+              &lt;div class&#x3D;&quot;d-flex gap-3&quot;&gt;
+                &lt;div class&#x3D;&quot;fs-3&quot;&gt;
+                  &lt;i class&#x3D;&quot;bi bi-people-fill&quot;&gt;&lt;/i&gt;
+                &lt;/div&gt;
+                &lt;div&gt;
+                  &lt;h3 class&#x3D;&quot;h6 mb-1&quot;&gt;Tutores verificados&lt;/h3&gt;
+                  &lt;p class&#x3D;&quot;small text-secondary mb-0&quot;&gt;
+                    Perfiles claros, experiencia, estilos y modalidades (presencial / online) definidos desde el inicio.
+                  &lt;/p&gt;
+                &lt;/div&gt;
+              &lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;!-- INSTRUMENTOS CON HISTORIA --&gt;
+            &lt;div class&#x3D;&quot;col-12 col-sm-6&quot;&gt;
+              &lt;div class&#x3D;&quot;d-flex gap-3&quot;&gt;
+                &lt;div class&#x3D;&quot;fs-3&quot;&gt;
+                  &lt;i class&#x3D;&quot;bi bi-music-note&quot;&gt;&lt;/i&gt;
+                &lt;/div&gt;
+                &lt;div&gt;
+                  &lt;h3 class&#x3D;&quot;h6 mb-1&quot;&gt;Instrumentos con historia&lt;/h3&gt;
+                  &lt;p class&#x3D;&quot;small text-secondary mb-0&quot;&gt;
+                    Guitarras, bajos, pedales y amplis usados, descritos con cariño y foco en el estado real del equipo.
+                  &lt;/p&gt;
+                &lt;/div&gt;
+              &lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;!-- ENFOQUE LOCAL --&gt;
+            &lt;div class&#x3D;&quot;col-12 col-sm-6&quot;&gt;
+              &lt;div class&#x3D;&quot;d-flex gap-3&quot;&gt;
+                &lt;div class&#x3D;&quot;fs-3&quot;&gt;
+                  &lt;i class&#x3D;&quot;bi bi-geo-alt-fill&quot;&gt;&lt;/i&gt;
+                &lt;/div&gt;
+                &lt;div&gt;
+                  &lt;h3 class&#x3D;&quot;h6 mb-1&quot;&gt;En tu comuna&lt;/h3&gt;
+                  &lt;p class&#x3D;&quot;small text-secondary mb-0&quot;&gt;
+                    Partimos en Huechuraba, pero con mirada a conectar barrios y comunas de todo Santiago.
+                  &lt;/p&gt;
+                &lt;/div&gt;
+              &lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;!-- EXPERIENCIA SIMPLE --&gt;
+            &lt;div class&#x3D;&quot;col-12 col-sm-6&quot;&gt;
+              &lt;div class&#x3D;&quot;d-flex gap-3&quot;&gt;
+                &lt;div class&#x3D;&quot;fs-3&quot;&gt;
+                  &lt;i class&#x3D;&quot;bi bi-lightning-charge-fill&quot;&gt;&lt;/i&gt;
+                &lt;/div&gt;
+                &lt;div&gt;
+                  &lt;h3 class&#x3D;&quot;h6 mb-1&quot;&gt;Experiencia simple&lt;/h3&gt;
+                  &lt;p class&#x3D;&quot;small text-secondary mb-0&quot;&gt;
+                    Navegación clara, fichas completas y un panel admin pensado para crecer sin perder el control.
+                  &lt;/p&gt;
+                &lt;/div&gt;
+              &lt;/div&gt;
+            &lt;/div&gt;
+
+          &lt;/div&gt;
+
+          &lt;!-- &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+               CTA: ACCIONES PRINCIPALES
+               ----------------------------------------------------
+               - Botones en columna (mobile) y fila (desktop).
+               - Llevan a las secciones principales del proyecto.
+          &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D; --&gt;
+          &lt;div class&#x3D;&quot;mt-auto pt-2&quot;&gt;
+            &lt;div class&#x3D;&quot;d-flex flex-column flex-sm-row gap-2&quot;&gt;
+              &lt;a routerLink&#x3D;&quot;/tutores&quot; class&#x3D;&quot;btn btn-primary w-100&quot;&gt;
+                Buscar tutores
+              &lt;/a&gt;
+              &lt;a routerLink&#x3D;&quot;/productos&quot; class&#x3D;&quot;btn btn-secondary w-100&quot;&gt;
+                Ver instrumentos
+              &lt;/a&gt;
+              &lt;a routerLink&#x3D;&quot;/contacto&quot; class&#x3D;&quot;btn btn-secondary w-100&quot;&gt;
+                Contáctanos
+              &lt;/a&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/section&gt;
+</code></pre>
+    </div>
+
+
+    <div class="tab-pane fade " id="tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Legend</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Html element</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Component</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Html element with directive</span>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<script src="../js/libs/vis-network.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div><!-- ============================================================     SECCIÓN PRINCIPAL: QUIÉNES SOMOS / IDENTIDAD DEL PROYECTO     ------------------------------------------------------------     - Presenta la misión de SoundSeeker.     - Combina imagen + texto + bloques de valor.     - Incluye CTA hacia las secciones clave: tutores, productos y contacto.=============================================================== --><section class="pt-4">  <!-- ------------------------------------------------------------       ENCABEZADO DE LA PÁGINA       ------------------------------------------------------------       - Título principal sin subtítulo (ya se comunica en el contenido).       - display-6 → jerarquía visual uniforme con páginas similares.  -------------------------------------------------------------- -->  <div class="d-flex justify-content-between align-items-center mb-5">    <div>      <h2 class="mb-0 page-title display-6">        Conectamos música, personas e instrumentos      </h2>    </div>  </div>  <!-- ============================================================       CARD PRINCIPAL: IMAGEN IZQUIERDA + CONTENIDO DERECHO       ------------------------------------------------------------       - Utiliza Bootstrap grid para asegurar responsividad.       - appFadeUp → animación de entrada desde el viewport.  =============================================================== -->  <div class="card shadow-sm overflow-hidden" appFadeUp>    <div class="row g-0">      <!-- --------------------------------------------------------           COLUMNA IZQUIERDA: IMAGEN PRINCIPAL           --------------------------------------------------------           - Imagen de amplia resolución, ocupando todo el alto.           - object-fit: cover; para evitar deformaciones.      ---------------------------------------------------------- -->      <div class="col-12 col-md-6">        <div class="h-100">          <img            src="assets/img/home/slider2.jpg"            alt="Clases de música e intercambio de instrumentos"            class="img-fluid w-100 h-100"            style="object-fit: cover;"          />        </div>      </div>      <!-- --------------------------------------------------------           COLUMNA DERECHA: CONTENIDO DEL PROYECTO           --------------------------------------------------------           - Intro → explicación corta del proyecto.           - Bloques de valor → beneficios y promesas del servicio.           - CTA al final.      ---------------------------------------------------------- -->      <div class="col-12 col-md-6 d-flex flex-column">        <div class="card-body p-4 p-lg-5 d-flex flex-column h-100">          <!-- INTRO DEL PROYECTO -->          <p class="text-secondary mb-3">            SoundSeeker nace como un proyecto local para <strong>Santiago</strong>, pensado para quienes            quieren aprender, mejorar o retomar la música sin perderse entre plataformas genéricas.          </p>          <p class="text-secondary mb-4">            Reunimos a <strong>tutores de guitarra, bajo y otros instrumentos</strong> con estudiantes reales, y al mismo tiempo            impulsamos la <strong>recirculación de instrumentos, amplificadores y pedales de segunda mano</strong> para que sigan            sonando en nuevas manos.          </p>          <!-- ====================================================               BLOQUES DE VALOR (4 atributos principales)               ----------------------------------------------------               - Íconos de Bootstrap Icons.               - Layout responsivo en 2×2.          ======================================================= -->          <div class="row g-3 mb-4">            <!-- TUTORES VERIFICADOS -->            <div class="col-12 col-sm-6">              <div class="d-flex gap-3">                <div class="fs-3">                  <i class="bi bi-people-fill"></i>                </div>                <div>                  <h3 class="h6 mb-1">Tutores verificados</h3>                  <p class="small text-secondary mb-0">                    Perfiles claros, experiencia, estilos y modalidades (presencial / online) definidos desde el inicio.                  </p>                </div>              </div>            </div>            <!-- INSTRUMENTOS CON HISTORIA -->            <div class="col-12 col-sm-6">              <div class="d-flex gap-3">                <div class="fs-3">                  <i class="bi bi-music-note"></i>                </div>                <div>                  <h3 class="h6 mb-1">Instrumentos con historia</h3>                  <p class="small text-secondary mb-0">                    Guitarras, bajos, pedales y amplis usados, descritos con cariño y foco en el estado real del equipo.                  </p>                </div>              </div>            </div>            <!-- ENFOQUE LOCAL -->            <div class="col-12 col-sm-6">              <div class="d-flex gap-3">                <div class="fs-3">                  <i class="bi bi-geo-alt-fill"></i>                </div>                <div>                  <h3 class="h6 mb-1">En tu comuna</h3>                  <p class="small text-secondary mb-0">                    Partimos en Huechuraba, pero con mirada a conectar barrios y comunas de todo Santiago.                  </p>                </div>              </div>            </div>            <!-- EXPERIENCIA SIMPLE -->            <div class="col-12 col-sm-6">              <div class="d-flex gap-3">                <div class="fs-3">                  <i class="bi bi-lightning-charge-fill"></i>                </div>                <div>                  <h3 class="h6 mb-1">Experiencia simple</h3>                  <p class="small text-secondary mb-0">                    Navegación clara, fichas completas y un panel admin pensado para crecer sin perder el control.                  </p>                </div>              </div>            </div>          </div>          <!-- ====================================================               CTA: ACCIONES PRINCIPALES               ----------------------------------------------------               - Botones en columna (mobile) y fila (desktop).               - Llevan a las secciones principales del proyecto.          ======================================================= -->          <div class="mt-auto pt-2">            <div class="d-flex flex-column flex-sm-row gap-2">              <a routerLink="/tutores" class="btn btn-primary w-100">                Buscar tutores              </a>              <a routerLink="/productos" class="btn btn-secondary w-100">                Ver instrumentos              </a>              <a routerLink="/contacto" class="btn btn-secondary w-100">                Contáctanos              </a>            </div>          </div>        </div>      </div>    </div>  </div></section></div>'
+    var COMPONENTS = [{'name': 'AdBanner', 'selector': 'app-ad-banner'},{'name': 'AdminCursosComponent', 'selector': 'app-admin-cursos'},{'name': 'AdminDashboard', 'selector': 'app-admin-dashboard'},{'name': 'AdminLayout', 'selector': 'app-admin-layout'},{'name': 'AdminProductos', 'selector': 'app-admin-productos'},{'name': 'AdminTutores', 'selector': 'app-admin-tutores'},{'name': 'AdminUsuarios', 'selector': 'app-admin-usuarios'},{'name': 'App', 'selector': 'app-root'},{'name': 'BreadcrumbComponent', 'selector': 'app-breadcrumb'},{'name': 'Carousel', 'selector': 'app-carousel'},{'name': 'Contacto', 'selector': 'app-contacto'},{'name': 'CourseCardComponent', 'selector': 'app-course-card'},{'name': 'CourseFormComponent', 'selector': 'app-course-form'},{'name': 'CursoDetailComponent', 'selector': 'app-curso-detail'},{'name': 'CursosListComponent', 'selector': 'app-cursos-list'},{'name': 'FooterComponent', 'selector': 'app-footer'},{'name': 'Home', 'selector': 'app-home'},{'name': 'LoadingComponent', 'selector': 'app-loading'},{'name': 'LoginComponent', 'selector': 'app-login'},{'name': 'MainLayout', 'selector': 'app-main-layout'},{'name': 'NavbarComponent', 'selector': 'app-navbar'},{'name': 'NewsCard', 'selector': 'app-news-card'},{'name': 'NoticiaDetalle', 'selector': 'app-noticias-detail'},{'name': 'Noticias', 'selector': 'app-noticias'},{'name': 'ProductCardComponent', 'selector': 'app-product-card'},{'name': 'ProductCategoryBannerComponent', 'selector': 'app-product-category-banner'},{'name': 'ProductDetailComponent', 'selector': 'app-product-detail'},{'name': 'ProductFiltersComponent', 'selector': 'app-product-filters'},{'name': 'ProductFormComponent', 'selector': 'app-product-form'},{'name': 'ProductGridComponent', 'selector': 'app-product-grid'},{'name': 'ProductListComponent', 'selector': 'app-product-list'},{'name': 'Profile', 'selector': 'app-profile'},{'name': 'Recover', 'selector': 'app-recover-password'},{'name': 'RegisterComponent', 'selector': 'app-register'},{'name': 'ServicioDetail', 'selector': 'app-servicio-detail'},{'name': 'ServiciosList', 'selector': 'app-servicios-list'},{'name': 'Somos', 'selector': 'app-somos'},{'name': 'TutorCardComponent', 'selector': 'app-tutor-card'},{'name': 'TutoresListComponent', 'selector': 'app-tutores-list'},{'name': 'TutorFilterBarComponent', 'selector': 'app-tutor-filter-bar'},{'name': 'TutorFormComponent', 'selector': 'app-tutor-form'},{'name': 'TutorProfileComponent', 'selector': 'app-tutor-profile-page'},{'name': 'UserFormComponent', 'selector': 'app-user-form'}];
+    var DIRECTIVES = [{'name': 'FadeUpDirective', 'selector': '[appFadeUp]'}];
+    var ACTUAL_COMPONENT = {'name': 'Somos'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
+            var COMPODOC_CURRENT_PAGE_URL = 'Somos.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

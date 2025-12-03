@@ -1,15 +1,5 @@
-import {
-  Component,
-  OnDestroy,
-  ElementRef,
-  ViewChild,
-} from '@angular/core';
-import {
-  ActivatedRoute,
-  NavigationEnd,
-  Router,
-  RouterLink,
-} from '@angular/router';
+import { Component, OnDestroy, ElementRef, ViewChild,} from '@angular/core';
+import { ActivatedRoute, NavigationEnd, Router, RouterLink,} from '@angular/router';
 import { NgFor, NgIf } from '@angular/common';
 import { filter, Subscription } from 'rxjs';
 
@@ -19,15 +9,44 @@ import { CourseService } from '@core/services/course.service';
 import { ProductService } from '@core/services/product.service';
 
 /**
- * Modelo de una miga de pan (breadcrumb)
- * label → texto visible
- * url   → ruta a la que navega
+ * Modelo de una miga de pan (breadcrumb).
+ *
+ * @description
+ * Representa un ítem individual dentro del breadcrumb:
+ * texto visible y URL asociada.
+ *
+ * @usageNotes
+ * - `label` se muestra en la interfaz.
+ * - `url` se usa para navegar al hacer clic.
  */
 interface Breadcrumb {
+  /** Texto visible del enlace en el breadcrumb */
   label: string;
+  /** Ruta a la que navega al hacer clic */
   url: string;
 }
 
+/**
+ * Componente responsable de construir y mostrar las migas de pan (breadcrumb).
+ *
+ * @description
+ * Escucha los eventos de navegación del router y genera dinámicamente
+ * el arreglo de breadcrumbs según las rutas activas. También:
+ * - Resuelve labels dinámicos para servicios, noticias, cursos y productos.
+ * - Aplica una animación ligera de fade al cambiar de ruta.
+ *
+ * @usageNotes
+ * - No requiere configuración explícita en cada ruta, solo:
+ *   - `data: { breadcrumb: 'Texto fijo' }` para labels estáticos.
+ *   - El propio componente resuelve labels dinámicos según el contexto.
+ * - Oculta el breadcrumb cuando la URL comienza con `/admin`.
+ *
+ * @example
+ * <!-- En un layout principal (app-layout.html) -->
+ * <header>
+ *   <app-breadcrumb></app-breadcrumb>
+ * </header>
+ */
 @Component({
   selector: 'app-breadcrumb',
   standalone: true,
@@ -36,15 +55,52 @@ interface Breadcrumb {
   imports: [NgFor, NgIf, RouterLink],
 })
 export class BreadcrumbComponent implements OnDestroy {
-  /** Arreglo que se muestra en el template como "Inicio / Sección / Detalle" */
+  /**
+   * Arreglo que se muestra en el template como:
+   * "Inicio / Sección / Detalle".
+   *
+   * @description
+   * Se actualiza en cada NavigationEnd mediante `triggerFade()`
+   * y `buildBreadcrumbs()`.
+   */
   breadcrumbs: Breadcrumb[] = [];
 
-  /** Referencia al <ol> para aplicarle la animación de fade */
+  /**
+   * Referencia al `<ol>` del template.
+   *
+   * @description
+   * Se utiliza para aplicar y quitar clases CSS de animación
+   * (fade-out / fade-in) cuando cambia la ruta.
+   */
   @ViewChild('bcRef') breadcrumbEl?: ElementRef<HTMLOListElement>;
 
-  /** Suscripción a los eventos del router (para limpiarla luego) */
+  /**
+   * Suscripción a los eventos del router.
+   *
+   * @description
+   * Se guarda para poder limpiarla correctamente en `ngOnDestroy()`.
+   */
   private sub?: Subscription;
 
+  /**
+   * Constructor del componente.
+   *
+   * @description
+   * Inyecta Router, ActivatedRoute y los servicios de dominio
+   * (servicios, noticias, cursos, productos). Además, se suscribe
+   * a los eventos de `NavigationEnd` para reconstruir el breadcrumb
+   * con animación en cada cambio de ruta.
+   *
+   * @param router         Router principal de Angular.
+   * @param route          ActivatedRoute raíz desde donde se recorre el árbol.
+   * @param serviceService Servicio que resuelve datos de "servicios".
+   * @param newsService    Servicio que resuelve datos de "noticias".
+   * @param courseService  Servicio que resuelve datos de "cursos".
+   * @param productService Servicio que resuelve datos de "productos".
+   *
+   * @usageNotes
+   * - La suscripción creada aquí se limpia en `ngOnDestroy()`.
+   */
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -53,7 +109,6 @@ export class BreadcrumbComponent implements OnDestroy {
     private courseService: CourseService,
     private productService: ProductService
   ) {
-    // Nos suscribimos a NavigationEnd para actualizar el breadcrumb
     this.sub = this.router.events
       .pipe(filter(e => e instanceof NavigationEnd))
       .subscribe(() => {
@@ -62,8 +117,27 @@ export class BreadcrumbComponent implements OnDestroy {
   }
 
   /**
-   * Aplica una pequeña animación de fade-out/fade-in al cambiar de ruta
-   * y reconstruye el arreglo de breadcrumbs.
+   * Aplica una animación de fade-out / fade-in al `<ol>` del breadcrumb
+   * y reconstruye el arreglo `breadcrumbs`.
+   *
+   * @description
+   * - Si la ruta actual comienza con `/admin`, se limpia el breadcrumb.
+   * - Si aún no existe la referencia al `<ol>`, solo reconstruye sin animación.
+   * - De lo contrario:
+   *   1. Aplica clase `fade-out`.
+   *   2. Actualiza el contenido del breadcrumb.
+   *   3. Fuerza un reflow y remueve `fade-out` para simular fade-in.
+   *
+   * @return {void}
+   *
+   * @usageNotes
+   * - No debe llamarse manualmente; se invoca en cada `NavigationEnd`.
+   *
+   * @example
+   * // Internamente, en la suscripción al router:
+   * this.sub = this.router.events
+   *   .pipe(filter(e => e instanceof NavigationEnd))
+   *   .subscribe(() => this.triggerFade());
    */
   private triggerFade(): void {
     const el = this.breadcrumbEl?.nativeElement;
@@ -97,11 +171,33 @@ export class BreadcrumbComponent implements OnDestroy {
   }
 
   /**
-   * Recorre recursivamente el árbol de rutas activas y arma las migas.
+   * Recorre recursivamente el árbol de rutas activas y arma el arreglo de migas.
    *
-   * @param route       Ruta actual
-   * @param url         URL acumulada
-   * @param breadcrumbs Arreglo acumulado
+   * @description
+   * - Usa `route.children` para descender en el árbol.
+   * - Construye la URL acumulada (`url` + segmentos actuales).
+   * - Determina la etiqueta (`label`) según:
+   *   - `data.breadcrumb` en las rutas.
+   *   - Datos dinámicos para:
+   *     - Servicios (nombre del servicio).
+   *     - Noticias (título de la noticia + miga “Noticias”).
+   *     - Cursos (título del curso + miga “Cursos”).
+   *     - Productos (nombre del producto + miga “Productos”).
+   *
+   * @param {ActivatedRoute} route     Ruta actual desde donde se inicia el recorrido.
+   * @param {string} [url='']          URL acumulada hasta el nodo actual.
+   * @param {Breadcrumb[]} [breadcrumbs=[]] Arreglo acumulado de breadcrumbs.
+   *
+   * @return {Breadcrumb[]} Arreglo final de breadcrumbs listo para la vista.
+   *
+   * @usageNotes
+   * - No se llama desde la plantilla, solo desde `triggerFade()`.
+   * - Evita duplicar migas comprobando si ya existe una entrada con
+   *   el mismo label y url.
+   *
+   * @example
+   * const result = this.buildBreadcrumbs(this.route.root);
+   * // result → [{ label: 'Inicio', url: '/' }, { label: 'Cursos', url: '/cursos' }, ...]
    */
   private buildBreadcrumbs(
     route: ActivatedRoute,
@@ -258,7 +354,20 @@ export class BreadcrumbComponent implements OnDestroy {
     return breadcrumbs;
   }
 
-  /** Limpiamos la suscripción al destruir el componente */
+  /**
+   * Lifecycle hook de destrucción del componente.
+   *
+   * @description
+   * Cancela la suscripción a los eventos del router para evitar
+   * fugas de memoria cuando el componente deja de estar en uso.
+   *
+   * @return {void}
+   *
+   * @example
+   * ngOnDestroy(): void {
+   *   this.sub?.unsubscribe();
+   * }
+   */
   ngOnDestroy(): void {
     this.sub?.unsubscribe();
   }

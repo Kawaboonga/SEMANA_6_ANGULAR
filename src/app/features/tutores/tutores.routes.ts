@@ -1,24 +1,48 @@
-// ============================================================
-// RUTAS DE FEATURES → TUTORES
-// ------------------------------------------------------------
-// Este archivo define todas las rutas internas bajo /tutores.
-// Usa lazy loading con loadComponent (standalone components).
-// Se integra con el sistema de breadcrumbs (padre/admin).
-// ============================================================
 
 import { Routes } from '@angular/router';
 
+/**
+ * Conjunto de rutas asociadas a la sección pública de **Tutores**.
+ *
+ * Incluye:
+ * - Listado de tutores (`/tutores`)
+ * - Perfil individual de tutor (`/tutores/:id`)
+ *
+ * @type {Routes}
+ *
+ * @usageNotes
+ * - Los componentes se cargan usando `loadComponent()` (lazy loading).
+ * - El breadcrumb "Tutores" lo aporta la ruta padre.
+ * - El detalle del tutor incluye su propio breadcrumb fijo ("Perfil tutor").
+ *
+ * @example
+ * // En app.routes.ts
+ * {
+ *   path: 'tutores',
+ *   loadChildren: () =>
+ *     import('./features/tutores/tutores.routes')
+ *       .then(m => m.TUTORES_ROUTES),
+ * }
+ */
 export const TUTORES_ROUTES: Routes = [
 
-  // ------------------------------------------------------------
-  // RUTA 1: LISTADO DE TUTORES
-  // ------------------------------------------------------------
-  // /tutores
-  //
-  // - Muestra el grid de tutores con filtros, tarjetas, etc.
-  // - No usamos data.breadcrumb aquí porque el breadcrumb
-  //   principal "Tutores" ya lo entrega el padre (/tutores).
-  // ------------------------------------------------------------
+  // ---------------------------------------------------------------------------
+  // RUTA 1: LISTADO GENERAL DE TUTORES
+  // ---------------------------------------------------------------------------
+  /**
+   * Ruta base `/tutores`.
+   *
+   * @description
+   * Renderiza el listado principal de tutores con:
+   * - Grid responsive
+   * - Filtros por instrumento, nivel, modalidad y precio
+   * - OrderBy y búsqueda
+   * - Animaciones FadeUp
+   *
+   * @usageNotes
+   * No usa `data.breadcrumb` porque el breadcrumb padre ya define
+   * el texto visible "Tutores".
+   */
   {
     path: '',
     loadComponent: () =>
@@ -26,27 +50,37 @@ export const TUTORES_ROUTES: Routes = [
         .then(m => m.TutoresListComponent),
   },
 
-  // ------------------------------------------------------------
-  // RUTA 2: PERFIL DE UN TUTOR (DETALLE)
-  // ------------------------------------------------------------
-  // /tutores/:id
-  //
-  // - Muestra el perfil completo del tutor (bio, instrumentos,
-  //   estilos, modalidades, disponibilidad semanal, cursos, etc.)
-  //
-  // - Aquí sí incluimos un breadcrumb fijo:
-  //   "Perfil tutor"
-  //
-  // - El breadcrumb dinámico (nombre del tutor) lo agregas
-  //   dentro del mismo componente si lo deseas.
-  // ------------------------------------------------------------
+  // ---------------------------------------------------------------------------
+  // RUTA 2: DETALLE DE TUTOR
+  // ---------------------------------------------------------------------------
+  /**
+   * Ruta `/tutores/:id`.
+   *
+   * @description
+   * Muestra el perfil completo de un tutor, incluyendo:
+   * - Biografía
+   * - Instrumentos enseñados
+   * - Modalidades disponibles
+   * - Estilos musicales
+   * - Disponibilidad semanal
+   * - Cursos dictados
+   *
+   * @param {string} id - Identificador único del tutor.
+   *
+   * @usageNotes
+   * - El breadcrumb fijo "Perfil tutor" se declara aquí.
+   * - Si deseas un breadcrumb dinámico (ej: nombre del tutor),
+   *   agrégalo dentro de `TutorProfileComponent`.
+   *
+   * @example
+   * /tutores/marco-vidal
+   */
   {
     path: ':id',
     loadComponent: () =>
       import('./tutor-profile/tutor-profile')
         .then(m => m.TutorProfileComponent),
 
-    // Breadcrumb fijo para esta ruta
     data: { breadcrumb: 'Perfil tutor' },
   },
 ];

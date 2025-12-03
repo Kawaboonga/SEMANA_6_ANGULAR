@@ -1,4 +1,9 @@
-// src/app/featured/servicios/servicios.routes.ts
+// ============================================================================
+// IMPORTANTE:
+// - El breadcrumb del listado NO se declara aquí porque se
+//   genera dinámicamente desde el componente ServicioDetail.
+// - Este archivo no requiere NgModule (todo standalone).
+// ============================================================================
 
 import { Routes } from '@angular/router';
 
@@ -6,17 +11,15 @@ import { Routes } from '@angular/router';
  * ============================================================
  * RUTAS DEL MÓDULO "SERVICIOS"
  * ------------------------------------------------------------
- * - Estructura basada en lazy loading con loadComponent()
- * - Adaptado a Angular 20 (standalone architecture)
- * 
- * Rutas:
- *   /servicios                → listado de servicios
- *   /servicios/:slug          → detalle individual
+ * Estructura:
+ *   /servicios             → listado de servicios disponibles
+ *   /servicios/:slug       → detalle individual del servicio
  *
- * NOTA SOBRE BREADCRUMB:
- *   El breadcrumb del detalle lo generamos dinámicamente
- *   desde el propio componente ServicioDetail, por eso NO se
- *   usa data:{breadcrumb:...} aquí.
+ * @remarks
+ * - Cada ruta usa `loadComponent()` para lazy loading real.
+ * - Los componentes son standalone → no se usan módulos.
+ * - El breadcrumb del detalle se calcula dinámicamente según
+ *   el nombre del servicio, usando signals en ServicioDetail.
  * ============================================================
  */
 export const SERVICIOS_ROUTES: Routes = [
@@ -25,8 +28,11 @@ export const SERVICIOS_ROUTES: Routes = [
    * ============================================================
    * RUTA PRINCIPAL: /servicios
    * ------------------------------------------------------------
-   * Carga el listado de servicios usando loadComponent().
-   * No usa NgModule porque toda la app es standalone.
+   * Carga la vista del listado general:
+   *   <app-servicios-list />
+   *
+   * No requiere parámetros. Muestra las categorías o cards de
+   * cada servicio según tu implementación del componente.
    * ============================================================
    */
   {
@@ -34,18 +40,23 @@ export const SERVICIOS_ROUTES: Routes = [
     loadComponent: () =>
       import('./servicios-list/servicios-list')
         .then(m => m.ServiciosList),
+    // El breadcrumb general se calcula fuera o no se usa
   },
 
   /**
    * ============================================================
-   * RUTA DETALLE: /servicios/:slug
+   * RUTA DE DETALLE: /servicios/:slug
    * ------------------------------------------------------------
-   * :slug → identificador SEO del servicio
-   * Ejemplo: /servicios/ajuste-guitarra
+   * :slug → identificador del servicio (ej: "ajuste-guitarra")
    *
-   * IMPORTANTE:
-   *   No definimos data.breadcrumb porque el breadcrumb será
-   *   generado en tiempo real por ServicioDetail usando signals.
+   * El detalle renderiza:
+   *   <app-servicio-detail />
+   *
+   * @usageNotes
+   * - No se define data.breadcrumb porque el nombre visible del
+   *   breadcrumb depende dinámicamente del servicio cargado.
+   * - ServicioDetail usa ActivatedRoute + ServiceService para
+   *   obtener el servicio por slug y exponer su nombre.
    * ============================================================
    */
   {
@@ -54,7 +65,7 @@ export const SERVICIOS_ROUTES: Routes = [
       import('./servicio-detail/servicio-detail')
         .then(m => m.ServicioDetail),
 
-    // breadcrumb dinámico → lo maneja ServicioDetail
+    // El breadcrumb se genera dinámicamente desde ServicioDetail
     // data: { breadcrumb: 'Detalle del servicio' },
   },
 

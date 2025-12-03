@@ -1,0 +1,1396 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>proyecto-semana4 documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+          <script>
+              // --- Iframe navigation tracking for Template Playground ---
+              function sendCurrentUrlToParent() {
+                  if (window.parent && window.parent !== window) {
+                      window.parent.postMessage({
+                          type: 'compodoc-iframe-navigate',
+                          url: window.location.pathname + window.location.hash
+                      }, '*');
+                  }
+              }
+              window.addEventListener('hashchange', sendCurrentUrlToParent, false);
+              window.addEventListener('popstate', sendCurrentUrlToParent, false);
+              window.addEventListener('DOMContentLoaded', sendCurrentUrlToParent, false);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">proyecto-semana4 documentation</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Components</li>
+  <li class="breadcrumb-item"
+  >
+  BreadcrumbComponent</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" class="nav-link"
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+        <li class="nav-item">
+            <a href="#templateData" class="nav-link"
+                role="tab" id="templateData-tab" data-bs-toggle="tab" data-link="template">Template</a>
+        </li>
+        <li class="nav-item">
+            <a href="#styleData" class="nav-link"
+                role="tab" id="styleData-tab" data-bs-toggle="tab" data-link="style">Styles</a>
+        </li>
+        <li class="nav-item">
+            <a href="#tree" class="nav-link"
+                role="tab" id="tree-tab" data-bs-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info"><p class="comment">
+    <h3>File</h3>
+</p>
+<p class="comment">
+    <code>src/app/shared/components/breadcrumb/breadcrumb.ts</code>
+</p>
+
+
+    <p class="comment">
+        <h3>Description</h3>
+    </p>
+    <p class="comment">
+        <p>Componente responsable de construir y mostrar las migas de pan (breadcrumb).</p>
+<p>Escucha los eventos de navegación del router y genera dinámicamente
+el arreglo de breadcrumbs según las rutas activas. También:</p>
+<ul>
+<li><p>Resuelve labels dinámicos para servicios, noticias, cursos y productos.</p>
+</li>
+<li><p>Aplica una animación ligera de fade al cambiar de ruta.</p>
+</li>
+<li><p>No requiere configuración explícita en cada ruta, solo:</p>
+<ul>
+<li><code>data: { breadcrumb: &#39;Texto fijo&#39; }</code> para labels estáticos.</li>
+<li>El propio componente resuelve labels dinámicos según el contexto.</li>
+</ul>
+</li>
+<li><p>Oculta el breadcrumb cuando la URL comienza con <code>/admin</code>.</p>
+</li>
+</ul>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-html">&lt;!-- En un layout principal (app-layout.html) --&gt;
+&lt;header&gt;
+  &lt;app-breadcrumb&gt;&lt;/app-breadcrumb&gt;
+&lt;/header&gt;</code></pre></div>
+    </p>
+
+
+    <p class="comment">
+        <h3>Implements</h3>
+    </p>
+    <p class="comment">
+                <code>OnDestroy</code>
+    </p>
+
+
+<section data-compodoc="block-metadata">
+    <h3>Metadata</h3>
+    <table class="table table-sm table-hover metadata">
+        <tbody>
+
+
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>app-breadcrumb</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">standalone</td>
+                <td class="col-md-9"><code>true</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">imports</td>
+                <td class="col-md-9">
+                            <code>NgFor</code>
+                            <code>NgIf</code>
+                            <code>RouterLink</code>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">styleUrls</td>
+                <td class="col-md-9"><code>./breadcrumb.css</code></td>
+            </tr>
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./breadcrumb.html</code></td>
+            </tr>
+
+
+
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier"></span>
+                                    <span class="modifier">Optional</span>
+                                <a href="#breadcrumbEl" >breadcrumbEl</a>
+                            </li>
+                            <li>
+                                <a href="#breadcrumbs" >breadcrumbs</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Optional</span>
+                                <a href="#sub" >sub</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#buildBreadcrumbs" >buildBreadcrumbs</a>
+                            </li>
+                            <li>
+                                <a href="#ngOnDestroy" >ngOnDestroy</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#triggerFade" >triggerFade</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-constructor">
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(router: Router, route: ActivatedRoute, serviceService: <a href="../injectables/ServiceService.html" target="_self">ServiceService</a>, newsService: <a href="../injectables/NewsService.html" target="_self">NewsService</a>, courseService: <a href="../injectables/CourseService.html" target="_self">CourseService</a>, productService: <a href="../injectables/ProductService.html" target="_self">ProductService</a>)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="83" class="link-to-prism">src/app/shared/components/breadcrumb/breadcrumb.ts:83</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div class="io-description"><p>Constructor del componente.</p>
+<p>Inyecta Router, ActivatedRoute y los servicios de dominio
+(servicios, noticias, cursos, productos). Además, se suscribe
+a los eventos de <code>NavigationEnd</code> para reconstruir el breadcrumb
+con animación en cada cambio de ruta.</p>
+<ul>
+<li>La suscripción creada aquí se limpia en <code>ngOnDestroy()</code>.</li>
+</ul>
+</div>
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                                    <td>Description</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>router</td>
+                                                  
+                                                        <td>
+                                                                    <code>Router</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                        <td>
+                                                                <p>Router principal de Angular.</p>
+
+                                                        </td>
+                                                </tr>
+                                                <tr>
+                                                        <td>route</td>
+                                                  
+                                                        <td>
+                                                                    <code>ActivatedRoute</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                        <td>
+                                                                <p>ActivatedRoute raíz desde donde se recorre el árbol.</p>
+
+                                                        </td>
+                                                </tr>
+                                                <tr>
+                                                        <td>serviceService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/ServiceService.html" target="_self" >ServiceService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                        <td>
+                                                                <p>Servicio que resuelve datos de &quot;servicios&quot;.</p>
+
+                                                        </td>
+                                                </tr>
+                                                <tr>
+                                                        <td>newsService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/NewsService.html" target="_self" >NewsService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                        <td>
+                                                                <p>Servicio que resuelve datos de &quot;noticias&quot;.</p>
+
+                                                        </td>
+                                                </tr>
+                                                <tr>
+                                                        <td>courseService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/CourseService.html" target="_self" >CourseService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                        <td>
+                                                                <p>Servicio que resuelve datos de &quot;cursos&quot;.</p>
+
+                                                        </td>
+                                                </tr>
+                                                <tr>
+                                                        <td>productService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/ProductService.html" target="_self" >ProductService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                        <td>
+                                                                <p>Servicio que resuelve datos de &quot;productos&quot;.</p>
+
+                                                        </td>
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+
+
+
+
+    <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="buildBreadcrumbs"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>buildBreadcrumbs</b></span>
+                        <a href="#buildBreadcrumbs"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>buildBreadcrumbs(route: ActivatedRoute, url: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, breadcrumbs: <a href="../interfaces/Breadcrumb.html" target="_self">Breadcrumb[]</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="202"
+                                    class="link-to-prism">src/app/shared/components/breadcrumb/breadcrumb.ts:202</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Recorre recursivamente el árbol de rutas activas y arma el arreglo de migas.</p>
+<ul>
+<li><p>Usa <code>route.children</code> para descender en el árbol.</p>
+</li>
+<li><p>Construye la URL acumulada (<code>url</code> + segmentos actuales).</p>
+</li>
+<li><p>Determina la etiqueta (<code>label</code>) según:</p>
+<ul>
+<li><code>data.breadcrumb</code> en las rutas.</li>
+<li>Datos dinámicos para:<ul>
+<li>Servicios (nombre del servicio).</li>
+<li>Noticias (título de la noticia + miga “Noticias”).</li>
+<li>Cursos (título del curso + miga “Cursos”).</li>
+<li>Productos (nombre del producto + miga “Productos”).</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>No se llama desde la plantilla, solo desde <code>triggerFade()</code>.</p>
+</li>
+<li><p>Evita duplicar migas comprobando si ya existe una entrada con
+el mismo label y url.</p>
+</li>
+</ul>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-html">const result = this.buildBreadcrumbs(this.route.root);
+// result → [{ label: &#39;Inicio&#39;, url: &#39;/&#39; }, { label: &#39;Cursos&#39;, url: &#39;/cursos&#39; }, ...]</code></pre></div></div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Default value</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>route</td>
+                                            <td>
+                                                        <code>ActivatedRoute</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+                                            <td>
+                                            </td>
+
+                                            <td>
+                                                    <p>Ruta actual desde donde se inicia el recorrido.</p>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                <td>url</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+                                            <td>
+                                                    <code>&#x27;&#x27;</code>
+                                            </td>
+
+                                            <td>
+                                                    <p>URL acumulada hasta el nodo actual.</p>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                <td>breadcrumbs</td>
+                                            <td>
+                                                            <code><a href="../interfaces/Breadcrumb.html" target="_self" >Breadcrumb[]</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+                                            <td>
+                                                    <code>[]</code>
+                                            </td>
+
+                                            <td>
+                                                    <p>Arreglo acumulado de breadcrumbs.</p>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../interfaces/Breadcrumb.html" target="_self" >Breadcrumb[]</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>Arreglo final de breadcrumbs listo para la vista.</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngOnDestroy"></a>
+                    <span class="name">
+                        <span ><b>ngOnDestroy</b></span>
+                        <a href="#ngOnDestroy"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngOnDestroy()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="371"
+                                    class="link-to-prism">src/app/shared/components/breadcrumb/breadcrumb.ts:371</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Lifecycle hook de destrucción del componente.</p>
+<p>Cancela la suscripción a los eventos del router para evitar
+fugas de memoria cuando el componente deja de estar en uso.</p>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-html">ngOnDestroy(): void {
+  this.sub?.unsubscribe();
+}</code></pre></div></div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="triggerFade"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>triggerFade</b></span>
+                        <a href="#triggerFade"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>triggerFade()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="142"
+                                    class="link-to-prism">src/app/shared/components/breadcrumb/breadcrumb.ts:142</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Aplica una animación de fade-out / fade-in al <code>&lt;ol&gt;</code> del breadcrumb
+y reconstruye el arreglo <code>breadcrumbs</code>.</p>
+<ul>
+<li><p>Si la ruta actual comienza con <code>/admin</code>, se limpia el breadcrumb.</p>
+</li>
+<li><p>Si aún no existe la referencia al <code>&lt;ol&gt;</code>, solo reconstruye sin animación.</p>
+</li>
+<li><p>De lo contrario:</p>
+<ol>
+<li>Aplica clase <code>fade-out</code>.</li>
+<li>Actualiza el contenido del breadcrumb.</li>
+<li>Fuerza un reflow y remueve <code>fade-out</code> para simular fade-in.</li>
+</ol>
+</li>
+<li><p>No debe llamarse manualmente; se invoca en cada <code>NavigationEnd</code>.</p>
+</li>
+</ul>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-html">// Internamente, en la suscripción al router:
+this.sub = this.router.events
+  .pipe(filter(e =&gt; e instanceof NavigationEnd))
+  .subscribe(() =&gt; this.triggerFade());</code></pre></div></div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+    <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Properties
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="breadcrumbEl"></a>
+                    <span class="name">
+                            <span class="modifier"></span>
+                            <span class="modifier">Optional</span>
+                        <span ><b>breadcrumbEl</b></span>
+                        <a href="#breadcrumbEl"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>ElementRef&lt;HTMLOListElement&gt;</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <b>Decorators : </b>
+                        <br />
+                        <code>
+                            @ViewChild(&#x27;bcRef&#x27;)<br />
+                        </code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="75" class="link-to-prism">src/app/shared/components/breadcrumb/breadcrumb.ts:75</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Referencia al <code>&lt;ol&gt;</code> del template.</p>
+<p>Se utiliza para aplicar y quitar clases CSS de animación
+(fade-out / fade-in) cuando cambia la ruta.</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="breadcrumbs"></a>
+                    <span class="name">
+                        <span ><b>breadcrumbs</b></span>
+                        <a href="#breadcrumbs"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/Breadcrumb.html" target="_self" >Breadcrumb[]</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="66" class="link-to-prism">src/app/shared/components/breadcrumb/breadcrumb.ts:66</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Arreglo que se muestra en el template como:
+&quot;Inicio / Sección / Detalle&quot;.</p>
+<p>Se actualiza en cada NavigationEnd mediante <code>triggerFade()</code>
+y <code>buildBreadcrumbs()</code>.</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="sub"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                            <span class="modifier">Optional</span>
+                        <span ><b>sub</b></span>
+                        <a href="#sub"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>Subscription</code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="83" class="link-to-prism">src/app/shared/components/breadcrumb/breadcrumb.ts:83</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Suscripción a los eventos del router.</p>
+<p>Se guarda para poder limpiarla correctamente en <code>ngOnDestroy()</code>.</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+</section>
+
+</div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component, OnDestroy, ElementRef, ViewChild,} from &#x27;@angular/core&#x27;;
+import { ActivatedRoute, NavigationEnd, Router, RouterLink,} from &#x27;@angular/router&#x27;;
+import { NgFor, NgIf } from &#x27;@angular/common&#x27;;
+import { filter, Subscription } from &#x27;rxjs&#x27;;
+
+import { ServiceService } from &#x27;@core/services/service.service&#x27;;
+import { NewsService } from &#x27;@core/services/news.service&#x27;;
+import { CourseService } from &#x27;@core/services/course.service&#x27;;
+import { ProductService } from &#x27;@core/services/product.service&#x27;;
+
+/**
+ * Modelo de una miga de pan (breadcrumb).
+ *
+ * @description
+ * Representa un ítem individual dentro del breadcrumb:
+ * texto visible y URL asociada.
+ *
+ * @usageNotes
+ * - &#x60;label&#x60; se muestra en la interfaz.
+ * - &#x60;url&#x60; se usa para navegar al hacer clic.
+ */
+interface Breadcrumb {
+  /** Texto visible del enlace en el breadcrumb */
+  label: string;
+  /** Ruta a la que navega al hacer clic */
+  url: string;
+}
+
+/**
+ * Componente responsable de construir y mostrar las migas de pan (breadcrumb).
+ *
+ * @description
+ * Escucha los eventos de navegación del router y genera dinámicamente
+ * el arreglo de breadcrumbs según las rutas activas. También:
+ * - Resuelve labels dinámicos para servicios, noticias, cursos y productos.
+ * - Aplica una animación ligera de fade al cambiar de ruta.
+ *
+ * @usageNotes
+ * - No requiere configuración explícita en cada ruta, solo:
+ *   - &#x60;data: { breadcrumb: &#x27;Texto fijo&#x27; }&#x60; para labels estáticos.
+ *   - El propio componente resuelve labels dinámicos según el contexto.
+ * - Oculta el breadcrumb cuando la URL comienza con &#x60;/admin&#x60;.
+ *
+ * @example
+ * &lt;!-- En un layout principal (app-layout.html) --&gt;
+ * &lt;header&gt;
+ *   &lt;app-breadcrumb&gt;&lt;/app-breadcrumb&gt;
+ * &lt;/header&gt;
+ */
+@Component({
+  selector: &#x27;app-breadcrumb&#x27;,
+  standalone: true,
+  templateUrl: &#x27;./breadcrumb.html&#x27;,
+  styleUrls: [&#x27;./breadcrumb.css&#x27;],
+  imports: [NgFor, NgIf, RouterLink],
+})
+export class BreadcrumbComponent implements OnDestroy {
+  /**
+   * Arreglo que se muestra en el template como:
+   * &quot;Inicio / Sección / Detalle&quot;.
+   *
+   * @description
+   * Se actualiza en cada NavigationEnd mediante &#x60;triggerFade()&#x60;
+   * y &#x60;buildBreadcrumbs()&#x60;.
+   */
+  breadcrumbs: Breadcrumb[] &#x3D; [];
+
+  /**
+   * Referencia al &#x60;&lt;ol&gt;&#x60; del template.
+   *
+   * @description
+   * Se utiliza para aplicar y quitar clases CSS de animación
+   * (fade-out / fade-in) cuando cambia la ruta.
+   */
+  @ViewChild(&#x27;bcRef&#x27;) breadcrumbEl?: ElementRef&lt;HTMLOListElement&gt;;
+
+  /**
+   * Suscripción a los eventos del router.
+   *
+   * @description
+   * Se guarda para poder limpiarla correctamente en &#x60;ngOnDestroy()&#x60;.
+   */
+  private sub?: Subscription;
+
+  /**
+   * Constructor del componente.
+   *
+   * @description
+   * Inyecta Router, ActivatedRoute y los servicios de dominio
+   * (servicios, noticias, cursos, productos). Además, se suscribe
+   * a los eventos de &#x60;NavigationEnd&#x60; para reconstruir el breadcrumb
+   * con animación en cada cambio de ruta.
+   *
+   * @param router         Router principal de Angular.
+   * @param route          ActivatedRoute raíz desde donde se recorre el árbol.
+   * @param serviceService Servicio que resuelve datos de &quot;servicios&quot;.
+   * @param newsService    Servicio que resuelve datos de &quot;noticias&quot;.
+   * @param courseService  Servicio que resuelve datos de &quot;cursos&quot;.
+   * @param productService Servicio que resuelve datos de &quot;productos&quot;.
+   *
+   * @usageNotes
+   * - La suscripción creada aquí se limpia en &#x60;ngOnDestroy()&#x60;.
+   */
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private serviceService: ServiceService,
+    private newsService: NewsService,
+    private courseService: CourseService,
+    private productService: ProductService
+  ) {
+    this.sub &#x3D; this.router.events
+      .pipe(filter(e &#x3D;&gt; e instanceof NavigationEnd))
+      .subscribe(() &#x3D;&gt; {
+        this.triggerFade();
+      });
+  }
+
+  /**
+   * Aplica una animación de fade-out / fade-in al &#x60;&lt;ol&gt;&#x60; del breadcrumb
+   * y reconstruye el arreglo &#x60;breadcrumbs&#x60;.
+   *
+   * @description
+   * - Si la ruta actual comienza con &#x60;/admin&#x60;, se limpia el breadcrumb.
+   * - Si aún no existe la referencia al &#x60;&lt;ol&gt;&#x60;, solo reconstruye sin animación.
+   * - De lo contrario:
+   *   1. Aplica clase &#x60;fade-out&#x60;.
+   *   2. Actualiza el contenido del breadcrumb.
+   *   3. Fuerza un reflow y remueve &#x60;fade-out&#x60; para simular fade-in.
+   *
+   * @return {void}
+   *
+   * @usageNotes
+   * - No debe llamarse manualmente; se invoca en cada &#x60;NavigationEnd&#x60;.
+   *
+   * @example
+   * // Internamente, en la suscripción al router:
+   * this.sub &#x3D; this.router.events
+   *   .pipe(filter(e &#x3D;&gt; e instanceof NavigationEnd))
+   *   .subscribe(() &#x3D;&gt; this.triggerFade());
+   */
+  private triggerFade(): void {
+    const el &#x3D; this.breadcrumbEl?.nativeElement;
+
+    // Si estamos en /admin o alguna subruta → no mostramos breadcrumb
+    if (this.router.url.startsWith(&#x27;/admin&#x27;)) {
+      this.breadcrumbs &#x3D; [];
+      return;
+    }
+
+    // Primera carga o todavía no hay referencia al &lt;ol&gt;
+    if (!el) {
+      this.breadcrumbs &#x3D; this.buildBreadcrumbs(this.route.root);
+      return;
+    }
+
+    // 1) Fade-out
+    el.classList.add(&#x27;fade-out&#x27;);
+
+    // 2) Actualizamos contenido y luego disparamos fade-in
+    setTimeout(() &#x3D;&gt; {
+      this.breadcrumbs &#x3D; this.buildBreadcrumbs(this.route.root);
+
+      // Forzamos reflow por seguridad
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+      el.offsetHeight;
+
+      // 3) Fade-in (quitando la clase)
+      el.classList.remove(&#x27;fade-out&#x27;);
+    }, 80);
+  }
+
+  /**
+   * Recorre recursivamente el árbol de rutas activas y arma el arreglo de migas.
+   *
+   * @description
+   * - Usa &#x60;route.children&#x60; para descender en el árbol.
+   * - Construye la URL acumulada (&#x60;url&#x60; + segmentos actuales).
+   * - Determina la etiqueta (&#x60;label&#x60;) según:
+   *   - &#x60;data.breadcrumb&#x60; en las rutas.
+   *   - Datos dinámicos para:
+   *     - Servicios (nombre del servicio).
+   *     - Noticias (título de la noticia + miga “Noticias”).
+   *     - Cursos (título del curso + miga “Cursos”).
+   *     - Productos (nombre del producto + miga “Productos”).
+   *
+   * @param {ActivatedRoute} route     Ruta actual desde donde se inicia el recorrido.
+   * @param {string} [url&#x3D;&#x27;&#x27;]          URL acumulada hasta el nodo actual.
+   * @param {Breadcrumb[]} [breadcrumbs&#x3D;[]] Arreglo acumulado de breadcrumbs.
+   *
+   * @return {Breadcrumb[]} Arreglo final de breadcrumbs listo para la vista.
+   *
+   * @usageNotes
+   * - No se llama desde la plantilla, solo desde &#x60;triggerFade()&#x60;.
+   * - Evita duplicar migas comprobando si ya existe una entrada con
+   *   el mismo label y url.
+   *
+   * @example
+   * const result &#x3D; this.buildBreadcrumbs(this.route.root);
+   * // result → [{ label: &#x27;Inicio&#x27;, url: &#x27;/&#x27; }, { label: &#x27;Cursos&#x27;, url: &#x27;/cursos&#x27; }, ...]
+   */
+  private buildBreadcrumbs(
+    route: ActivatedRoute,
+    url: string &#x3D; &#x27;&#x27;,
+    breadcrumbs: Breadcrumb[] &#x3D; []
+  ): Breadcrumb[] {
+    const children &#x3D; route.children;
+
+    // Caso base: no hay más hijos
+    if (!children || children.length &#x3D;&#x3D;&#x3D; 0) {
+      return breadcrumbs;
+    }
+
+    for (const child of children) {
+      const routeConfig &#x3D; child.snapshot.routeConfig;
+      if (!routeConfig) continue;
+
+      // Segmento de esta ruta (ej: &#x27;noticias&#x27;, &#x27;:id&#x27;, &#x27;cursos&#x27;, etc.)
+      const routeURL &#x3D; child.snapshot.url.map(seg &#x3D;&gt; seg.path).join(&#x27;/&#x27;);
+      const nextUrl &#x3D; routeURL ? &#x60;${url}/${routeURL}&#x60; : url;
+
+      // Label base desde data.breadcrumb (si existe)
+      let label: string | undefined &#x3D; child.snapshot.data[&#x27;breadcrumb&#x27;];
+
+      const parentPath &#x3D; child.parent?.snapshot.routeConfig?.path;
+      const currentPath &#x3D; routeConfig.path;
+
+      // &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+      // 🔵 SERVICIOS → /servicios/:slug
+      // &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+      if (parentPath &#x3D;&#x3D;&#x3D; &#x27;servicios&#x27; &amp;&amp; currentPath &#x3D;&#x3D;&#x3D; &#x27;:slug&#x27;) {
+        const slug &#x3D; child.snapshot.params[&#x27;slug&#x27;];
+        const service &#x3D; this.serviceService.getBySlug(slug);
+
+        if (service) {
+          label &#x3D; service.name;
+        } else if (!label) {
+          label &#x3D; &#x27;Servicio&#x27;;
+        }
+      }
+
+      // &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+      // 🟣 NOTICIAS → /noticias/:id
+      // &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+      if (parentPath &#x3D;&#x3D;&#x3D; &#x27;noticias&#x27; &amp;&amp; currentPath &#x3D;&#x3D;&#x3D; &#x27;:id&#x27;) {
+        const id &#x3D; child.snapshot.params[&#x27;id&#x27;];
+        const noticia &#x3D; this.newsService.getById(id);
+
+        // Aseguramos la miga intermedia &quot;Noticias&quot;
+        const noticiasCrumbExists &#x3D; breadcrumbs.some(
+          b &#x3D;&gt; b.label &#x3D;&#x3D;&#x3D; &#x27;Noticias&#x27; &amp;&amp; b.url &#x3D;&#x3D;&#x3D; &#x27;/noticias&#x27;
+        );
+        if (!noticiasCrumbExists) {
+          breadcrumbs.push({
+            label: &#x27;Noticias&#x27;,
+            url: &#x27;/noticias&#x27;,
+          });
+        }
+
+        // Última miga: título de la noticia
+        if (noticia) {
+          label &#x3D; noticia.title;
+        } else if (!label) {
+          label &#x3D; &#x27;Noticia&#x27;;
+        }
+      }
+
+      // &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+      // 🟠 CURSOS → /cursos/:slug
+      // &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+      if (
+        currentPath &#x3D;&#x3D;&#x3D; &#x27;cursos/:slug&#x27; ||
+        (parentPath &#x3D;&#x3D;&#x3D; &#x27;cursos&#x27; &amp;&amp; currentPath &#x3D;&#x3D;&#x3D; &#x27;:slug&#x27;)
+      ) {
+        const slug &#x3D; child.snapshot.params[&#x27;slug&#x27;];
+        const course &#x3D; this.courseService.getCourseBySlug(slug);
+
+        // Miga intermedia &quot;Cursos&quot;
+        const cursosCrumbExists &#x3D; breadcrumbs.some(
+          b &#x3D;&gt; b.label &#x3D;&#x3D;&#x3D; &#x27;Cursos&#x27; &amp;&amp; b.url &#x3D;&#x3D;&#x3D; &#x27;/cursos&#x27;
+        );
+        if (!cursosCrumbExists) {
+          breadcrumbs.push({
+            label: &#x27;Cursos&#x27;,
+            url: &#x27;/cursos&#x27;,
+          });
+        }
+
+        // Miga final con título del curso
+        if (course) {
+          label &#x3D; course.title;
+        } else if (!label) {
+          label &#x3D; &#x27;Curso&#x27;;
+        }
+      }
+
+      // &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+      // 🟢 PRODUCTOS → /productos y /productos/:slug
+      // &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+
+      // Siempre aseguramos miga &quot;Productos&quot; cuando estamos en esa sección
+      if (currentPath &#x3D;&#x3D;&#x3D; &#x27;productos&#x27; || parentPath &#x3D;&#x3D;&#x3D; &#x27;productos&#x27;) {
+        const productosCrumbExists &#x3D; breadcrumbs.some(
+          b &#x3D;&gt; b.label &#x3D;&#x3D;&#x3D; &#x27;Productos&#x27; &amp;&amp; b.url &#x3D;&#x3D;&#x3D; &#x27;/productos&#x27;
+        );
+        if (!productosCrumbExists) {
+          breadcrumbs.push({
+            label: &#x27;Productos&#x27;,
+            url: &#x27;/productos&#x27;,
+          });
+        }
+      }
+
+      // Detalle de producto: /productos/:slug o /productos/:id
+      if (
+        parentPath &#x3D;&#x3D;&#x3D; &#x27;productos&#x27; &amp;&amp;
+        (currentPath &#x3D;&#x3D;&#x3D; &#x27;:slug&#x27; || currentPath &#x3D;&#x3D;&#x3D; &#x27;:id&#x27;)
+      ) {
+        const slugOrId &#x3D;
+          child.snapshot.params[&#x27;slug&#x27;] ?? child.snapshot.params[&#x27;id&#x27;];
+
+        let product: any | undefined;
+        if (slugOrId) {
+          product &#x3D; this.productService.getBySlug(slugOrId);
+        }
+
+        if (product) {
+          label &#x3D; product.name ?? product.title ?? &#x27;Producto&#x27;;
+        } else if (!label) {
+          label &#x3D; &#x27;Producto&#x27;;
+        }
+      }
+
+      // &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+      // Agregamos la miga si hay label
+      // &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+      if (label) {
+        const exists &#x3D; breadcrumbs.some(
+          b &#x3D;&gt; b.label &#x3D;&#x3D;&#x3D; label &amp;&amp; b.url &#x3D;&#x3D;&#x3D; (nextUrl || &#x27;/&#x27;)
+        );
+
+        if (!exists) {
+          breadcrumbs.push({
+            label,
+            url: nextUrl || &#x27;/&#x27;,
+          });
+        }
+      }
+
+      // Recorremos recursivamente el resto del árbol
+      this.buildBreadcrumbs(child, nextUrl, breadcrumbs);
+    }
+
+    return breadcrumbs;
+  }
+
+  /**
+   * Lifecycle hook de destrucción del componente.
+   *
+   * @description
+   * Cancela la suscripción a los eventos del router para evitar
+   * fugas de memoria cuando el componente deja de estar en uso.
+   *
+   * @return {void}
+   *
+   * @example
+   * ngOnDestroy(): void {
+   *   this.sub?.unsubscribe();
+   * }
+   */
+  ngOnDestroy(): void {
+    this.sub?.unsubscribe();
+  }
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;!--
+  NAV BREADCRUMB
+  --------------
+  Solo se muestra si hay elementos en el array &#x60;breadcrumbs&#x60;.
+--&gt;
+&lt;nav *ngIf&#x3D;&quot;breadcrumbs.length&quot; aria-label&#x3D;&quot;breadcrumb&quot; class&#x3D;&quot;mb-3&quot;&gt;
+
+  &lt;!--
+    &lt;ol&gt; principal del breadcrumb.
+    - &#x60;#bcRef&#x60; → se usa en el componente TS para aplicar la animación fade-out/fade-in.
+    - &#x60;breadcrumb-fade&#x60; / &#x60;is-visible&#x60; → clases de animación CSS.
+
+    NO ESTA FUNCIONADO REVISAR!!!
+  --&gt;
+  &lt;ol class&#x3D;&quot;breadcrumb my-breadcrumb breadcrumb-fade is-visible&quot; #bcRef&gt;
+
+    &lt;!--
+      Miga fija de &quot;Inicio&quot;.
+      Siempre apunta a la raíz del sitio.
+    --&gt;
+    &lt;li class&#x3D;&quot;breadcrumb-item&quot;&gt;
+      &lt;a routerLink&#x3D;&quot;/&quot;&gt;Inicio&lt;/a&gt;
+    &lt;/li&gt;
+
+    &lt;!--
+      Resto de migas dinámicas:
+      - Recorremos el array &#x60;breadcrumbs&#x60;.
+      - &#x60;last&#x60; &#x3D; true en el último elemento → se marca como &#x60;.active&#x60; y
+        se muestra como texto sin enlace.
+    --&gt;
+    &lt;li
+      *ngFor&#x3D;&quot;let bc of breadcrumbs; let last &#x3D; last&quot;
+      class&#x3D;&quot;breadcrumb-item&quot;
+      [class.active]&#x3D;&quot;last&quot;
+      aria-current&#x3D;&quot;page&quot;
+    &gt;
+      &lt;!--
+        Si NO es la última miga:
+        - Mostrar como enlace (permite navegar hacia atrás en la jerarquía).
+      --&gt;
+      &lt;ng-container *ngIf&#x3D;&quot;!last; else lastCrumb&quot;&gt;
+        &lt;a [routerLink]&#x3D;&quot;bc.url&quot;&gt;{{ bc.label }}&lt;/a&gt;
+      &lt;/ng-container&gt;
+
+      &lt;!--
+        Última miga:
+        - Solo texto, sin enlace.
+        - Representa la página actual.
+      --&gt;
+      &lt;ng-template #lastCrumb&gt;
+        {{ bc.label }}
+      &lt;/ng-template&gt;
+    &lt;/li&gt;
+
+  &lt;/ol&gt;
+&lt;/nav&gt;
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="styleData">
+                <p class="comment">
+                    <code>./breadcrumb.css</code>
+                </p>
+                <pre class="line-numbers"><code class="language-scss"></code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Legend</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Html element</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Component</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Html element with directive</span>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<script src="../js/libs/vis-network.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div><!--  NAV BREADCRUMB  --------------  Solo se muestra si hay elementos en el array `breadcrumbs`.--><nav *ngIf="breadcrumbs.length" aria-label="breadcrumb" class="mb-3">  <!--    <ol> principal del breadcrumb.    - `#bcRef` → se usa en el componente TS para aplicar la animación fade-out/fade-in.    - `breadcrumb-fade` / `is-visible` → clases de animación CSS.    NO ESTA FUNCIONADO REVISAR!!!  -->  <ol class="breadcrumb my-breadcrumb breadcrumb-fade is-visible" #bcRef>    <!--      Miga fija de "Inicio".      Siempre apunta a la raíz del sitio.    -->    <li class="breadcrumb-item">      <a routerLink="/">Inicio</a>    </li>    <!--      Resto de migas dinámicas:      - Recorremos el array `breadcrumbs`.      - `last` = true en el último elemento → se marca como `.active` y        se muestra como texto sin enlace.    -->    <li      *ngFor="let bc of breadcrumbs; let last = last"      class="breadcrumb-item"      [class.active]="last"      aria-current="page"    >      <!--        Si NO es la última miga:        - Mostrar como enlace (permite navegar hacia atrás en la jerarquía).      -->      <ng-container *ngIf="!last; else lastCrumb">        <a [routerLink]="bc.url">{{ bc.label }}</a>      </ng-container>      <!--        Última miga:        - Solo texto, sin enlace.        - Representa la página actual.      -->      <ng-template #lastCrumb>        {{ bc.label }}      </ng-template>    </li>  </ol></nav></div>'
+    var COMPONENTS = [{'name': 'AdBanner', 'selector': 'app-ad-banner'},{'name': 'AdminCursosComponent', 'selector': 'app-admin-cursos'},{'name': 'AdminDashboard', 'selector': 'app-admin-dashboard'},{'name': 'AdminLayout', 'selector': 'app-admin-layout'},{'name': 'AdminProductos', 'selector': 'app-admin-productos'},{'name': 'AdminTutores', 'selector': 'app-admin-tutores'},{'name': 'AdminUsuarios', 'selector': 'app-admin-usuarios'},{'name': 'App', 'selector': 'app-root'},{'name': 'BreadcrumbComponent', 'selector': 'app-breadcrumb'},{'name': 'Carousel', 'selector': 'app-carousel'},{'name': 'Contacto', 'selector': 'app-contacto'},{'name': 'CourseCardComponent', 'selector': 'app-course-card'},{'name': 'CourseFormComponent', 'selector': 'app-course-form'},{'name': 'CursoDetailComponent', 'selector': 'app-curso-detail'},{'name': 'CursosListComponent', 'selector': 'app-cursos-list'},{'name': 'FooterComponent', 'selector': 'app-footer'},{'name': 'Home', 'selector': 'app-home'},{'name': 'LoadingComponent', 'selector': 'app-loading'},{'name': 'LoginComponent', 'selector': 'app-login'},{'name': 'MainLayout', 'selector': 'app-main-layout'},{'name': 'NavbarComponent', 'selector': 'app-navbar'},{'name': 'NewsCard', 'selector': 'app-news-card'},{'name': 'NoticiaDetalle', 'selector': 'app-noticias-detail'},{'name': 'Noticias', 'selector': 'app-noticias'},{'name': 'ProductCardComponent', 'selector': 'app-product-card'},{'name': 'ProductCategoryBannerComponent', 'selector': 'app-product-category-banner'},{'name': 'ProductDetailComponent', 'selector': 'app-product-detail'},{'name': 'ProductFiltersComponent', 'selector': 'app-product-filters'},{'name': 'ProductFormComponent', 'selector': 'app-product-form'},{'name': 'ProductGridComponent', 'selector': 'app-product-grid'},{'name': 'ProductListComponent', 'selector': 'app-product-list'},{'name': 'Profile', 'selector': 'app-profile'},{'name': 'Recover', 'selector': 'app-recover-password'},{'name': 'RegisterComponent', 'selector': 'app-register'},{'name': 'ServicioDetail', 'selector': 'app-servicio-detail'},{'name': 'ServiciosList', 'selector': 'app-servicios-list'},{'name': 'Somos', 'selector': 'app-somos'},{'name': 'TutorCardComponent', 'selector': 'app-tutor-card'},{'name': 'TutoresListComponent', 'selector': 'app-tutores-list'},{'name': 'TutorFilterBarComponent', 'selector': 'app-tutor-filter-bar'},{'name': 'TutorFormComponent', 'selector': 'app-tutor-form'},{'name': 'TutorProfileComponent', 'selector': 'app-tutor-profile-page'},{'name': 'UserFormComponent', 'selector': 'app-user-form'}];
+    var DIRECTIVES = [{'name': 'FadeUpDirective', 'selector': '[appFadeUp]'}];
+    var ACTUAL_COMPONENT = {'name': 'BreadcrumbComponent'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
+            var COMPODOC_CURRENT_PAGE_URL = 'BreadcrumbComponent.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

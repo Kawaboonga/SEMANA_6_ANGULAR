@@ -1,9 +1,9 @@
-// src/app/features/auth/login/login.ts
 
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule,} from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+
 import { AuthService } from '@core/services/auth.service';
 import { FadeUpDirective } from '@shared/directives/fade-up';
 
@@ -14,23 +14,48 @@ import { FadeUpDirective } from '@shared/directives/fade-up';
   templateUrl: './login.html',
   styleUrls: ['./login.css'],
 })
+
+/**
+ * Página de inicio de sesión del proyecto.
+ *
+ * Maneja el flujo completo de login:
+ * - Validación del formulario (email + contraseña)
+ * - Llamada al AuthService
+ * - Manejo de mensajes de error y éxito
+ * - Redirección posterior al login
+ *
+ * Este componente se mantiene simple y centrado en UX:
+ * muestra errores según el estado del formulario,
+ * bloquea el botón mientras carga y entrega feedback inmediato.
+ *
+ * @usageNotes
+ * - El AuthService se encarga de persistir sesión en localStorage.
+ * - Si quieres redirigir al admin o a "returnUrl", puedes modificar la navegación en `onSubmit`.
+ */
 export class LoginComponent {
+
   // ============================================================
   // 1) STATE DEL FORMULARIO
   // ============================================================
 
-  // Grupo reactivo con los campos de login.
+  /**
+   * Formulario reactivo con email + password.
+   * Validaciones:
+   * - email: requerido + formato válido
+   * - password: requerido
+   */
   form: FormGroup;
 
-  // Simple flag para saber si ya se intentó hacer submit.
+  /** Flag que indica si ya se intentó enviar el formulario. */
   submitted = false;
 
-  // Flag para mostrar estado de "cargando" (deshabilitar botón, etc.).
+  /** Estado de carga para deshabilitar botón y mostrar spinner. */
   loading = false;
 
-  // Mensajes que se muestran en el template según resultado del login.
-  /** Mensajes de error o éxito */
+  /** Mensaje visible en caso de error. */
   errorMessage = '';
+
+  /** Mensaje visible en caso de login exitoso. */
   successMessage = '';
 
   // ============================================================
@@ -38,13 +63,15 @@ export class LoginComponent {
   // ============================================================
 
   constructor(
-    private fb: FormBuilder,   // para construir el FormGroup
-    private auth: AuthService, // maneja el login y el usuario actual
-    private router: Router     // para redirigir después de login
+    private fb: FormBuilder,
+    private auth: AuthService,
+    private router: Router,
   ) {
-    // Definición del formulario reactivo:
-    // - email: requerido + formato de correo
-    // - password: requerido (validación básica)
+    /**
+     * Configuración inicial del formulario:
+     * - email: string
+     * - password: string
+     */
     this.form = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]],
@@ -54,8 +81,14 @@ export class LoginComponent {
   // ============================================================
   // 3) Helper de validaciones para el HTML
   // ============================================================
-  // Devuelve true si el control está tocado y tiene el error indicado.
-  // Lo uso para mostrar mensajes de error específicos en el template.
+
+  /**
+   * Indica si un control del formulario tiene un error específico
+   * y está en estado "touched".
+   *
+   * @param control Nombre del campo del formulario.
+   * @param code Código de validación (ej: 'required', 'email').
+   */
   hasError(control: string, code: string): boolean {
     const ctrl = this.form.get(control);
     return !!ctrl && ctrl.touched && ctrl.hasError(code);
@@ -64,46 +97,60 @@ export class LoginComponent {
   // ============================================================
   // 4) SUBMIT DEL FORMULARIO DE LOGIN
   // ============================================================
-  // Maneja el flujo completo:
-  // - marca el form como enviado
-  // - valida
-  // - llama al AuthService
-  // - setea mensajes y redirige si todo sale bien
+
+  /**
+   * Maneja el submit del login:
+   * - Marca el formulario como enviado
+   * - Valida campos
+   * - Llama a AuthService.login
+   * - Muestra mensajes de error o éxito
+   * - Redirige al área privada si todo sale bien
+   *
+   * @example
+   * <button (click)="onSubmit()">Ingresar</button>
+   */
   onSubmit(): void {
     this.submitted = true;
 
-    // Si el formulario no es válido, marco todos los campos como tocados
-    // para que se muestren los mensajes de error y corto el flujo.
+    // Reset de mensajes previos
+    this.errorMessage = '';
+    this.successMessage = '';
+
+    // Validación previa: si está malo, mostrar errores y detener
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
     }
 
-    // Estado de "cargando" mientras se procesa el login.
     this.loading = true;
-    this.errorMessage = '';
-    this.successMessage = '';
 
-    // Extraigo el email y la contraseña del form.
     const { email, password } = this.form.value;
 
-    // Llamada al servicio de autenticación.
-    // En este proyecto, AuthService.login trabaja en memoria (demo local).
-    const result = this.auth.login({ email, password });
+    // Llamada al servicio de autenticación
+    const result = this.auth.login({
+      email: (email ?? '').toString(),
+      password: (password ?? '').toString(),
+    });
 
-    // Si el login falla, muestro el mensaje y desactivo el loading.
+    // Error en login (credenciales o usuario inactivo)
     if (!result.success) {
       this.errorMessage =
-        result.message ?? 'Ocurrió un error al iniciar sesión. Intenta nuevamente.';
+        result.message ??
+        'Ocurrió un error al iniciar sesión. Intenta nuevamente.';
       this.loading = false;
       return;
     }
 
-    // Si todo salió bien, muestro un mensaje corto y redirijo al área privada.
+    // Login exitoso
     this.successMessage = 'Inicio de sesión exitoso. Redirigiendo...';
 
-    // Pequeño delay para que alcance a verse el mensaje en la interfaz.
+    // Delay para mostrar el mensaje antes de navegar
     setTimeout(() => {
+      this.form.reset();
+      this.submitted = false;
+      this.loading = false;
+
+      // Redirección por defecto
       this.router.navigate(['/mi-cuenta']);
     }, 800);
   }

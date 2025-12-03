@@ -1,6 +1,5 @@
-// src/app/features/home/home.ts (o ruta equivalente)
 
-import {Component, AfterViewInit, OnInit, OnDestroy, inject,} from '@angular/core';
+import { Component, AfterViewInit, OnInit, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
@@ -13,7 +12,6 @@ import { Tutor } from '@core/models/tutor.model';
 
 import { FadeUpDirective } from '@shared/directives/fade-up';
 
-
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -21,56 +19,97 @@ import { FadeUpDirective } from '@shared/directives/fade-up';
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
+/**
+ * Página principal del sitio.
+ *
+ * Aquí se combinan:
+ * - El hero con efecto de parallax.
+ * - Carruseles con tutores, productos, cursos, noticias y ofertas.
+ * - Secciones con animaciones de entrada (fade-up, scroll).
+ *
+ * La lógica está dividida entre:
+ * - `ngOnInit`: carga de datos + configuración inicial del layout.
+ * - `ngAfterViewInit`: activación de animaciones y fallback del parallax.
+ * - `ngOnDestroy`: limpieza de listeners y estados del DOM.
+ *
+ * Nota:
+ * Este componente es “pesado” por diseño: concentra animaciones y loaders
+ * específicos del home porque son únicos del sitio.
+ *
+ * Si más adelante integras SSR, ya está preparado con isBrowser.
+ */
 export class Home implements OnInit, AfterViewInit, OnDestroy {
   // ============================================================
   // 1) INYECCIÓN DE SERVICIOS
   // ============================================================
+
+  /** Servicio que reúne los items para los diferentes carruseles del home. */
   private dataService = inject(CarouselDataService);
+
+  /** Servicio de tutores reales (mock local + signals) para mostrar en carrusel. */
   private tutorService = inject(TutorService);
 
   // ============================================================
   // 2) DATA PARA CARRUSELES
   // ============================================================
 
-  // 🟦 Ahora los tutores vienen desde TutorService (tutores reales)
+  /** Lista de tutores reales que aparece en el carrusel “Tutores Destacados”. */
   tutorItems: Tutor[] = [];
 
-  // El resto de carruseles sigue usando el contrato CarouselItem
+  /** Carrusel de productos destacados. */
   productItems: CarouselItem[] = [];
+
+  /** Carrusel de cursos recomendados. */
   courseItems: CarouselItem[] = [];
+
+  /** Carrusel de contenidos destacados (puede ser hero secundario). */
   highlightItems: CarouselItem[] = [];
+
+  /** Carrusel de ofertas activas. */
   offerItems: CarouselItem[] = [];
+
+  /** Carrusel de noticias recientes. */
   newsItems: CarouselItem[] = [];
 
   // ============================================================
-  // 3) CONTROL DE ENTORNO (solo navegador)
-  //    → útil si algún día activas SSR
+  // 3) CONTROL DE ENTORNO
   // ============================================================
+
+  /**
+   * Flag que indica si estamos en un entorno de navegador.
+   * Necesario porque este componente usa APIs del DOM (window, document),
+   * y eso rompe SSR si no se verifica previamente.
+   */
   private isBrowser =
     typeof window !== 'undefined' && typeof document !== 'undefined';
 
-  // Handlers para limpiar listeners en ngOnDestroy
+  /** Handlers que se registran en scroll/resize para el fallback del parallax. */
   private scrollHandler?: () => void;
   private resizeHandler?: () => void;
 
   // ============================================================
-  // 4) ngOnInit: cargar datos + clase en <body>
+  // 4) ngOnInit: carga de datos y configuración del layout
   // ============================================================
+
+  /**
+   * Carga los datos del home y agrega la clase `has-hero` al <body>.
+   * Esta clase permite aplicar estilos globales que solo se usan en esta vista
+   * (por ejemplo, la superposición del header sobre el hero).
+   */
   ngOnInit(): void {
     if (!this.isBrowser) return;
 
-    // Clase en body para estilos específicos del home (hero, etc.)
+    // Añadimos una clase especial al body para estilos del home.
     document.body.classList.add('has-hero');
 
-    // -----------------------------
-    // 🟦 TUTORES desde TutorService
-    // -----------------------------
-    // getAll() devuelve el arreglo de tutores que ya usas en admin
+    // ------------------------------------------
+    // 🟦 TUTORES reales desde TutorService
+    // ------------------------------------------
     this.tutorItems = this.tutorService.getAll();
 
-    // -----------------------------
+    // ------------------------------------------
     // 🔥 Resto de carruseles desde CarouselDataService
-    // -----------------------------
+    // ------------------------------------------
     this.productItems = this.dataService.getProductItems();
     this.courseItems = this.dataService.getCourseItems();
     this.highlightItems = this.dataService.getHighlightItems();
@@ -79,17 +118,26 @@ export class Home implements OnInit, AfterViewInit, OnDestroy {
   }
 
   // ============================================================
-  // 5) ngAfterViewInit: animaciones fade + fallback parallax
+  // 5) ngAfterViewInit: animaciones + fallback parallax
   // ============================================================
+
+  /**
+   * Activa animaciones de entrada (fade-up) y fallback para el hero parallax
+   * en navegadores que no soportan scroll-timeline.
+   *
+   * Esta sección está muy separada del OnInit para evitar
+   * tocar el DOM antes de tiempo.
+   */
   ngAfterViewInit(): void {
     if (!this.isBrowser) return;
 
     // ----------------------------------------------------------
-    // A) Fallback simple para elementos .fade-up
-    //    (si no hay IntersectionObserver, los dejamos visibles)
-    //    → esto convive con tu directiva appFadeUp si la usas.
+    // A) Animación fade-up mediante IntersectionObserver
     // ----------------------------------------------------------
+
     const els = document.querySelectorAll<HTMLElement>('.fade-up');
+
+    // Si el soporte es limitado, dejamos visibles los elementos.
     if (!('IntersectionObserver' in window) || !els.length) {
       els.forEach((e) => e.classList.add('is-visible'));
     } else {
@@ -112,12 +160,11 @@ export class Home implements OnInit, AfterViewInit, OnDestroy {
     }
 
     // ----------------------------------------------------------
-    // B) Fallback para hero parallax si NO hay scroll-timeline
+    // B) Fallback parallax si NO hay soporte para scroll-timeline
     // ----------------------------------------------------------
+
     const supportsScrollLinked =
-      (window as any).CSS &&
-      (window as any).CSS.supports &&
-      (window as any).CSS.supports('animation-timeline: scroll()');
+      (window as any).CSS?.supports?.('animation-timeline: scroll()');
 
     if (!supportsScrollLinked) {
       const header = document.getElementById('sticky-parallax-header');
@@ -133,13 +180,11 @@ export class Home implements OnInit, AfterViewInit, OnDestroy {
       const clamp = (v: number, min: number, max: number) =>
         Math.max(min, Math.min(max, v));
 
-      // Handler de scroll (lo guardamos en propiedad para poder removerlo)
+      // Handler que controla opacidad y desplazamiento del hero.
       this.scrollHandler = () => {
-        const y =
-          window.scrollY || document.documentElement.scrollTop || 0;
+        const y = window.scrollY || document.documentElement.scrollTop || 0;
         const h = vh();
 
-        // Rangos de scroll donde se anima el contenido y el header
         const elemStart = 0.6 * h;
         const elemEnd = 0.95 * h;
         const headStart = 0.65 * h;
@@ -148,42 +193,42 @@ export class Home implements OnInit, AfterViewInit, OnDestroy {
         const pElem = clamp((y - elemStart) / (elemEnd - elemStart), 0, 1);
         const pHead = clamp((y - headStart) / (headEnd - headStart), 0, 1);
 
-        // Atenuar y levantar elementos hero-fade
         fadingEls.forEach((el) => {
           el.style.opacity = (1 - pElem).toFixed(4);
           el.style.transform = `translateY(${-30 * pElem}px)`;
         });
 
-        // Atenuar header sticky
         header.style.opacity = (1 - pHead).toFixed(4);
       };
 
-      // Handler de resize → recalcula en base al nuevo viewport
+      // Listener de resize para recalcular rangos.
       this.resizeHandler = () => {
-        if (this.scrollHandler) {
-          this.scrollHandler();
-        }
+        if (this.scrollHandler) this.scrollHandler();
       };
 
-      // Ejecutamos una vez para estado inicial
+      // Ejecutar una vez.
       this.scrollHandler();
 
-      // Registramos listeners
+      // Registrar listeners.
       window.addEventListener('scroll', this.scrollHandler, { passive: true });
       window.addEventListener('resize', this.resizeHandler);
     }
   }
 
   // ============================================================
-  // 6) ngOnDestroy: limpiar clases y listeners
+  // 6) ngOnDestroy: limpieza de estado global
   // ============================================================
+
+  /**
+   * Elimina la clase global del body y limpia listeners registrados
+   * durante el fallback del parallax.
+   */
   ngOnDestroy(): void {
     if (!this.isBrowser) return;
 
-    // Quitar clase de body
     document.body.classList.remove('has-hero');
 
-    // Limpiar listeners de scroll/resize si se registraron
+    // Remover listeners si estaban activos
     if (this.scrollHandler) {
       window.removeEventListener('scroll', this.scrollHandler);
       this.scrollHandler = undefined;

@@ -1,5 +1,41 @@
+
 import { Product } from '@core/models/product.model';
 
+/**
+ * Listado estático de productos usados como mock de datos.
+ *
+ * Este arreglo representa el catálogo base de instrumentos, pedales y amplificadores
+ * para la sección de productos de SoundSeeker. Sirve para:
+ * - Diseñar y probar la UI de listas, grillas, filtros y detalles.
+ * - Validar paginación, ordenamiento, tags y categorías.
+ * - Trabajar sin depender todavía de un backend real.
+ *
+ * Cada `Product` incluye:
+ * - Información general: `id`, `slug`, `name`, `description`, `shortDescription`.
+ * - Metadatos de catálogo: `category`, `brand`, `model`, `year`, `tags`.
+ * - Estado de venta: `condition`, `level`, `modality`, `location`.
+ * - Datos de precio: `price`, `previousPrice` (si existe), `currency`.
+ * - Información visual: `imageUrl`.
+ * - Métricas: `rating`, `reviewCount` (cuando aplica).
+ * - Fechas de creación: `createdAt`, útil para ordenar por “más nuevo”.
+ *
+ * @usageNotes
+ * - Este mock se puede reemplazar por una API HTTP en el futuro sin cambiar
+ *   la interfaz `Product`.
+ * - Si se agregan nuevos campos en `Product`, recordar mantener actualizado este mock.
+ * - Puedes usar `tags`, `category`, `brand` y `condition` para construir filtros
+ *   en el front (por ejemplo, checkboxes y chips).
+ * - Ideal para probar secciones como “Ofertas”, “Nuevos ingresos” o “Recomendados”.
+ *
+ * @example
+ * // Ejemplo en ProductService:
+ * getAll(): Product[] {
+ *   return PRODUCTS_MOCK;
+ * }
+ *
+ * // Uso en un componente:
+ * this.products = this.productService.getAll();
+ */
 
 export const PRODUCTS_MOCK: Product[] = [
   {

@@ -1,0 +1,2835 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>proyecto-semana4 documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+          <script>
+              // --- Iframe navigation tracking for Template Playground ---
+              function sendCurrentUrlToParent() {
+                  if (window.parent && window.parent !== window) {
+                      window.parent.postMessage({
+                          type: 'compodoc-iframe-navigate',
+                          url: window.location.pathname + window.location.hash
+                      }, '*');
+                  }
+              }
+              window.addEventListener('hashchange', sendCurrentUrlToParent, false);
+              window.addEventListener('popstate', sendCurrentUrlToParent, false);
+              window.addEventListener('DOMContentLoaded', sendCurrentUrlToParent, false);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">proyecto-semana4 documentation</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content miscellaneous-variables">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Miscellaneous</li>
+  <li class="breadcrumb-item">Variables</li>
+</ol>
+
+<section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <ul class="index-list">
+                        <li>
+                            <a href="#adminGuard" title="src/app/core/guards/admin-guard.ts" ><b>adminGuard</b>&nbsp;&nbsp;&nbsp;(src/.../admin-guard.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#angularApp" title="src/server.ts" ><b>angularApp</b>&nbsp;&nbsp;&nbsp;(src/.../server.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#app" title="src/server.ts" ><b>app</b>&nbsp;&nbsp;&nbsp;(src/.../server.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#appConfig" title="src/app/app.config.ts" ><b>appConfig</b>&nbsp;&nbsp;&nbsp;(src/.../app.config.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#authGuard" title="src/app/core/guards/auth-guard.ts" ><b>authGuard</b>&nbsp;&nbsp;&nbsp;(src/.../auth-guard.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#authTokenInterceptor" title="src/app/core/interceptors/auth-token-interceptor.ts" ><b>authTokenInterceptor</b>&nbsp;&nbsp;&nbsp;(src/.../auth-token-interceptor.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#browserDistFolder" title="src/server.ts" ><b>browserDistFolder</b>&nbsp;&nbsp;&nbsp;(src/.../server.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#config" title="src/app/app.config.server.ts" ><b>config</b>&nbsp;&nbsp;&nbsp;(src/.../app.config.server.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#COURSES_MOCK" title="src/app/core/mocks/course.mock.ts" ><b>COURSES_MOCK</b>&nbsp;&nbsp;&nbsp;(src/.../course.mock.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#IDS_TUTORES" title="src/app/app.routes.server.ts" ><b>IDS_TUTORES</b>&nbsp;&nbsp;&nbsp;(src/.../app.routes.server.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#minAgeValidator" title="src/app/shared/forms/user-form/user-form.builder.ts" ><b>minAgeValidator</b>&nbsp;&nbsp;&nbsp;(src/.../user-form.builder.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#NOTICIAS_ROUTES" title="src/app/features/noticias/noticias.routes.ts" ><b>NOTICIAS_ROUTES</b>&nbsp;&nbsp;&nbsp;(src/.../noticias.routes.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#passwordsMatchValidator" title="src/app/shared/forms/user-form/user-form.builder.ts" ><b>passwordsMatchValidator</b>&nbsp;&nbsp;&nbsp;(src/.../user-form.builder.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#PRODUCT_ROUTES" title="src/app/features/productos/productos.routes.ts" ><b>PRODUCT_ROUTES</b>&nbsp;&nbsp;&nbsp;(src/.../productos.routes.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#PRODUCTS_MOCK" title="src/app/core/mocks/products.mock.ts" ><b>PRODUCTS_MOCK</b>&nbsp;&nbsp;&nbsp;(src/.../products.mock.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#reqHandler" title="src/server.ts" ><b>reqHandler</b>&nbsp;&nbsp;&nbsp;(src/.../server.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#routes" title="src/app/app.routes.ts" ><b>routes</b>&nbsp;&nbsp;&nbsp;(src/.../app.routes.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#serverRoutes" title="src/app/app.routes.server.ts" ><b>serverRoutes</b>&nbsp;&nbsp;&nbsp;(src/.../app.routes.server.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#SERVICES_MOCK" title="src/app/core/mocks/service.mock.ts" ><b>SERVICES_MOCK</b>&nbsp;&nbsp;&nbsp;(src/.../service.mock.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#SERVICIOS_ROUTES" title="src/app/features/servicios/servicios.routes.ts" ><b>SERVICIOS_ROUTES</b>&nbsp;&nbsp;&nbsp;(src/.../servicios.routes.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#SLUGS_PRODUCTOS" title="src/app/app.routes.server.ts" ><b>SLUGS_PRODUCTOS</b>&nbsp;&nbsp;&nbsp;(src/.../app.routes.server.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#TUTORES_ROUTES" title="src/app/features/tutores/tutores.routes.ts" ><b>TUTORES_ROUTES</b>&nbsp;&nbsp;&nbsp;(src/.../tutores.routes.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#TUTORS_MOCK" title="src/app/core/mocks/tutor.mock.ts" ><b>TUTORS_MOCK</b>&nbsp;&nbsp;&nbsp;(src/.../tutor.mock.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#weakPasswordValidator" title="src/app/shared/forms/user-form/user-form.builder.ts" ><b>weakPasswordValidator</b>&nbsp;&nbsp;&nbsp;(src/.../user-form.builder.ts)</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+
+    <h3>src/app/core/guards/admin-guard.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="adminGuard"></a>
+                    <span class="name">
+                        <span ><b>adminGuard</b></span>
+                        <a href="#adminGuard"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>CanActivateFn</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>(route, state) &#x3D;&gt; {
+  /**
+   * Obtiene el servicio de autenticación para revisar el rol del usuario.
+   * Uso &#x60;inject()&#x60; porque este guard está hecho con la API nueva de Angular.
+   */
+  const auth &#x3D; inject(AuthService);
+
+  /**
+   * Router inyectado para permitir redirecciones cuando
+   * el usuario no tiene los permisos necesarios.
+   */
+  const router &#x3D; inject(Router);
+
+  /**
+   * Si el usuario es admin, permitimos avanzar a la ruta protegida.
+   */
+  if (auth.isAdmin()) {
+    return true;
+  }
+
+  /**
+   * Si llega aquí NO es admin.
+   * Se redirige a &#x60;/mi-cuenta&#x60; para bloquear el acceso a zonas restringidas.
+   * Esto evita que usuarios normales vean o manipulen contenido del panel admin.
+   */
+  router.navigate([&#x27;/mi-cuenta&#x27;]);
+
+  /**
+   * Retorna &#x60;false&#x60; indicando que la navegación no está permitida.
+   */
+  return false;
+}</code>
+                    </td>
+                </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Guard de protección para rutas administrativas.</p>
+<p>Su propósito es simple: <strong>permitir la entrada solo a usuarios con rol admin</strong>.
+Si no cumple esa condición, se redirige automáticamente a <code>/mi-cuenta</code>.</p>
+<p>Uso típico:</p>
+<ul>
+<li>Se asigna en las rutas del panel de administración.</li>
+<li>Evita que usuarios normales entren a zonas restringidas.</li>
+</ul>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+</section>
+    <h3>src/server.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="angularApp"></a>
+                    <span class="name">
+                        <span ><b>angularApp</b></span>
+                        <a href="#angularApp"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>new AngularNodeAppEngine()</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="app"></a>
+                    <span class="name">
+                        <span ><b>app</b></span>
+                        <a href="#app"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>express()</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="browserDistFolder"></a>
+                    <span class="name">
+                        <span ><b>browserDistFolder</b></span>
+                        <a href="#browserDistFolder"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>join(import.meta.dirname, &#x27;../browser&#x27;)</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="reqHandler"></a>
+                    <span class="name">
+                        <span ><b>reqHandler</b></span>
+                        <a href="#reqHandler"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>createNodeRequestHandler(app)</code>
+                    </td>
+                </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Request handler used by the Angular CLI (for dev-server and during build) or Firebase Cloud Functions.</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+</section>
+    <h3>src/app/app.config.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="appConfig"></a>
+                    <span class="name">
+                        <span ><b>appConfig</b></span>
+                        <a href="#appConfig"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../components/App.html" target="_self" >ApplicationConfig</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>{
+  providers: [
+    provideRouter(routes),
+    provideHttpClient(
+      withInterceptors([authTokenInterceptor])
+    ),
+  ],
+}</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+</section>
+    <h3>src/app/core/guards/auth-guard.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="authGuard"></a>
+                    <span class="name">
+                        <span ><b>authGuard</b></span>
+                        <a href="#authGuard"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>CanActivateFn</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>(route, state) &#x3D;&gt; {
+  /**
+   * Obtengo el servicio de autenticación para verificar
+   * si el usuario ya inició sesión.
+   *
+   * Se usa &#x60;inject()&#x60; porque los guards modernos en Angular
+   * son funciones en lugar de clases.
+   */
+  const auth &#x3D; inject(AuthService);
+
+  /**
+   * Inyecto el Router para poder redirigir al login
+   * en caso de que el usuario no esté autenticado.
+   */
+  const router &#x3D; inject(Router);
+
+  /**
+   * Si el usuario está logueado → permitir acceso inmediato.
+   * Esto protege cualquier ruta privada donde se requiera sesión activa.
+   */
+  if (auth.isLoggedIn()) {
+    return true;
+  }
+
+  /**
+   * Usuario NO autenticado.
+   * Se envía a &#x60;/auth/login&#x60; y se pasa la URL original como queryParam.
+   *
+   * Ejemplo:
+   * Intentó entrar a &#x60;/admin&#x60;
+   * → se redirige a &#x60;/auth/login?returnUrl&#x3D;/admin&#x60;
+   *
+   * Después del login, la app puede enviarlo automáticamente de regreso.
+   */
+  router.navigate([&#x27;/auth/login&#x27;], {
+    queryParams: { returnUrl: state.url },
+  });
+
+  /**
+   * Se bloquea el acceso a la ruta protegida.
+   */
+  return false;
+}</code>
+                    </td>
+                </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Guard encargado de proteger rutas que requieren que el usuario esté logueado.</p>
+<p>Su propósito es asegurar que solo usuarios autenticados puedan entrar a
+secciones privadas como <code>/mi-cuenta</code>, áreas de configuración o el panel admin.</p>
+<p>Si el usuario no está autenticado:</p>
+<ul>
+<li>es redirigido a <code>/auth/login</code></li>
+<li>se guarda la URL original en <code>returnUrl</code> para volver automáticamente luego del login</li>
+</ul>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+</section>
+    <h3>src/app/core/interceptors/auth-token-interceptor.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="authTokenInterceptor"></a>
+                    <span class="name">
+                        <span ><b>authTokenInterceptor</b></span>
+                        <a href="#authTokenInterceptor"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>HttpInterceptorFn</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>(req, next) &#x3D;&gt; {
+  /**
+   * No enviamos token en llamados a assets locales.
+   * Angular requiere esto para no intentar agregar Authorization
+   * a imágenes, JSON o archivos estáticos.
+   */
+  if (req.url.startsWith(&#x27;/assets&#x27;)) {
+    return next(req);
+  }
+
+  /**
+   * No enviamos token en peticiones relacionadas con autenticación.
+   * Ejemplos típicos: login, register, recover-password, etc.
+   */
+  if (
+    req.url.includes(&#x27;/auth/login&#x27;) ||
+    req.url.includes(&#x27;/auth/register&#x27;) ||
+    req.url.includes(&#x27;/auth/recover&#x27;)
+  ) {
+    return next(req);
+  }
+
+  /**
+   * Recuperamos el token almacenado por AuthService.persistSession().
+   * Si no existe, la petición continúa sin header adicional.
+   */
+  const token &#x3D; localStorage.getItem(&#x27;token&#x27;);
+
+  if (!token) {
+    return next(req);
+  }
+
+  /**
+   * Clonamos la request y agregamos el header Authorization.
+   */
+  const authReq &#x3D; req.clone({
+    setHeaders: {
+      Authorization: &#x60;Bearer ${token}&#x60;,
+    },
+  });
+
+  return next(authReq);
+}</code>
+                    </td>
+                </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Interceptor encargado de agregar el token JWT a cada petición HTTP saliente.</p>
+<p>Su función es sencilla:</p>
+<ul>
+<li>Deja pasar sin cambios las peticiones a <code>/assets</code> y rutas de autenticación.</li>
+<li>Para el resto, agrega el header <code>Authorization: Bearer &lt;token&gt;</code> si existe un token guardado.</li>
+</ul>
+<p>Este interceptor permite que el backend reconozca al usuario autenticado
+sin que los componentes o servicios tengan que preocuparse del header.</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+</section>
+    <h3>src/app/app.config.server.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="config"></a>
+                    <span class="name">
+                        <span ><b>config</b></span>
+                        <a href="#config"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../components/App.html" target="_self" >ApplicationConfig</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>{
+  providers: [
+    provideServerRendering(),
+  ],
+}</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+</section>
+    <h3>src/app/core/mocks/course.mock.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="COURSES_MOCK"></a>
+                    <span class="name">
+                        <span ><b>COURSES_MOCK</b></span>
+                        <a href="#COURSES_MOCK"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/Course.html" target="_self" >Course[]</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[
+
+  {
+    id: &#x27;curso-guitarra-rock&#x27;,
+    slug: &#x27;curso-intensivo-guitarra-rock&#x27;,
+    title: &#x27;Curso intensivo de guitarra rock&#x27;,
+    tutorId: &#x27;marco-vidal&#x27;,
+    tutorName: &#x27;Marco Vidal&#x27;,
+
+    difficulty: &#x27;Intermedio&#x27;,
+    level: &#x27;Intermedio&#x27;,
+
+    duration: &#x27;16 h · 8 clases&#x27;,
+    durationHours: 16,
+    totalLessons: 8,
+    lessonsCount: 8,
+
+    shortDescription: &#x27;Domina riffs, power chords y solos básicos de rock.&#x27;,
+    description:
+      &#x27;En este curso trabajarás repertorio real de rock, técnica de púa, palm mute, power chords y construcción de solos sencillos sobre backing tracks.&#x27;,
+    imageUrl: &#x27;/assets/img/course/curso-guitarra-e2.jpg&#x27;,
+
+    rating: 4.8,
+    ratingCount: 32,
+
+    modalities: [&#x27;Presencial&#x27;, &#x27;Online&#x27;],
+
+    stages: [
+      &#x27;Fundamentos de palm mute&#x27;,
+      &#x27;Riffs clásicos&#x27;,
+      &#x27;Power chords y progresiones&#x27;,
+      &#x27;Introducción a solos&#x27;,
+    ],
+    learnOutcomes: [
+      &#x27;Tocar riffs con buen timing.&#x27;,
+      &#x27;Entender progresiones de rock.&#x27;,
+      &#x27;Improvisar solos sencillos.&#x27;,
+    ],
+
+    reviews: [
+      {
+        author: &#x27;Estudiante 1&#x27;,
+        rating: 5,
+        comment: &#x27;Curso muy práctico, lleno de ejemplos reales.&#x27;,
+        createdAt: &#x27;2024-05-10&#x27;,
+      },
+    ],
+
+    showInCarousel: true,
+    isFeatured: true,
+    isOffer: false,
+    isNew: true,
+    isActive: true,
+
+    priceCLP: 89990,
+    price: 89990,
+    priceLabel: &#x27;$89.990&#x27;,
+  },
+
+  // ... RESTO DEL MOCK SIN CAMBIOS ...
+  
+]</code>
+                    </td>
+                </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Listado estático de cursos usados como mock de datos.</p>
+<p>Este arreglo permite trabajar sin backend mientras se construye el
+front-end, y sirve como base para pruebas de UI, pruebas de componentes
+y desarrollo rápido del catálogo.</p>
+<p>Cada objeto sigue la estructura definida en <code>Course</code>, incluyendo:</p>
+<ul>
+<li>información principal (id, slug, title)</li>
+<li>datos del tutor</li>
+<li>dificultad y nivel</li>
+<li>duración detallada</li>
+<li>descripciones breves y largas</li>
+<li>imágenes</li>
+<li>modalidades</li>
+<li>etapas del curso y aprendizajes</li>
+<li>reviews de estudiantes</li>
+<li>flags de visualización (featured, new, carousel, etc.)</li>
+<li>precios en CLP</li>
+</ul>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+</section>
+    <h3>src/app/app.routes.server.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="IDS_TUTORES"></a>
+                    <span class="name">
+                        <span ><b>IDS_TUTORES</b></span>
+                        <a href="#IDS_TUTORES"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>[]</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[&#x27;1&#x27;, &#x27;2&#x27;, &#x27;3&#x27;]</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="serverRoutes"></a>
+                    <span class="name">
+                        <span ><b>serverRoutes</b></span>
+                        <a href="#serverRoutes"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>ServerRoute[]</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[
+  // Rutas estáticas que quieres prerender (ejemplos):
+  { path: &#x27;&#x27;, renderMode: RenderMode.Prerender },
+  { path: &#x27;home&#x27;, renderMode: RenderMode.Prerender },
+  { path: &#x27;productos&#x27;, renderMode: RenderMode.Prerender },
+  { path: &#x27;tutores&#x27;, renderMode: RenderMode.Prerender },
+  { path: &#x27;cursos&#x27;, renderMode: RenderMode.Prerender },
+  { path: &#x27;servicios&#x27;, renderMode: RenderMode.Prerender },
+  { path: &#x27;somos&#x27;, renderMode: RenderMode.Prerender },
+  { path: &#x27;contacto&#x27;, renderMode: RenderMode.Prerender },
+  { path: &#x27;login&#x27;, renderMode: RenderMode.Prerender },
+  { path: &#x27;register&#x27;, renderMode: RenderMode.Prerender },
+  { path: &#x27;recover&#x27;, renderMode: RenderMode.Prerender },
+  { path: &#x27;publicar&#x27;, renderMode: RenderMode.Prerender },
+
+  // RUTA DINÁMICA 1: producto/:slug
+  {
+    path: &#x27;producto/:slug&#x27;,
+    renderMode: RenderMode.Prerender,
+    fallback: PrerenderFallback.Server, // Si llega un slug no prerenderizado, cae a SSR on-the-fly
+    async getPrerenderParams() {
+      // Devuelve [{ slug: &#x27;...&#x27; }, ...]
+      return SLUGS_PRODUCTOS.map((slug) &#x3D;&gt; ({ slug }));
+    },
+  },
+
+  // RUTA DINÁMICA 2: tutor/:id
+  {
+    path: &#x27;tutor/:id&#x27;,
+    renderMode: RenderMode.Prerender,
+    fallback: PrerenderFallback.Server,
+    async getPrerenderParams() {
+      // Devuelve [{ id: &#x27;1&#x27; }, { id: &#x27;2&#x27; }, ...]
+      return IDS_TUTORES.map((id) &#x3D;&gt; ({ id }));
+    },
+  },
+
+  // Catch-all: todo lo demás en SSR
+  { path: &#x27;**&#x27;, renderMode: RenderMode.Server },
+]</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="SLUGS_PRODUCTOS"></a>
+                    <span class="name">
+                        <span ><b>SLUGS_PRODUCTOS</b></span>
+                        <a href="#SLUGS_PRODUCTOS"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>[]</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[
+  &#x27;fender-stratocaster&#x27;,
+  &#x27;ibanez-rg&#x27;,
+  &#x27;boss-overdrive-od3&#x27;,
+]</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+</section>
+    <h3>src/app/shared/forms/user-form/user-form.builder.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="minAgeValidator"></a>
+                    <span class="name">
+                        <span ><b>minAgeValidator</b></span>
+                        <a href="#minAgeValidator"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>(minAge: number): ValidatorFn &#x3D;&gt; {
+  return (control: AbstractControl): ValidationErrors | null &#x3D;&gt; {
+    const value &#x3D; control.value;
+    if (!value) return null;
+
+    const birthDate &#x3D; new Date(value);
+    const today &#x3D; new Date();
+
+    let age &#x3D; today.getFullYear() - birthDate.getFullYear();
+    const m &#x3D; today.getMonth() - birthDate.getMonth();
+    if (m &lt; 0 || (m &#x3D;&#x3D;&#x3D; 0 &amp;&amp; today.getDate() &lt; birthDate.getDate())) {
+      age--;
+    }
+
+    return age &gt;&#x3D; minAge ? null : { tooYoung: true };
+  };
+}</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="passwordsMatchValidator"></a>
+                    <span class="name">
+                        <span ><b>passwordsMatchValidator</b></span>
+                        <a href="#passwordsMatchValidator"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>ValidatorFn</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>(group: AbstractControl): ValidationErrors | null &#x3D;&gt; {
+  const password &#x3D; group.get(&#x27;password&#x27;)?.value;
+  const confirm &#x3D; group.get(&#x27;confirmPassword&#x27;)?.value;
+  if (!password || !confirm) return null;
+  return password &#x3D;&#x3D;&#x3D; confirm ? null : { passwordsDontMatch: true };
+}</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="weakPasswordValidator"></a>
+                    <span class="name">
+                        <span ><b>weakPasswordValidator</b></span>
+                        <a href="#weakPasswordValidator"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>ValidatorFn</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>(control: AbstractControl): ValidationErrors | null &#x3D;&gt; {
+  const value &#x3D; control.value as string;
+  if (!value) return null;
+
+  const hasNumber &#x3D; /\d/.test(value);
+  const hasUppercase &#x3D; /[A-Z]/.test(value);
+
+  return hasNumber &amp;&amp; hasUppercase ? null : { weakPassword: true };
+}</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+</section>
+    <h3>src/app/features/noticias/noticias.routes.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="NOTICIAS_ROUTES"></a>
+                    <span class="name">
+                        <span ><b>NOTICIAS_ROUTES</b></span>
+                        <a href="#NOTICIAS_ROUTES"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>Routes</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[
+  {
+    /**
+     * Ruta raíz del feature.
+     *
+     * /noticias
+     * → Renderiza el listado general usando el componente &#x60;&lt;app-noticias&gt;&#x60;.
+     *
+     * Se carga lazy usando loadComponent, por lo que solo se descarga
+     * cuando el usuario entra a esta sección.
+     */
+    path: &#x27;&#x27;,
+    loadComponent: () &#x3D;&gt;
+      &quot;import(&#x27;./noticias&#x27;).then(m &#x3D;&gt; m.Noticias)&quot;, // noticias.ts → class Noticias
+    data: {
+      breadcrumb: &#x27;Noticias&#x27;, // Título del breadcrumb para esta vista
+    },
+  },
+
+  {
+    /**
+     * Ruta de detalle.
+     *
+     * /noticias/:id
+     * → Carga la vista de detalle de una noticia específica.
+     *
+     * El parámetro dinámico :id es consumido en noticias-detail.ts,
+     * donde se consulta NewsService.getById().
+     */
+    path: &#x27;:id&#x27;,
+    loadComponent: () &#x3D;&gt;
+      &quot;import(&#x27;./noticias-detail/noticias-detail&#x27;).then(\n\
+        m &#x3D;&gt; m.NoticiaDetalle,\n\
+      )&quot;,
+    data: {
+      breadcrumb: &#x27;Detalle&#x27;, // Segunda miga de pan cuando ingresas al detalle
+    },
+  },
+]</code>
+                    </td>
+                </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Rutas del módulo &quot;Noticias&quot;.</p>
+<p>Este archivo define la navegación completa del feature:</p>
+<ul>
+<li>Listado general de noticias.</li>
+<li>Página de detalle para una noticia específica.</li>
+</ul>
+<p>Ambas rutas cargan componentes standalone de forma Lazy,
+permitiendo un feature separado, liviano y sin necesidad de módulos.</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+</section>
+    <h3>src/app/features/productos/productos.routes.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="PRODUCT_ROUTES"></a>
+                    <span class="name">
+                        <span ><b>PRODUCT_ROUTES</b></span>
+                        <a href="#PRODUCT_ROUTES"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>Routes</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[
+  // &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+  // LISTADO DE PRODUCTOS (TODOS)
+  // /productos
+  //
+  // Vista principal: muestra el grid completo de productos sin filtros.
+  // Se usa ProductListComponent para controlar filtros, ordenamiento
+  // y visualización general.
+  // &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+  {
+    path: &#x27;&#x27;,
+    loadComponent: () &#x3D;&gt;
+      &quot;import(&#x27;./product-list/product-list&#x27;).then(\n\
+        m &#x3D;&gt; m.ProductListComponent\n\
+      )&quot;,
+    data: {
+      breadcrumb: &#x27;Productos&#x27;,
+    },
+  },
+
+  // &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+  // LISTADO POR CATEGORÍA
+  // /productos/categoria/:slug
+  //
+  // - slug debe coincidir con ProductCategory:
+  //   &#x27;guitarras&#x27; | &#x27;bajos&#x27; | &#x27;pedales&#x27; | &#x27;amplificadores&#x27; | &#x27;accesorios&#x27; | &#x27;otros&#x27;
+  //
+  // Usa exactamente el mismo ProductListComponent, pero este interpreta
+  // el slug y filtra la categoría automáticamente.
+  //
+  // Ejemplo:
+  // /productos/categoria/guitarras
+  // → ProductListComponent obtiene &quot;guitarras&quot; desde ActivatedRoute
+  //   y aplica filtro inicial.
+  // &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+  {
+    path: &#x27;categoria/:slug&#x27;,
+    loadComponent: () &#x3D;&gt;
+      &quot;import(&#x27;./product-list/product-list&#x27;).then(\n\
+        m &#x3D;&gt; m.ProductListComponent\n\
+      )&quot;,
+    data: {
+      breadcrumb: &#x27;Categoría&#x27;,
+    },
+  },
+
+  // &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+  // DETALLE DE PRODUCTO
+  // /productos/:slug
+  //
+  // - slug identifica un producto único y legible (Ej: &quot;fender-player-telecaster&quot;)
+  // - ProductDetailComponent resuelve el slug, obtiene el producto y renderiza
+  //   características, imágenes, descripción, estado, precio, etc.
+  //
+  // Si el slug no existe, el componente debería manejar redirección a /not-found.
+  // &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+  {
+    path: &#x27;:slug&#x27;,
+    loadComponent: () &#x3D;&gt;
+      &quot;import(&#x27;./product-detail/product-detail&#x27;).then(\n\
+        m &#x3D;&gt; m.ProductDetailComponent\n\
+      )&quot;,
+    data: {
+      breadcrumb: &#x27;Detalle del producto&#x27;,
+    },
+  },
+]</code>
+                    </td>
+                </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Rutas del feature &quot;Productos&quot;.</p>
+<p>Este módulo agrupa:</p>
+<ul>
+<li>El listado general de productos.</li>
+<li>Listados filtrados por categoría.</li>
+<li>La vista de detalle de un producto específico.</li>
+<li>Cada ruta define metadata para breadcrumbs.</li>
+</ul>
+<p>El patrón usa <code>loadComponent()</code> para cargar componentes standalone
+bajo demanda, manteniendo el bundle principal más liviano.</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+</section>
+    <h3>src/app/core/mocks/products.mock.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="PRODUCTS_MOCK"></a>
+                    <span class="name">
+                        <span ><b>PRODUCTS_MOCK</b></span>
+                        <a href="#PRODUCTS_MOCK"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/Product.html" target="_self" >Product[]</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[
+  {
+    id: &#x27;1&#x27;,
+      slug: &#x27;fender-player-telecaster&#x27;,
+      name: &#x27;Fender Player Telecaster&#x27;,
+      description: &#x27;Telecaster clásica ideal para rock e indie.&#x27;,
+      shortDescription: &#x27;Telecaster Player serie México, perfecta para rock e indie.&#x27;,
+      category: &#x27;guitarras&#x27;,
+      brand: &#x27;Fender&#x27;,
+      model: &#x27;Player&#x27;,
+      year: 2002,
+      price: 650000,
+      previousPrice: 720000,
+      currency: &#x27;CLP&#x27;,
+      condition: &#x27;usado&#x27;,
+      level: &#x27;intermedio&#x27;,
+      modality: &#x27;venta&#x27;,
+      location: &#x27;Santiago&#x27;,
+      imageUrl: &#x27;/assets/img/products/Fender-Player-Telecaster.jpg&#x27;,
+      tags: [&#x27;fender&#x27;, &#x27;telecaster&#x27;, &#x27;single-coil&#x27;],
+      createdAt: &#x27;2025-10-01T12:00:00Z&#x27;,
+      rating: 4.8,
+      reviewCount: 12,
+    },
+
+    {
+      id: &#x27;2&#x27;,
+      slug: &#x27;squier-precision-bass&#x27;,
+      name: &#x27;Squier Precision Bass&#x27;,
+      description: &#x27;Bajo eléctrico ideal para comenzar en el mundo del bajo.&#x27;,
+      shortDescription: &#x27;Precision Bass para principiantes, cómodo y versátil.&#x27;,
+      category: &#x27;bajos&#x27;,
+      brand: &#x27;Squier&#x27;,
+      model: &#x27;Precision&#x27;,
+      year: 2002,
+      price: 350000,
+      currency: &#x27;CLP&#x27;,
+      condition: &#x27;usado&#x27;,
+      level: &#x27;principiante&#x27;,
+      modality: &#x27;venta&#x27;,
+      location: &#x27;Santiago&#x27;,
+      imageUrl: &#x27;/assets/img/products/Squier-Precision-Bass.jpg&#x27;,
+      tags: [&#x27;bajo&#x27;, &#x27;squier&#x27;],
+      createdAt: &#x27;2025-10-05T10:00:00Z&#x27;,
+    },
+
+    {
+      id: &#x27;3&#x27;,
+      slug: &#x27;boss-ds1-distortion&#x27;,
+      name: &#x27;Boss DS-1 Distortion&#x27;,
+      description: &#x27;Pedal de distorsión clásico con gran carácter.&#x27;,
+      shortDescription: &#x27;Distorsión versátil y potente, ideal para rock.&#x27;,
+      category: &#x27;pedales&#x27;,
+      brand: &#x27;Boss&#x27;,
+      model: &#x27;DS-1&#x27;,
+      year: 2002,
+      price: 65000,
+      currency: &#x27;CLP&#x27;,
+      condition: &#x27;usado&#x27;,
+      level: &#x27;avanzado&#x27;,
+      modality: &#x27;venta&#x27;,
+      location: &#x27;Santiago&#x27;,
+      imageUrl: &#x27;/assets/img/products/Boss-DS-1-Distortion.jpg&#x27;,
+      tags: [&#x27;distorsión&#x27;, &#x27;boss&#x27;],
+      createdAt: &#x27;2025-09-20T10:00:00Z&#x27;,
+    },
+
+    {
+      id: &#x27;4&#x27;,
+      slug: &#x27;marshall-mg15fx&#x27;,
+      name: &#x27;Marshall MG15FX&#x27;,
+      description: &#x27;Amplificador compacto con efectos digitales.&#x27;,
+      shortDescription: &#x27;Combo 15W con delay, chorus y reverb integrados.&#x27;,
+      category: &#x27;amplificadores&#x27;,
+      brand: &#x27;Marshall&#x27;,
+      model: &#x27;MG15FX&#x27;,
+      year: 2002,
+      price: 180000,
+      currency: &#x27;CLP&#x27;,
+      condition: &#x27;nuevo&#x27;,
+      level: &#x27;principiante&#x27;,
+      modality: &#x27;venta&#x27;,
+      location: &#x27;Santiago&#x27;,
+      imageUrl: &#x27;/assets/img/products/Marshall-MG15FX.jpg&#x27;,
+      tags: [&#x27;marshall&#x27;, &#x27;amp&#x27;],
+      createdAt: &#x27;2025-10-02T15:00:00Z&#x27;,
+    },
+
+    {
+      id: &#x27;5&#x27;,
+      slug: &#x27;fender-stratocaster-player&#x27;,
+      name: &#x27;Fender Stratocaster Player&#x27;,
+      description: &#x27;Strat moderna con tono brillante.&#x27;,
+      shortDescription: &#x27;Stratocaster Player con sonido brillante y versátil.&#x27;,
+      category: &#x27;guitarras&#x27;,
+      brand: &#x27;Fender&#x27;,
+      model: &#x27;Player Stratocaster&#x27;,
+      year: 2002,
+      price: 680000,
+      currency: &#x27;CLP&#x27;,
+      condition: &#x27;usado&#x27;,
+      level: &#x27;intermedio&#x27;,
+      modality: &#x27;venta&#x27;,
+      location: &#x27;Santiago&#x27;,
+      imageUrl: &#x27;/assets/img/products/Fender-Stratocaster-Player.jpg&#x27;,
+      tags: [&#x27;stratocaster&#x27;, &#x27;fender&#x27;],
+      createdAt: &#x27;2025-10-08T14:00:00Z&#x27;,
+    },
+
+    {
+      id: &#x27;6&#x27;,
+      slug: &#x27;yamaha-rbx375&#x27;,
+      name: &#x27;Yamaha RBX375&#x27;,
+      description: &#x27;Bajo de 5 cuerdas versátil para varios estilos.&#x27;,
+      shortDescription: &#x27;Bajo Yamaha de 5 cuerdas, ideal para rock y fusión.&#x27;,
+      category: &#x27;bajos&#x27;,
+      brand: &#x27;Yamaha&#x27;,
+      model: &#x27;RBX375&#x27;,
+      year: 2002,
+      price: 420000,
+      currency: &#x27;CLP&#x27;,
+      condition: &#x27;usado&#x27;,
+      level: &#x27;intermedio&#x27;,
+      modality: &#x27;venta&#x27;,
+      location: &#x27;Santiago&#x27;,
+      imageUrl: &#x27;/assets/img/products/Yamaha-RBX375.jpg&#x27;,
+      tags: [&#x27;bajo&#x27;, &#x27;yamaha&#x27;],
+      createdAt: &#x27;2025-09-30T13:00:00Z&#x27;,
+    },
+
+    {
+      id: &#x27;7&#x27;,
+      slug: &#x27;ehx-memory-man&#x27;,
+      name: &#x27;Electro-Harmonix Memory Man&#x27;,
+      description: &#x27;Delay analógico cálido con vibrato.&#x27;,
+      shortDescription:
+        &#x27;Delay analógico con vibrato, ideal para texturas atmosféricas.&#x27;,
+      category: &#x27;pedales&#x27;,
+      brand: &#x27;Electro-Harmonix&#x27;,
+      model: &#x27;Memory Man&#x27;,
+      year: 2002,
+      price: 250000,
+      currency: &#x27;CLP&#x27;,
+      condition: &#x27;usado&#x27;,
+      level: &#x27;avanzado&#x27;,
+      modality: &#x27;venta&#x27;,
+      location: &#x27;Santiago&#x27;,
+      imageUrl: &#x27;/assets/img/products/Electro-Harmonix-Memory.jpg&#x27;,
+      tags: [&#x27;delay&#x27;, &#x27;ehx&#x27;],
+      createdAt: &#x27;2025-09-12T18:00:00Z&#x27;,
+    },
+
+    {
+      id: &#x27;8&#x27;,
+      slug: &#x27;orange-crush-20rt&#x27;,
+      name: &#x27;Orange Crush 20RT&#x27;,
+      description: &#x27;Amplificador de práctica con afinador y reverb.&#x27;,
+      shortDescription:
+        &#x27;Amplificador de práctica 20W con reverb y afinador integrado.&#x27;,
+      category: &#x27;amplificadores&#x27;,
+      brand: &#x27;Orange&#x27;,
+      model: &#x27;Crush 20RT&#x27;,
+      year: 2002,
+      price: 200000,
+      currency: &#x27;CLP&#x27;,
+      condition: &#x27;nuevo&#x27;,
+      level: &#x27;intermedio&#x27;,
+      modality: &#x27;venta&#x27;,
+      location: &#x27;Santiago&#x27;,
+      imageUrl: &#x27;/assets/img/products/Orange-Crush-20RT.jpg&#x27;,
+      tags: [&#x27;orange&#x27;, &#x27;amp&#x27;],
+      createdAt: &#x27;2025-10-11T16:00:00Z&#x27;,
+    },
+
+    {
+      id: &#x27;9&#x27;,
+      slug: &#x27;ibanez-rg421-ex&#x27;,
+      name: &#x27;Ibanez RG421EX&#x27;,
+      description:
+        &#x27;Durante más de 40 años, Ibanez ha sido pionero en nuevas fronteras en el desarrollo de bajos, ampliando los límites de los diseños convencionales a bajistas de todos los estilos, brindando nuevas vías de expresión y creatividad. Este espíritu de exploración ha llevado a la creación de algunos de los bajos más exitosos y populares de todos los tiempos. Siguiendo este mismo impulso de traer ideas nuevas y relevantes a la vanguardia musical es lo que sirve como base para este proyecto en curso, El ímpetu detrás de cada uno de estos instrumentos únicos proviene desde el deseo del equipo de desarrollo de bajos de Ibanez de satisfacer las necesidades particulares de muchos, para aquellos que anhelan explorar nuevas perspectivas sonoras a través del bajo.&#x27;,
+      shortDescription: &#x27;RG de perfil rápido, perfecta para metal moderno.&#x27;,
+      category: &#x27;guitarras&#x27;,
+      brand: &#x27;Ibanez&#x27;,
+      model: &#x27;RG421EX&#x27;,
+      year: 2002,
+      price: 390000,
+      currency: &#x27;CLP&#x27;,
+      condition: &#x27;usado&#x27;,
+      level: &#x27;intermedio&#x27;,
+      modality: &#x27;venta&#x27;,
+      location: &#x27;Santiago&#x27;,
+      imageUrl: &#x27;/assets/img/products/Ibanez-RG421EX.jpg&#x27;,
+      tags: [&#x27;ibanez&#x27;, &#x27;metal&#x27;],
+      createdAt: &#x27;2025-10-02T14:40:00Z&#x27;,
+    },
+
+    {
+      id: &#x27;10&#x27;,
+      slug: &#x27;boss-ce2w-chorus&#x27;,
+      name: &#x27;Boss CE-2W Waza Craft Chorus&#x27;,
+      description: &#x27;Versión moderna del legendario CE-2.&#x27;,
+      shortDescription: &#x27;Chorus Waza Craft con modos clásicos CE-1 y CE-2.&#x27;,
+      category: &#x27;pedales&#x27;,
+      brand: &#x27;Boss&#x27;,
+      model: &#x27;CE-2W&#x27;,
+      year: 2002,
+      price: 260000,
+      currency: &#x27;CLP&#x27;,
+      condition: &#x27;nuevo&#x27;,
+      level: &#x27;avanzado&#x27;,
+      modality: &#x27;venta&#x27;,
+      location: &#x27;Santiago&#x27;,
+      imageUrl: &#x27;/assets/img/products/Boss-CE-2W.jpg&#x27;,
+      tags: [&#x27;chorus&#x27;, &#x27;waza&#x27;],
+      createdAt: &#x27;2025-10-15T17:10:00Z&#x27;,
+    },
+
+    {
+      id: &#x27;11&#x27;,
+      slug: &#x27;epiphone-les-paul-standard&#x27;,
+      name: &#x27;Epiphone Les Paul Standard&#x27;,
+      description: &#x27;Sonido cálido y cuerpo clásico con humbuckers.&#x27;,
+      shortDescription:
+        &#x27;Les Paul Standard con humbuckers cálidos y sustain clásico.&#x27;,
+      category: &#x27;guitarras&#x27;,
+      brand: &#x27;Epiphone&#x27;,
+      model: &#x27;Les Paul Standard&#x27;,
+      year: 2002,
+      price: 520000,
+      currency: &#x27;CLP&#x27;,
+      condition: &#x27;usado&#x27;,
+      level: &#x27;intermedio&#x27;,
+      modality: &#x27;venta&#x27;,
+      location: &#x27;Santiago&#x27;,
+      imageUrl: &#x27;/assets/img/products/Gibson-SG-Special.jpg&#x27;,
+      tags: [&#x27;les paul&#x27;, &#x27;epiphone&#x27;],
+      createdAt: &#x27;2025-09-12T09:15:00Z&#x27;,
+    },
+
+    {
+      id: &#x27;12&#x27;,
+      slug: &#x27;ibanez-sr300e-bass&#x27;,
+      name: &#x27;Ibanez SR300E Bass&#x27;,
+      description:
+        &#x27;Durante más de 40 años, Ibanez ha sido pionero en nuevas fronteras en el desarrollo de bajos, ampliando los límites de los diseños convencionales a bajistas de todos los estilos, brindando nuevas vías de expresión y creatividad. Este espíritu de exploración ha llevado a la creación de algunos de los bajos más exitosos y populares de todos los tiempos. Siguiendo este mismo impulso de traer ideas nuevas y relevantes a la vanguardia musical es lo que sirve como base para este proyecto en curso, El ímpetu detrás de cada uno de estos instrumentos únicos proviene desde el deseo del equipo de desarrollo de bajos de Ibanez de satisfacer las necesidades particulares de muchos, para aquellos que anhelan explorar nuevas perspectivas sonoras a través del bajo.&#x27;,
+      shortDescription:
+        &#x27;Bajo activo SR300E con EQ de 3 bandas para tono flexible.&#x27;,
+      category: &#x27;bajos&#x27;,
+      brand: &#x27;Ibanez&#x27;,
+      model: &#x27;SR300E&#x27;,
+      year: 2002,
+      price: 430000,
+      currency: &#x27;CLP&#x27;,
+      condition: &#x27;nuevo&#x27;,
+      level: &#x27;intermedio&#x27;,
+      modality: &#x27;venta&#x27;,
+      location: &#x27;Santiago&#x27;,
+      imageUrl: &#x27;/assets/img/products/Ibanez-SR300E-Bass-.jpg&#x27;,
+      tags: [&#x27;ibanez&#x27;, &#x27;bass&#x27;],
+      createdAt: &#x27;2025-10-20T12:30:00Z&#x27;,
+    },
+
+    {
+      id: &#x27;13&#x27;,
+      slug: &#x27;line6-hx-stomp&#x27;,
+      name: &#x27;Line 6 HX Stomp&#x27;,
+      description: &#x27;Procesador multiefectos con gran calidad sonora.&#x27;,
+      shortDescription:
+        &#x27;Multiefectos compacto con modelos de amplis y efectos HX.&#x27;,
+      category: &#x27;pedales&#x27;,
+      brand: &#x27;Line 6&#x27;,
+      model: &#x27;HX Stomp&#x27;,
+      year: 2002,
+      price: 720000,
+      currency: &#x27;CLP&#x27;,
+      condition: &#x27;usado&#x27;,
+      level: &#x27;avanzado&#x27;,
+      modality: &#x27;venta&#x27;,
+      location: &#x27;Santiago&#x27;,
+      imageUrl: &#x27;/assets/img/products/Line-6-HX-Stomp.jpg&#x27;,
+      tags: [&#x27;multiefectos&#x27;, &#x27;line6&#x27;],
+      createdAt: &#x27;2025-09-22T11:00:00Z&#x27;,
+    },
+
+    {
+      id: &#x27;14&#x27;,
+      slug: &#x27;vox-ac15c1&#x27;,
+      name: &#x27;Vox AC15C1&#x27;,
+      description: &#x27;Amplificador valvular clásico con sonido británico.&#x27;,
+      shortDescription:
+        &#x27;Combo valvular de 15W con el clásico sonido Vox británico.&#x27;,
+      category: &#x27;amplificadores&#x27;,
+      brand: &#x27;Vox&#x27;,
+      model: &#x27;AC15C1&#x27;,
+      year: 2002,
+      price: 820000,
+      currency: &#x27;CLP&#x27;,
+      condition: &#x27;usado&#x27;,
+      level: &#x27;avanzado&#x27;,
+      modality: &#x27;venta&#x27;,
+      location: &#x27;Santiago&#x27;,
+      imageUrl: &#x27;/assets/img/products/Vox-AC15C1-.jpg&#x27;,
+      tags: [&#x27;vox&#x27;, &#x27;tube&#x27;],
+      createdAt: &#x27;2025-10-21T18:00:00Z&#x27;,
+    },
+
+    {
+      id: &#x27;15&#x27;,
+      slug: &#x27;tc-electronic-polytune&#x27;,
+      name: &#x27;TC Electronic Polytune 3&#x27;,
+      description: &#x27;Afinador rápido y preciso con modo buffer.&#x27;,
+      shortDescription:
+        &#x27;Afinador polifónico rápido con opción de buffer siempre activo.&#x27;,
+      category: &#x27;pedales&#x27;,
+      brand: &#x27;TC Electronic&#x27;,
+      model: &#x27;Polytune 3&#x27;,
+      year: 2002,
+      price: 110000,
+      currency: &#x27;CLP&#x27;,
+      condition: &#x27;nuevo&#x27;,
+      level: &#x27;avanzado&#x27;,
+      modality: &#x27;venta&#x27;,
+      location: &#x27;Santiago&#x27;,
+      imageUrl: &#x27;/assets/img/products/TC-Electronic-Polytune-3.jpg&#x27;,
+      tags: [&#x27;afinador&#x27;, &#x27;tc&#x27;],
+      createdAt: &#x27;2025-10-03T11:50:00Z&#x27;,
+    },
+
+    {
+      id: &#x27;16&#x27;,
+      slug: &#x27;gibson-sg-special&#x27;,
+      name: &#x27;Gibson SG Special&#x27;,
+      description: &#x27;Guitarra ligera con ataque agresivo y gran sustain.&#x27;,
+      shortDescription:
+        &#x27;SG ligera con mucho ataque, ideal para rock clásico y hard rock.&#x27;,
+      category: &#x27;guitarras&#x27;,
+      brand: &#x27;Gibson&#x27;,
+      model: &#x27;SG Special&#x27;,
+      year: 2002,
+      price: 900000,
+      currency: &#x27;CLP&#x27;,
+      condition: &#x27;usado&#x27;,
+      level: &#x27;avanzado&#x27;,
+      modality: &#x27;venta&#x27;,
+      location: &#x27;Santiago&#x27;,
+      imageUrl: &#x27;/assets/img/products/Gibson-SG-Special.jpg&#x27;,
+      tags: [&#x27;gibson&#x27;, &#x27;sg&#x27;],
+      createdAt: &#x27;2025-10-19T14:00:00Z&#x27;,
+    },
+]</code>
+                    </td>
+                </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Listado estático de productos usados como mock de datos.</p>
+<p>Este arreglo representa el catálogo base de instrumentos, pedales y amplificadores
+para la sección de productos de SoundSeeker. Sirve para:</p>
+<ul>
+<li>Diseñar y probar la UI de listas, grillas, filtros y detalles.</li>
+<li>Validar paginación, ordenamiento, tags y categorías.</li>
+<li>Trabajar sin depender todavía de un backend real.</li>
+</ul>
+<p>Cada <code>Product</code> incluye:</p>
+<ul>
+<li>Información general: <code>id</code>, <code>slug</code>, <code>name</code>, <code>description</code>, <code>shortDescription</code>.</li>
+<li>Metadatos de catálogo: <code>category</code>, <code>brand</code>, <code>model</code>, <code>year</code>, <code>tags</code>.</li>
+<li>Estado de venta: <code>condition</code>, <code>level</code>, <code>modality</code>, <code>location</code>.</li>
+<li>Datos de precio: <code>price</code>, <code>previousPrice</code> (si existe), <code>currency</code>.</li>
+<li>Información visual: <code>imageUrl</code>.</li>
+<li>Métricas: <code>rating</code>, <code>reviewCount</code> (cuando aplica).</li>
+<li>Fechas de creación: <code>createdAt</code>, útil para ordenar por “más nuevo”.</li>
+</ul>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+</section>
+    <h3>src/app/app.routes.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="routes"></a>
+                    <span class="name">
+                        <span ><b>routes</b></span>
+                        <a href="#routes"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>Routes</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[
+  {
+    path: &#x27;&#x27;,
+    component: MainLayout,
+    children: [
+
+      // &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+      // RUTAS PÚBLICAS
+      // &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+
+      // Home
+      {
+        path: &#x27;&#x27;,
+        pathMatch: &#x27;full&#x27;,
+        loadComponent: () &#x3D;&gt;
+          &quot;import(&#x27;@features/home/home&#x27;).then(m &#x3D;&gt; m.Home)&quot;,
+        data: { breadcrumb: &#x27;Inicio&#x27; },
+      },
+
+      {
+        path: &#x27;home&#x27;,
+        redirectTo: &#x27;&#x27;,
+        pathMatch: &#x27;full&#x27;,
+      },
+
+      {
+        path: &#x27;somos&#x27;,
+        loadComponent: () &#x3D;&gt;
+          &quot;import(&#x27;@features/somos/somos&#x27;).then(m &#x3D;&gt; m.Somos)&quot;,
+        data: { breadcrumb: &#x27;Quiénes somos&#x27; },
+      },
+
+      {
+        path: &#x27;tutores&#x27;,
+        loadChildren: () &#x3D;&gt;
+          &quot;import(&#x27;@features/tutores/tutores.routes&#x27;).then(m &#x3D;&gt; m.TUTORES_ROUTES)&quot;,
+        data: { breadcrumb: &#x27;Tutores&#x27; },
+      },
+
+      {
+        path: &#x27;cursos&#x27;,
+        loadComponent: () &#x3D;&gt;
+          &quot;import(&#x27;@features/cursos/cursos-list/cursos-list&#x27;).then(\n\
+            m &#x3D;&gt; m.CursosListComponent\n\
+          )&quot;,
+        data: { breadcrumb: &#x27;Cursos&#x27; },
+      },
+
+      {
+        path: &#x27;cursos/:slug&#x27;,
+        loadComponent: () &#x3D;&gt;
+          &quot;import(&#x27;@features/cursos/curso-detail/curso-detail&#x27;).then(\n\
+            m &#x3D;&gt; m.CursoDetailComponent\n\
+          )&quot;,
+        data: { breadcrumb: &#x27;Curso&#x27; }, // el breadcrumb dinámico lo puedes sobreescribir en el componente
+      },
+
+      {
+        path: &#x27;productos&#x27;,
+        loadChildren: () &#x3D;&gt;
+          &quot;import(&#x27;@features/productos/productos.routes&#x27;).then(m &#x3D;&gt; m.PRODUCT_ROUTES)&quot;,
+        data: { breadcrumb: &#x27;Productos&#x27; },
+      },
+
+      {
+        path: &#x27;servicios&#x27;,
+        loadChildren: () &#x3D;&gt;
+          &quot;import(&#x27;@features/servicios/servicios.routes&#x27;).then(m &#x3D;&gt; m.SERVICIOS_ROUTES)&quot;,
+        data: { breadcrumb: &#x27;Servicios&#x27; },
+      },
+
+      {
+        path: &#x27;noticias&#x27;,
+        loadChildren: () &#x3D;&gt;
+          &quot;import(&#x27;@features/noticias/noticias.routes&#x27;).then(m &#x3D;&gt; m.NOTICIAS_ROUTES)&quot;,
+        // si quieres que el breadcrumb diga &quot;Noticias&quot;:
+        // data: { breadcrumb: &#x27;Noticias&#x27; },
+      },
+
+      {
+        path: &#x27;contacto&#x27;,
+        loadComponent: () &#x3D;&gt;
+          &quot;import(&#x27;@features/contacto/contacto&#x27;).then(m &#x3D;&gt; m.Contacto)&quot;,
+        data: { breadcrumb: &#x27;Contacto&#x27; },
+      },
+
+      // &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+      // AUTENTICACIÓN
+      // &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+      {
+        path: &#x27;auth&#x27;,
+        children: [
+          {
+            path: &#x27;login&#x27;,
+            loadComponent: () &#x3D;&gt;
+              &quot;import(&#x27;@features/auth/login/login&#x27;).then(m &#x3D;&gt; m.LoginComponent)&quot;,
+            data: { breadcrumb: &#x27;Iniciar sesión&#x27; },
+          },
+          {
+            path: &#x27;register&#x27;,
+            loadComponent: () &#x3D;&gt;
+              &quot;import(&#x27;@features/auth/register/register&#x27;).then(m &#x3D;&gt; m.RegisterComponent)&quot;,
+            data: { breadcrumb: &#x27;Registro&#x27; },
+          },
+          {
+            path: &#x27;recover-password&#x27;,
+            loadComponent: () &#x3D;&gt;
+              &quot;import(&#x27;@features/auth/recover/recover&#x27;).then(m &#x3D;&gt; m.Recover)&quot;,
+            data: { breadcrumb: &#x27;Recuperar contraseña&#x27; },
+          },
+          {
+            path: &#x27;&#x27;,
+            pathMatch: &#x27;full&#x27;,
+            redirectTo: &#x27;login&#x27;,
+          },
+        ],
+      },
+
+      // &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+      // PERFIL (PROTEGIDO)
+      // &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+      {
+        path: &#x27;mi-cuenta&#x27;,
+        canActivate: [authGuard],
+        loadComponent: () &#x3D;&gt;
+          &quot;import(&#x27;@features/auth/profile/profile&#x27;).then(m &#x3D;&gt; m.Profile)&quot;,
+        data: { breadcrumb: &#x27;Mi cuenta&#x27; },
+      },
+
+      // &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+      // ADMIN (PROTEGIDO: LOGIN + ROL ADMIN)
+      // &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+      {
+        path: &#x27;admin&#x27;,
+        canActivate: [authGuard, adminGuard],
+        loadComponent: () &#x3D;&gt;
+          &quot;import(&#x27;@features/admin/admin-layout/admin-layout&#x27;).then(m &#x3D;&gt; m.AdminLayout)&quot;,
+        children: [
+          {
+            path: &#x27;&#x27;,
+            pathMatch: &#x27;full&#x27;,
+            loadComponent: () &#x3D;&gt;
+              &quot;import(&#x27;@features/admin/admin-dashboard/admin-dashboard&#x27;).then(\n\
+                m &#x3D;&gt; m.AdminDashboard\n\
+              )&quot;,
+          },
+          {
+            path: &#x27;tutores&#x27;,
+            loadComponent: () &#x3D;&gt;
+              &quot;import(&#x27;@features/admin/admin-tutores/admin-tutores&#x27;).then(\n\
+                m &#x3D;&gt; m.AdminTutores\n\
+              )&quot;,
+          },
+          {
+            path: &#x27;productos&#x27;,
+            loadComponent: () &#x3D;&gt;
+              &quot;import(&#x27;@features/admin/admin-productos/admin-productos&#x27;).then(\n\
+                m &#x3D;&gt; m.AdminProductos\n\
+              )&quot;,
+          },
+          {
+            path: &#x27;cursos&#x27;,
+            loadComponent: () &#x3D;&gt;
+              &quot;import(&#x27;@features/admin/admin-cursos/admin-cursos&#x27;).then(\n\
+                m &#x3D;&gt; m.AdminCursosComponent\n\
+              )&quot;,
+          },
+          {
+            path: &#x27;usuarios&#x27;,
+            loadComponent: () &#x3D;&gt;
+              &quot;import(&#x27;@features/admin/admin-usuarios/admin-usuarios&#x27;).then(\n\
+                m &#x3D;&gt; m.AdminUsuarios\n\
+              )&quot;,
+          },
+        ],
+      },
+    ],
+  },
+
+  // &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+  // RUTA DESCONOCIDA → HOME
+  // &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+  {
+    path: &#x27;**&#x27;,
+    redirectTo: &#x27;&#x27;,
+  },
+]</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+</section>
+    <h3>src/app/core/mocks/service.mock.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="SERVICES_MOCK"></a>
+                    <span class="name">
+                        <span ><b>SERVICES_MOCK</b></span>
+                        <a href="#SERVICES_MOCK"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/Service.html" target="_self" >Service[]</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[
+  {
+    id: &#x27;compra&#x27;,
+    slug: &#x27;compra&#x27;,
+    name: &#x27;Compra de instrumentos&#x27;,
+    shortDescription:
+      &#x27;Encuentra guitarras, bajos y equipos usados en excelente estado.&#x27;,
+    imageUrl:
+      &#x27;https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto&#x3D;format&amp;fit&#x3D;crop&amp;w&#x3D;900&amp;q&#x3D;80&#x27;,
+    icon: &#x27;bi-bag-check&#x27;,
+    description: [
+      &#x27;En SoundSeeker conectamos a músicos que desean vender sus instrumentos con quienes buscan su próximo sonido. Filtramos publicaciones para asegurar descripciones claras y fotos útiles.&#x27;,
+      &#x27;Podrás revisar antecedentes del vendedor, detalles de uso del instrumento, estado de mantenimiento y cualquier modificación realizada.&#x27;,
+      &#x27;Nuestro objetivo es que la experiencia de compra sea segura, transparente y enfocada en el sonido que realmente estás buscando.&#x27;,
+    ],
+  },
+  {
+    id: &#x27;venta&#x27;,
+    slug: &#x27;venta&#x27;,
+    name: &#x27;Venta de instrumentos&#x27;,
+    shortDescription:
+      &#x27;Publica tu instrumento y llega a músicos de tu misma comuna.&#x27;,
+    imageUrl:
+      &#x27;https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto&#x3D;format&amp;fit&#x3D;crop&amp;w&#x3D;900&amp;q&#x3D;80&#x27;,
+    icon: &#x27;bi-cash-coin&#x27;,
+    description: [
+      &#x27;Si tienes instrumentos que ya no usas o quieres hacer un upgrade, puedes publicarlos en la plataforma con fotos, descripción y precio sugerido.&#x27;,
+      &#x27;Te ayudamos con recomendaciones para fijar precios realistas y destacar el valor de tu instrumento (marca, año, modificaciones, estado general).&#x27;,
+    ],
+  },
+  {
+    id: &#x27;intercambio&#x27;,
+    slug: &#x27;intercambio&#x27;,
+    name: &#x27;Intercambio de equipo&#x27;,
+    shortDescription:
+      &#x27;Trueque entre músicos: cambia tu pedal, ampli o guitarra por otro equipo.&#x27;,
+    imageUrl:
+      &#x27;https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto&#x3D;format&amp;fit&#x3D;crop&amp;w&#x3D;900&amp;q&#x3D;80&#x27;,
+    icon: &#x27;bi-arrow-left-right&#x27;,
+    description: [
+      &#x27;El intercambio permite que encuentres nuevos sonidos sin necesidad de gastar dinero. Podrás proponer cambios directos o combinados (equipo + dinero).&#x27;,
+      &#x27;La idea es fomentar comunidad y recircular equipo que sigue teniendo mucha vida sonora.&#x27;,
+    ],
+  },
+  {
+    id: &#x27;mantencion&#x27;,
+    slug: &#x27;mantencion&#x27;,
+    name: &#x27;Mantención y ajustes&#x27;,
+    shortDescription:
+      &#x27;Cambio de cuerdas, calibración, ajuste de acción y otros detalles finos.&#x27;,
+    imageUrl:
+      &#x27;https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto&#x3D;format&amp;fit&#x3D;crop&amp;w&#x3D;900&amp;q&#x3D;80&#x27;,
+    icon: &#x27;bi-tools&#x27;,
+    description: [
+      &#x27;Trabajamos con técnicos y luthiers que realizan mantenciones básicas y ajustes finos a guitarras y bajos.&#x27;,
+      &#x27;Servicios típicos: cambio de cuerdas, limpieza profunda, ajuste de alma, calibración de octavación, ajuste de acción y revisión general.&#x27;,
+    ],
+  },
+  {
+    id: &#x27;reparacion&#x27;,
+    slug: &#x27;reparacion&#x27;,
+    name: &#x27;Reparación de amplificadores y circuitos&#x27;,
+    shortDescription:
+      &#x27;Reparación de amplis, pedales y circuitos de guitarras/bajos.&#x27;,
+    imageUrl:
+      &#x27;https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto&#x3D;format&amp;fit&#x3D;crop&amp;w&#x3D;900&amp;q&#x3D;80&#x27;,
+    icon: &#x27;bi-lightning-charge&#x27;,
+    description: [
+      &#x27;Si tu ampli dejó de sonar, tu pedal tiene ruido o tu guitarra presenta problemas eléctricos, contamos con técnicos especializados en audio.&#x27;,
+      &#x27;Se realizan diagnósticos, presupuestos y reparaciones en circuitos de amplificadores, pedales y electrónica de instrumentos.&#x27;,
+    ],
+  },
+  {
+    id: &#x27;pintura-case&#x27;,
+    slug: &#x27;pintura-case&#x27;,
+    name: &#x27;Pintura y cases de almacenamiento&#x27;,
+    shortDescription:
+      &#x27;Renueva el look de tu instrumento y protégelo con un buen case.&#x27;,
+    imageUrl:
+      &#x27;https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto&#x3D;format&amp;fit&#x3D;crop&amp;w&#x3D;900&amp;q&#x3D;80&#x27;,
+    icon: &#x27;bi-palette&#x27;,
+    description: [
+      &#x27;Servicio de pintura y repintado para guitarras y bajos, respetando el tipo de acabado que buscas.&#x27;,
+      &#x27;Además, podrás acceder a cases y estuches para almacenar tu instrumento de forma segura, ya sea para transporte frecuente o guardado en casa.&#x27;,
+    ],
+  },
+]</code>
+                    </td>
+                </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Listado estático de servicios disponibles en SoundSeeker.</p>
+<p>Este mock funciona como base para construir toda la sección de “Servicios”:
+compra, venta, intercambio, mantención, reparaciones y pintura.<br>Su idea es mantener información clara, simple y directa para desarrollar
+la UI, probar navegación y cargar contenido sin depender todavía de un backend.</p>
+<p>Cada servicio incluye:</p>
+<ul>
+<li>Identificador (<code>id</code>, <code>slug</code>)</li>
+<li>Nombre y resumen corto para tarjetas</li>
+<li>Imagen de referencia (unsplash)</li>
+<li>Ícono (Bootstrap Icons)</li>
+<li>Descripción detallada dividida en párrafos</li>
+</ul>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+</section>
+    <h3>src/app/features/servicios/servicios.routes.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="SERVICIOS_ROUTES"></a>
+                    <span class="name">
+                        <span ><b>SERVICIOS_ROUTES</b></span>
+                        <a href="#SERVICIOS_ROUTES"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>Routes</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[
+
+  /**
+   * &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+   * RUTA PRINCIPAL: /servicios
+   * ------------------------------------------------------------
+   * Carga la vista del listado general:
+   *   &lt;app-servicios-list /&gt;
+   *
+   * No requiere parámetros. Muestra las categorías o cards de
+   * cada servicio según tu implementación del componente.
+   * &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+   */
+  {
+    path: &#x27;&#x27;,
+    loadComponent: () &#x3D;&gt;
+      &quot;import(&#x27;./servicios-list/servicios-list&#x27;)\n\
+        .then(m &#x3D;&gt; m.ServiciosList)&quot;,
+    // El breadcrumb general se calcula fuera o no se usa
+  },
+
+  /**
+   * &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+   * RUTA DE DETALLE: /servicios/:slug
+   * ------------------------------------------------------------
+   * :slug → identificador del servicio (ej: &quot;ajuste-guitarra&quot;)
+   *
+   * El detalle renderiza:
+   *   &lt;app-servicio-detail /&gt;
+   *
+   * @usageNotes
+   * - No se define data.breadcrumb porque el nombre visible del
+   *   breadcrumb depende dinámicamente del servicio cargado.
+   * - ServicioDetail usa ActivatedRoute + ServiceService para
+   *   obtener el servicio por slug y exponer su nombre.
+   * &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+   */
+  {
+    path: &#x27;:slug&#x27;,
+    loadComponent: () &#x3D;&gt;
+      &quot;import(&#x27;./servicio-detail/servicio-detail&#x27;)\n\
+        .then(m &#x3D;&gt; m.ServicioDetail)&quot;,
+
+    // El breadcrumb se genera dinámicamente desde ServicioDetail
+    // data: { breadcrumb: &#x27;Detalle del servicio&#x27; },
+  },
+
+]</code>
+                    </td>
+                </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><h2>============================================================
+RUTAS DEL MÓDULO &quot;SERVICIOS&quot;</h2>
+<p>Estructura:
+  /servicios             → listado de servicios disponibles
+  /servicios/:slug       → detalle individual del servicio</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+</section>
+    <h3>src/app/features/tutores/tutores.routes.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="TUTORES_ROUTES"></a>
+                    <span class="name">
+                        <span ><b>TUTORES_ROUTES</b></span>
+                        <a href="#TUTORES_ROUTES"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>Routes</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[
+
+  // ---------------------------------------------------------------------------
+  // RUTA 1: LISTADO GENERAL DE TUTORES
+  // ---------------------------------------------------------------------------
+  /**
+   * Ruta base &#x60;/tutores&#x60;.
+   *
+   * @description
+   * Renderiza el listado principal de tutores con:
+   * - Grid responsive
+   * - Filtros por instrumento, nivel, modalidad y precio
+   * - OrderBy y búsqueda
+   * - Animaciones FadeUp
+   *
+   * @usageNotes
+   * No usa &#x60;data.breadcrumb&#x60; porque el breadcrumb padre ya define
+   * el texto visible &quot;Tutores&quot;.
+   */
+  {
+    path: &#x27;&#x27;,
+    loadComponent: () &#x3D;&gt;
+      &quot;import(&#x27;./tutores-list/tutores-list&#x27;)\n\
+        .then(m &#x3D;&gt; m.TutoresListComponent)&quot;,
+  },
+
+  // ---------------------------------------------------------------------------
+  // RUTA 2: DETALLE DE TUTOR
+  // ---------------------------------------------------------------------------
+  /**
+   * Ruta &#x60;/tutores/:id&#x60;.
+   *
+   * @description
+   * Muestra el perfil completo de un tutor, incluyendo:
+   * - Biografía
+   * - Instrumentos enseñados
+   * - Modalidades disponibles
+   * - Estilos musicales
+   * - Disponibilidad semanal
+   * - Cursos dictados
+   *
+   * @param {string} id - Identificador único del tutor.
+   *
+   * @usageNotes
+   * - El breadcrumb fijo &quot;Perfil tutor&quot; se declara aquí.
+   * - Si deseas un breadcrumb dinámico (ej: nombre del tutor),
+   *   agrégalo dentro de &#x60;TutorProfileComponent&#x60;.
+   *
+   * @example
+   * /tutores/marco-vidal
+   */
+  {
+    path: &#x27;:id&#x27;,
+    loadComponent: () &#x3D;&gt;
+      &quot;import(&#x27;./tutor-profile/tutor-profile&#x27;)\n\
+        .then(m &#x3D;&gt; m.TutorProfileComponent)&quot;,
+
+    data: { breadcrumb: &#x27;Perfil tutor&#x27; },
+  },
+]</code>
+                    </td>
+                </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Conjunto de rutas asociadas a la sección pública de <strong>Tutores</strong>.</p>
+<p>Incluye:</p>
+<ul>
+<li>Listado de tutores (<code>/tutores</code>)</li>
+<li>Perfil individual de tutor (<code>/tutores/:id</code>)</li>
+</ul>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+</section>
+    <h3>src/app/core/mocks/tutor.mock.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="TUTORS_MOCK"></a>
+                    <span class="name">
+                        <span ><b>TUTORS_MOCK</b></span>
+                        <a href="#TUTORS_MOCK"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/Tutor.html" target="_self" >Tutor[]</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[
+
+   {
+      id: &#x27;marco-vidal&#x27;,
+      name: &#x27;Marco Vidal&#x27;,
+      avatarUrl: &#x27;/assets/img/trainers/marco-vidal.jpg&#x27;,
+      instruments: [&#x27;guitarra-electrica&#x27;, &#x27;guitarra-acustica&#x27;],
+      styles: [&#x27;rock&#x27;, &#x27;blues&#x27;, &#x27;indie&#x27;],
+      levelRange: [&#x27;principiante&#x27;, &#x27;intermedio&#x27;, &#x27;avanzado&#x27;],
+      modalities: [&#x27;presencial&#x27;, &#x27;online&#x27;],
+      shortDescription:
+        &#x27;Clases centradas en repertorio real, técnica útil y oído con backing tracks.&#x27;,
+      fullDescription:
+        &#x27;Clases centradas en objetivos reales del alumno: repertorio, técnica útil y oído... (texto largo)&#x27;,
+      city: &#x27;Santiago&#x27;,
+      commune: &#x27;Providencia&#x27;,
+      hourlyRate: 25000,
+      rating: 4.7,
+      ratingCount: 24,
+      languages: [&#x27;Español&#x27;, &#x27;Inglés&#x27;],
+      experience: &#x27;8 años de docencia, sesionista en vivo.&#x27;,
+      education: &#x27;Intérprete Mención Guitarra — Projazz.&#x27;,
+      weeklyAvailability: [
+        { day: &#x27;Lun&#x27;, times: [&#x27;18:00&#x27;, &#x27;19:00&#x27;] },
+        { day: &#x27;Mie&#x27;, times: [&#x27;19:00&#x27;] },
+        { day: &#x27;Sab&#x27;, times: [&#x27;11:00&#x27;, &#x27;12:00&#x27;] },
+      ],
+      courses: [
+        { id: &#x27;curso-rock-basico&#x27;, title: &#x27;Guitarra Rock para Principiantes&#x27; },
+        { id: &#x27;curso-rock&#x27;, title: &#x27;Guitarra Rock Intermedio&#x27; },
+        { id: &#x27;curso-rock2&#x27;, title: &#x27;Guitarra Rock Avanzado&#x27; },
+      ],
+      reviews: [],
+      gear: [
+        {
+          name: &#x27;Amplificador Fender Blues Junior&#x27;,
+          description: &#x27;Combo valvular 15W.&#x27;,
+          reason: &#x27;Ataque definido para blues y rock clásico.&#x27;,
+        },
+      ],
+    },
+
+    /* &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+       2) CATALINA HERRERA — canto moderno
+    &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D; */
+    {
+      id: &#x27;catalina-herrera&#x27;,
+      name: &#x27;Catalina Herrera&#x27;,
+      avatarUrl: &#x27;/assets/img/trainers/catalina-herrera.jpg&#x27;,
+      instruments: [&#x27;voz&#x27;],
+      styles: [&#x27;pop&#x27;],
+      levelRange: [&#x27;principiante&#x27;, &#x27;intermedio&#x27;],
+      modalities: [&#x27;online&#x27;],
+      shortDescription:
+        &#x27;Técnica vocal contemporánea enfocada en control, color y expresión artística.&#x27;,
+      fullDescription:
+        &#x27;Metodología progresiva centrada en respiración, resonadores, interpretación y repertorio personal... (texto largo)&#x27;,
+      city: &#x27;Santiago&#x27;,
+      commune: &#x27;Las Condes&#x27;,
+      hourlyRate: 30000,
+      rating: 4.9,
+      ratingCount: 40,
+      languages: [&#x27;Español&#x27;, &#x27;Inglés&#x27;],
+      experience: &#x27;6 años de docencia y grabaciones para artistas locales.&#x27;,
+      education: &#x27;Canto Popular — UNIACC.&#x27;,
+      weeklyAvailability: [
+        { day: &#x27;Lun&#x27;, times: [&#x27;10:00&#x27;, &#x27;11:00&#x27;] },
+        { day: &#x27;Jue&#x27;, times: [&#x27;18:00&#x27;, &#x27;19:00&#x27;] },
+      ],
+      courses: [
+        { id: &#x27;curso-pop-vocal&#x27;, title: &#x27;Canto Pop para Principiantes&#x27; },
+      ],
+      reviews: [],
+      gear: [
+        {
+          name: &#x27;Micrófono Shure SM7B&#x27;,
+          description: &#x27;Mic dinámico de estudio.&#x27;,
+          reason: &#x27;Claridad y calidez para grabación vocal profesional.&#x27;,
+        },
+      ],
+    },
+
+    /* &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+       3) TOMÁS LAGOS — bajo eléctrico
+    &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D; */
+    {
+      id: &#x27;tomas-lagos&#x27;,
+      name: &#x27;Tomás Lagos&#x27;,
+      avatarUrl: &#x27;/assets/img/trainers/tomas-lagos.jpg&#x27;,
+      instruments: [&#x27;bajo-electrico&#x27;],
+      styles: [&#x27;funk&#x27;, &#x27;rock&#x27;, &#x27;pop&#x27;],
+      levelRange: [&#x27;principiante&#x27;, &#x27;intermedio&#x27;, &#x27;avanzado&#x27;],
+      modalities: [&#x27;presencial&#x27;, &#x27;online&#x27;],
+      shortDescription:
+        &#x27;Aprende groove, slap, armonía aplicada y lectura rítmica.&#x27;,
+      fullDescription:
+        &#x27;Clases enfocadas en groove, coordinación, lectura, armonía funcional y repertorio moderno... (texto largo)&#x27;,
+      city: &#x27;Santiago&#x27;,
+      commune: &#x27;Ñuñoa&#x27;,
+      hourlyRate: 22000,
+      rating: 4.6,
+      ratingCount: 32,
+      languages: [&#x27;Español&#x27;],
+      experience: &#x27;Bajista en proyectos funk y pop; 7 años enseñando.&#x27;,
+      education: &#x27;Intérprete en Bajo — Projazz.&#x27;,
+      weeklyAvailability: [
+        { day: &#x27;Mar&#x27;, times: [&#x27;17:00&#x27;, &#x27;18:00&#x27;] },
+        { day: &#x27;Vie&#x27;, times: [&#x27;16:00&#x27;] },
+      ],
+      courses: [
+        { id: &#x27;curso-slap&#x27;, title: &#x27;Slap desde Cero&#x27; },
+        { id: &#x27;curso-funk&#x27;, title: &#x27;Groove Funk y Pop&#x27; },
+      ],
+      reviews: [],
+      gear: [
+        {
+          name: &#x27;Bajo Music Man StingRay&#x27;,
+          description: &#x27;Activo, sonido definido.&#x27;,
+          reason: &#x27;Punch característico para funk moderno.&#x27;,
+        },
+      ],
+    },
+
+    /* &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+       4) SOFÍA ARIAS — piano
+    &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D; */
+    {
+      id: &#x27;sofia-arias&#x27;,
+      name: &#x27;Sofía Arias&#x27;,
+      avatarUrl: &#x27;/assets/img/trainers/sofia-arias.jpg&#x27;,
+      instruments: [&#x27;piano&#x27;],
+      styles: [&#x27;clasico&#x27;, &#x27;jazz&#x27;, &#x27;pop&#x27;],
+      levelRange: [&#x27;principiante&#x27;, &#x27;intermedio&#x27;],
+      modalities: [&#x27;presencial&#x27;],
+      shortDescription:
+        &#x27;Pianista clásica y moderna: técnica sólida y repertorio variado.&#x27;,
+      fullDescription:
+        &#x27;Desarrollo técnico progresivo, postura, lectura, armonía y repertorio acorde a los objetivos... (texto largo)&#x27;,
+      city: &#x27;Santiago&#x27;,
+      commune: &#x27;La Florida&#x27;,
+      hourlyRate: 28000,
+      rating: 4.8,
+      ratingCount: 20,
+      languages: [&#x27;Español&#x27;],
+      experience: &#x27;Conservatorio + proyectos jazz pop.&#x27;,
+      education: &#x27;Conservatorio Universidad de Chile.&#x27;,
+      weeklyAvailability: [
+        { day: &#x27;Sab&#x27;, times: [&#x27;10:00&#x27;, &#x27;11:00&#x27;, &#x27;12:00&#x27;] },
+      ],
+      courses: [
+        { id: &#x27;curso-piano-basico&#x27;, title: &#x27;Piano para Principiantes&#x27; },
+      ],
+      reviews: [],
+      gear: [
+        {
+          name: &#x27;Piano Yamaha P-125&#x27;,
+          description: &#x27;88 teclas contrapesadas.&#x27;,
+          reason: &#x27;Tacto natural y sonido realista.&#x27;,
+        },
+      ],
+    },
+
+    /* &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+       5) CLAUDIO SAN MARTÍN — guitarra metal
+    &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D; */
+    {
+      id: &#x27;claudio-san-martin&#x27;,
+      name: &#x27;Claudio San Martín&#x27;,
+      avatarUrl: &#x27;/assets/img/trainers/claudio-san-martin.jpg&#x27;,
+      instruments: [&#x27;guitarra-electrica&#x27;],
+      styles: [&#x27;metal&#x27;, &#x27;rock&#x27;],
+      levelRange: [&#x27;intermedio&#x27;, &#x27;avanzado&#x27;],
+      modalities: [&#x27;online&#x27;],
+      shortDescription:
+        &#x27;Técnica moderna: palm mute, alternate picking, escalas modales.&#x27;,
+      fullDescription:
+        &#x27;Especialista en técnica metal moderna: precisión, muting, velocidad, sweep picking, modos... (texto largo)&#x27;,
+      city: &#x27;Santiago&#x27;,
+      commune: &#x27;Recoleta&#x27;,
+      hourlyRate: 26000,
+      rating: 4.7,
+      ratingCount: 29,
+      languages: [&#x27;Español&#x27;],
+      experience: &#x27;Guitarrista progresivo, 10 años de enseñanza.&#x27;,
+      education: &#x27;Intérprete Rock — SCD.&#x27;,
+      weeklyAvailability: [
+        { day: &#x27;Mar&#x27;, times: [&#x27;20:00&#x27;] },
+        { day: &#x27;Jue&#x27;, times: [&#x27;20:00&#x27;] },
+      ],
+      courses: [
+        { id: &#x27;curso-metal&#x27;, title: &#x27;Técnica Metal desde Cero&#x27; },
+      ],
+      reviews: [],
+      gear: [
+        {
+          name: &#x27;Ibanez RG Premium&#x27;,
+          description: &#x27;Puente flotante, 24 trastes.&#x27;,
+          reason: &#x27;Versatilidad y comodidad técnica.&#x27;,
+        },
+      ],
+    },
+
+    /* &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+       6) CARLA FUENTES — canto lírico
+    &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D; */
+    {
+      id: &#x27;carla-fuentes&#x27;,
+      name: &#x27;Carla Fuentes&#x27;,
+      avatarUrl: &#x27;/assets/img/trainers/carla-fuentes.jpg&#x27;,
+      instruments: [&#x27;voz&#x27;],
+      styles: [&#x27;clasico&#x27;],
+      levelRange: [&#x27;principiante&#x27;, &#x27;intermedio&#x27;, &#x27;avanzado&#x27;],
+      modalities: [&#x27;presencial&#x27;],
+      shortDescription:
+        &#x27;Técnica lírica para ampliar registro, proyección y control.&#x27;,
+      fullDescription:
+        &#x27;Bases del canto lírico: respiración costo-diafragmática, resonancia, dicción y repertorio clásico... (texto largo)&#x27;,
+      city: &#x27;Santiago&#x27;,
+      commune: &#x27;Santiago Centro&#x27;,
+      hourlyRate: 32000,
+      rating: 4.9,
+      ratingCount: 44,
+      languages: [&#x27;Español&#x27;, &#x27;Italiano&#x27;],
+      experience: &#x27;Soprano lírica, coros, ópera.&#x27;,
+      education: &#x27;Licenciatura en Música — Universidad de Chile.&#x27;,
+      weeklyAvailability: [
+        { day: &#x27;Mie&#x27;, times: [&#x27;15:00&#x27;, &#x27;16:00&#x27;] },
+      ],
+      courses: [],
+      reviews: [],
+      gear: [
+        {
+          name: &#x27;Micrófono Rode NT1&#x27;,
+          description: &#x27;Condensador de estudio.&#x27;,
+          reason: &#x27;Captura natural del color vocal lírico.&#x27;,
+        },
+      ],
+    },
+
+    /* &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+       7) ESTEBAN ROJAS — batería
+    &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D; */
+    {
+      id: &#x27;esteban-rojas&#x27;,
+      name: &#x27;Esteban Rojas&#x27;,
+      avatarUrl: &#x27;/assets/img/trainers/esteban-rojas.jpg&#x27;,
+      instruments: [&#x27;bateria&#x27;],
+      styles: [&#x27;rock&#x27;, &#x27;funk&#x27;, &#x27;fusion&#x27;],
+      levelRange: [&#x27;principiante&#x27;, &#x27;intermedio&#x27;],
+      modalities: [&#x27;presencial&#x27;, &#x27;online&#x27;],
+      shortDescription:
+        &#x27;Groove, independencia, lectura rítmica y rudimentos modernos.&#x27;,
+      fullDescription:
+        &#x27;Desarrollo de independencia, técnica, lectura y repertorio aplicado a estilos modernos... (texto largo)&#x27;,
+      city: &#x27;Santiago&#x27;,
+      commune: &#x27;Maipú&#x27;,
+      hourlyRate: 23000,
+      rating: 4.5,
+      ratingCount: 18,
+      languages: [&#x27;Español&#x27;],
+      experience: &#x27;Baterista profesional, sesiones y bandas locales.&#x27;,
+      education: &#x27;Escuela Moderna de Música.&#x27;,
+      weeklyAvailability: [
+        { day: &#x27;Vie&#x27;, times: [&#x27;19:00&#x27;] },
+      ],
+      courses: [
+        { id: &#x27;curso-bateria-rock&#x27;, title: &#x27;Batería Rock Básica&#x27; },
+      ],
+      reviews: [],
+      gear: [
+        {
+          name: &#x27;Batería Pearl Export&#x27;,
+          description: &#x27;Kit acústico completo.&#x27;,
+          reason: &#x27;Calidad y respuesta para rock y funk.&#x27;,
+        },
+      ],
+    },
+
+    /* &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+       8) VALENTINA ZÚÑIGA — ukelele / guitarra acústica
+    &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D; */
+    {
+      id: &#x27;valentina-zuniga&#x27;,
+      name: &#x27;Valentina Zúñiga&#x27;,
+      avatarUrl: &#x27;/assets/img/trainers/valentina-zuniga.jpg&#x27;,
+      instruments: [&#x27;guitarra-acustica&#x27;],
+      styles: [&#x27;pop&#x27;, &#x27;folk&#x27;],
+      levelRange: [&#x27;principiante&#x27;, &#x27;intermedio&#x27;],
+      modalities: [&#x27;online&#x27;],
+      shortDescription:
+        &#x27;Aprende acordes, ritmo y repertorio moderno desde la primera clase.&#x27;,
+      fullDescription:
+        &#x27;Clases dinámicas centradas en canciones reales, ritmos latinos, pop y folk, técnica básica... (texto largo)&#x27;,
+      city: &#x27;Santiago&#x27;,
+      commune: &#x27;Huechuraba&#x27;,
+      hourlyRate: 18000,
+      rating: 4.8,
+      ratingCount: 15,
+      languages: [&#x27;Español&#x27;],
+      experience: &#x27;Sesionista acústica y creadora de contenido musical.&#x27;,
+      education: &#x27;Talleres populares + estudios independientes.&#x27;,
+      weeklyAvailability: [
+        { day: &#x27;Sab&#x27;, times: [&#x27;16:00&#x27;, &#x27;17:00&#x27;] },
+      ],
+      courses: [],
+      reviews: [],
+      gear: [
+        {
+          name: &#x27;Ukelele Kala&#x27;,
+          description: &#x27;Modelo soprano.&#x27;,
+          reason: &#x27;Buen tono y afinación estable.&#x27;,
+        },
+      ],
+    },
+
+    /* &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+       9) FELIPE CONTRERAS — saxofón
+    &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D; */
+    {
+      id: &#x27;felipe-contreras&#x27;,
+      name: &#x27;Felipe Contreras&#x27;,
+      avatarUrl: &#x27;/assets/img/trainers/felipe-contreras.jpg&#x27;,
+      instruments: [&#x27;guitarra-acustica&#x27;],
+      styles: [&#x27;jazz&#x27;, &#x27;blues&#x27;, &#x27;funk&#x27;],
+      levelRange: [&#x27;principiante&#x27;, &#x27;intermedio&#x27;],
+      modalities: [&#x27;presencial&#x27;],
+      shortDescription:
+        &#x27;Técnica, sonido, articulación y repertorio jazz-blues.&#x27;,
+      fullDescription:
+        &#x27;Sonido, articulación, lectura, improvisación modal y repertorio clásico del jazz... (texto largo)&#x27;,
+      city: &#x27;Santiago&#x27;,
+      commune: &#x27;Independencia&#x27;,
+      hourlyRate: 35000,
+      rating: 4.9,
+      ratingCount: 22,
+      languages: [&#x27;Español&#x27;],
+      experience: &#x27;Big band, cuartetos, profesor 9 años.&#x27;,
+      education: &#x27;Jazz — Universidad de las Américas.&#x27;,
+      weeklyAvailability: [
+        { day: &#x27;Jue&#x27;, times: [&#x27;19:00&#x27;] },
+      ],
+      courses: [],
+      reviews: [],
+      gear: [
+        {
+          name: &#x27;Saxo Alto Yamaha 62&#x27;,
+          description: &#x27;Profesional.&#x27;,
+          reason: &#x27;Afinación estable y sonido versátil.&#x27;,
+        },
+      ],
+    },
+
+    /* &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+       10) DANIELA MUÑOZ — violín
+    &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D; */
+    {
+      id: &#x27;daniela-munoz&#x27;,
+      name: &#x27;Daniela Muñoz&#x27;,
+      avatarUrl: &#x27;/assets/img/trainers/daniela-munoz.jpg&#x27;,
+      instruments: [&#x27;violin&#x27;],
+      styles: [&#x27;clasico&#x27;, &#x27;folk&#x27;],
+      levelRange: [&#x27;principiante&#x27;, &#x27;intermedio&#x27;],
+      modalities: [&#x27;presencial&#x27;],
+      shortDescription:
+        &#x27;Técnica clásica, afinación y repertorio tradicional.&#x27;,
+      fullDescription:
+        &#x27;Metodología Suzuki, técnica básica, afinación y repertorio clásico y folk... (texto largo)&#x27;,
+      city: &#x27;Santiago&#x27;,
+      commune: &#x27;Providencia&#x27;,
+      hourlyRate: 28000,
+      rating: 4.7,
+      ratingCount: 13,
+      languages: [&#x27;Español&#x27;],
+      experience: &#x27;Orquesta juvenil y enseñanza desde 2016.&#x27;,
+      education: &#x27;Escuela Moderna de Música.&#x27;,
+      weeklyAvailability: [
+        { day: &#x27;Lun&#x27;, times: [&#x27;17:00&#x27;] },
+      ],
+      courses: [],
+      reviews: [],
+      gear: [
+        {
+          name: &#x27;Violín Stentor 1500&#x27;,
+          description: &#x27;Estudiante.&#x27;,
+          reason: &#x27;Sonido cálido para iniciación.&#x27;,
+        },
+      ],
+    },
+
+    /* &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+       11) MAURICIO IBARRA — producción musical
+    &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D; */
+    {
+      id: &#x27;mauricio-ibarra&#x27;,
+      name: &#x27;Mauricio Ibarra&#x27;,
+      avatarUrl: &#x27;/assets/img/trainers/mauricio-ibarra.jpg&#x27;,
+      instruments: [&#x27;teoria&#x27;],
+      styles: [&#x27;pop&#x27;],
+      levelRange: [&#x27;principiante&#x27;, &#x27;intermedio&#x27;, &#x27;avanzado&#x27;],
+      modalities: [&#x27;online&#x27;],
+      shortDescription:
+        &#x27;Producción en DAW: mezcla, beats, diseño sonoro y composición.&#x27;,
+      fullDescription:
+        &#x27;Aprende desde cero a producir música: DAW, mezcla, sintes, beats, armonía aplicada y workflow... (texto largo)&#x27;,
+      city: &#x27;Santiago&#x27;,
+      commune: &#x27;La Reina&#x27;,
+      hourlyRate: 30000,
+      rating: 4.8,
+      ratingCount: 28,
+      languages: [&#x27;Español&#x27;, &#x27;Inglés&#x27;],
+      experience: &#x27;Productor independiente + estudios.&#x27;,
+      education: &#x27;Producción Musical — UNIACC.&#x27;,
+      weeklyAvailability: [
+        { day: &#x27;Mar&#x27;, times: [&#x27;18:00&#x27;] },
+      ],
+      courses: [
+        { id: &#x27;curso-produccion&#x27;, title: &#x27;Producción Musical Moderna&#x27; },
+      ],
+      reviews: [],
+      gear: [
+        {
+          name: &#x27;Monitores KRK Rokit 5&#x27;,
+          description: &#x27;Nearfield.&#x27;,
+          reason: &#x27;Traducción clara del sonido.&#x27;,
+        },
+      ],
+    },
+
+    /* &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+       12) LORENA SÁNCHEZ — cello
+    &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D; */
+    {
+      id: &#x27;lorena-sanchez&#x27;,
+      name: &#x27;Lorena Sánchez&#x27;,
+      avatarUrl: &#x27;/assets/img/trainers/lorena-sanchez.jpg&#x27;,
+      instruments: [&#x27;violin&#x27;],
+      styles: [&#x27;clasico&#x27;, &#x27;ambient&#x27;],
+      levelRange: [&#x27;principiante&#x27;, &#x27;intermedio&#x27;],
+      modalities: [&#x27;presencial&#x27;, &#x27;online&#x27;],
+      shortDescription:
+        &#x27;Técnica clásica con enfoque moderno y musical.&#x27;,
+      fullDescription:
+        &#x27;Postura, arco, afinación, repertorio clásico y adaptaciones modernas para cello... (texto largo)&#x27;,
+      city: &#x27;Santiago&#x27;,
+      commune: &#x27;Peñalolén&#x27;,
+      hourlyRate: 32000,
+      rating: 4.8,
+      ratingCount: 12,
+      languages: [&#x27;Español&#x27;],
+      experience: &#x27;Orquestas juveniles, cuerdas y ensambles.&#x27;,
+      education: &#x27;Conservatorio privado.&#x27;,
+      weeklyAvailability: [
+        { day: &#x27;Sab&#x27;, times: [&#x27;14:00&#x27;, &#x27;15:00&#x27;] },
+      ],
+      courses: [],
+      reviews: [],
+      gear: [
+        {
+          name: &#x27;Cello Stentor Student II&#x27;,
+          description: &#x27;Modelo estudiantil.&#x27;,
+          reason: &#x27;Buen brillo y sustain para principiantes.&#x27;,
+        },
+      ],
+    },
+
+    /* &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+       13) JAVIER ARANCIBIA — guitarra flamenca
+    &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D; */
+    {
+      id: &#x27;javier-arancibia&#x27;,
+      name: &#x27;Javier Arancibia&#x27;,
+      avatarUrl: &#x27;/assets/img/trainers/javier-arancibia.jpg&#x27;,
+      instruments: [&#x27;guitarra-acustica&#x27;],
+      styles: [&#x27;pop&#x27;],
+      levelRange: [&#x27;principiante&#x27;, &#x27;intermedio&#x27;],
+      modalities: [&#x27;presencial&#x27;],
+      shortDescription:
+        &#x27;Técnica flamenca tradicional: rasgueos, picado y compás.&#x27;,
+      fullDescription:
+        &#x27;Rasgueos, picado, compás, falsetas, estudio de palos y repertorio tradicional... (texto largo)&#x27;,
+      city: &#x27;Santiago&#x27;,
+      commune: &#x27;Santiago Centro&#x27;,
+      hourlyRate: 26000,
+      rating: 4.6,
+      ratingCount: 17,
+      languages: [&#x27;Español&#x27;],
+      experience: &#x27;Formación tradicional con maestros flamencos.&#x27;,
+      education: &#x27;Escuela de Flamenco (España, modalidad online).&#x27;,
+      weeklyAvailability: [
+        { day: &#x27;Mie&#x27;, times: [&#x27;20:00&#x27;] },
+      ],
+      courses: [],
+      reviews: [],
+      gear: [
+        {
+          name: &#x27;Guitarra Flamenca Alhambra 5F&#x27;,
+          description: &#x27;Modelo flamenco.&#x27;,
+          reason: &#x27;Golpeador y respuesta rápida.&#x27;,
+        },
+      ],
+    },
+
+    /* &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+       14) ANDREA RIVAS — teclado pop
+    &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D; */
+    {
+      id: &#x27;andrea-rivas&#x27;,
+      name: &#x27;Andrea Rivas&#x27;,
+      avatarUrl: &#x27;/assets/img/trainers/andrea-rivas.jpg&#x27;,
+      instruments: [&#x27;teclado&#x27;],
+      styles: [&#x27;pop&#x27;],
+      levelRange: [&#x27;principiante&#x27;, &#x27;intermedio&#x27;],
+      modalities: [&#x27;online&#x27;],
+      shortDescription:
+        &#x27;Aprende arreglos, síntesis básica y acompañamiento pop.&#x27;,
+      fullDescription:
+        &#x27;Clases centradas en acordes, voicings simples, arpegios, acompañamiento y diseño sonoro básico... (texto largo)&#x27;,
+      city: &#x27;Santiago&#x27;,
+      commune: &#x27;Las Condes&#x27;,
+      hourlyRate: 20000,
+      rating: 4.7,
+      ratingCount: 14,
+      languages: [&#x27;Español&#x27;],
+      experience: &#x27;Tecladista pop y estudio de producción.&#x27;,
+      education: &#x27;Cursos independientes + años de escenario.&#x27;,
+      weeklyAvailability: [
+        { day: &#x27;Dom&#x27;, times: [&#x27;11:00&#x27;] },
+      ],
+      courses: [],
+      reviews: [],
+      gear: [
+        {
+          name: &#x27;Teclado Roland Juno DS&#x27;,
+          description: &#x27;Workstation.&#x27;,
+          reason: &#x27;Sonidos modernos para pop y synthwave.&#x27;,
+        },
+      ],
+    },
+
+    /* &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+       15) RODRIGO VEGA — percusión latina
+    &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D; */
+    {
+      id: &#x27;rodrigo-vega&#x27;,
+      name: &#x27;Rodrigo Vega&#x27;,
+      avatarUrl: &#x27;/assets/img/trainers/rodrigo-vega.jpg&#x27;,
+      instruments: [&#x27;guitarra-acustica&#x27;],
+      styles: [&#x27;pop&#x27;],
+      levelRange: [&#x27;principiante&#x27;, &#x27;intermedio&#x27;],
+      modalities: [&#x27;presencial&#x27;],
+      shortDescription:
+        &#x27;Congas, bongó, timbal y ritmos afrolatinos desde cero.&#x27;,
+      fullDescription:
+        &#x27;Clases prácticas de percusión latina: técnica, postura, toques, patrones y acompañamientos... (texto largo)&#x27;,
+      city: &#x27;Santiago&#x27;,
+      commune: &#x27;Quilicura&#x27;,
+      hourlyRate: 22000,
+      rating: 4.6,
+      ratingCount: 11,
+      languages: [&#x27;Español&#x27;],
+      experience: &#x27;Bandas de salsa y fusión.&#x27;,
+      education: &#x27;Talleres en escuelas latinoamericanas.&#x27;,
+      weeklyAvailability: [
+        { day: &#x27;Mar&#x27;, times: [&#x27;19:00&#x27;] },
+      ],
+      courses: [],
+      reviews: [],
+      gear: [
+        {
+          name: &#x27;Conga LP Galaxy&#x27;,
+          description: &#x27;Madera premium.&#x27;,
+          reason: &#x27;Proyección ideal para estilos latinos.&#x27;,
+        },
+      ],
+    },
+
+    /* &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+       16) IGNACIO SEPÚLVEDA — guitarra acústica fingerstyle
+    &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D; */
+    {
+      id: &#x27;ignacio-sepulveda&#x27;,
+      name: &#x27;Ignacio Sepúlveda&#x27;,
+      avatarUrl: &#x27;/assets/img/trainers/ignacio-sepulveda.jpg&#x27;,
+      instruments: [&#x27;guitarra-acustica&#x27;],
+      styles: [&#x27;fingerstyle&#x27;, &#x27;folk&#x27;, &#x27;ambient&#x27;],
+      levelRange: [&#x27;intermedio&#x27;, &#x27;avanzado&#x27;],
+      modalities: [&#x27;online&#x27;, &#x27;presencial&#x27;],
+      shortDescription:
+        &#x27;Fingerstyle moderno: percusiones, acordes abiertos y armonía avanzada.&#x27;,
+      fullDescription:
+        &#x27;Clases personalizadas de fingerstyle: técnicas percutivas, afinaciones abiertas, arreglos solistas... (texto largo)&#x27;,
+      city: &#x27;Santiago&#x27;,
+      commune: &#x27;Puente Alto&#x27;,
+      hourlyRate: 27000,
+      rating: 4.9,
+      ratingCount: 33,
+      languages: [&#x27;Español&#x27;, &#x27;Inglés&#x27;],
+      experience: &#x27;Guitarrista fingerstyle con álbumes propios.&#x27;,
+      education: &#x27;Autodidacta + cursos internacionales.&#x27;,
+      weeklyAvailability: [
+        { day: &#x27;Jue&#x27;, times: [&#x27;17:00&#x27;, &#x27;18:00&#x27;] },
+      ],
+      courses: [],
+      reviews: [],
+      gear: [
+        {
+          name: &#x27;Guitarra Taylor 214ce&#x27;,
+          description: &#x27;Electroacústica.&#x27;,
+          reason: &#x27;Claridad y dinámica ideales para fingerstyle.&#x27;,
+        },
+      ],
+    },
+
+]</code>
+                    </td>
+                </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Listado estático de tutores disponibles en SoundSeeker.</p>
+<p>Este mock reúne perfiles completos de profesores reales: instrumentos,
+estilos, niveles, modalidades, experiencia, educación, disponibilidad,
+cursos asociados y equipo. Sirve para construir toda la sección de tutores,
+probar fichas individuales, filtros, grillas y páginas de detalle.</p>
+<p>La estructura sigue exactamente el modelo <code>Tutor</code>, lo que permite:</p>
+<ul>
+<li>Crear una experiencia creíble mientras no existe un backend.</li>
+<li>Probar búsqueda por estilos, instrumentos, nivel y comuna.</li>
+<li>Renderizar horarios, valor por hora, reviews y equipo real de cada tutor.</li>
+</ul>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+</section>
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'miscellaneous-variables';
+            var COMPODOC_CURRENT_PAGE_URL = 'variables.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

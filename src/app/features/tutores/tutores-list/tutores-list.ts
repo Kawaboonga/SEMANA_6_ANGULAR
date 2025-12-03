@@ -1,12 +1,3 @@
-// ============================================================================
-//  LISTA DE TUTORES
-//  ---------------------------------------------------------------------------
-//  Este componente:
-//    • Muestra el listado de tutores usando <app-tutor-card>
-//    • Controla los filtros de búsqueda (instrumentos, estilos, modalidad, comuna…)
-//    • Consume la lógica de filtrado del TutorService (smart component)
-//    • Usa tutor-filter-bar como componente “tonto” que solo emite eventos
-// ============================================================================
 
 import { Component, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -17,80 +8,128 @@ import { TutorCardComponent } from '@shared/components/tutor-card/tutor-card';
 import { TutorFilterBarComponent } from '@shared/components/tutor-filter-bar/tutor-filter-bar';
 import { FadeUpDirective } from '@shared/directives/fade-up';
 
-
+/**
+ * ============================================================================
+ * Componente: TutoresListComponent
+ * ============================================================================
+ *
+ * @description
+ * Vista principal del listado de tutores.  
+ * Funciona como **smart component**, concentrando:
+ * - Estado global del filtro (expuesto por TutorService)
+ * - Lista reactiva de tutores ya filtrados
+ * - Eventos provenientes de la barra de filtros
+ *
+ * La presentación (tarjetas, UI y animaciones) se delega a componentes tontos.
+ *
+ * @usageNotes
+ * - El filtrado real ocurre en TutorService mediante signals + computed.
+ * - Este componente solo coordina entradas y salidas.
+ * - TutorFilterBarComponent nunca debería hacer lógica pesada.
+ *
+ * @example
+ * <app-tutores-list></app-tutores-list>
+ */
 @Component({
   selector: 'app-tutores-list',
   standalone: true,
   imports: [
     CommonModule,
     RouterLink,
-    TutorCardComponent,        // Tarjeta visual de tutor (dumb component)
-    TutorFilterBarComponent,   // Barra de filtros (dumb component)
+    TutorCardComponent,
+    TutorFilterBarComponent,
     FadeUpDirective,
   ],
   templateUrl: './tutores-list.html',
 })
 export class TutoresListComponent {
 
-  // ==========================================================================
-  //  INYECCIÓN DEL SERVICIO PRINCIPAL
-  // --------------------------------------------------------------------------
-  //  TutorService contiene:
-  //    • lista completa de tutores
-  //    • filtro actual
-  //    • lógica de filtrado
-  // ==========================================================================
+  // ---------------------------------------------------------------------------
+  // INYECCIÓN DEL SERVICIO PRINCIPAL
+  // ---------------------------------------------------------------------------
+  /**
+   * @description
+   * TutorService mantiene:
+   * - Lista completa de tutores
+   * - Estado del filtro actual
+   * - Lógica de filtrado centralizada
+   */
   private service = inject(TutorService);
 
-  // ==========================================================================
-  //  FILTER (signal readonly)
-  //  -------------------------------------------------------------------------
-  //  Expone el estado del filtro actual. Se usa para mostrar valores actuales
-  //  dentro de la barra de filtros (componentes tontos).
-  // ==========================================================================
+  // ---------------------------------------------------------------------------
+  // FILTRO ACTUAL (readonly)
+  // ---------------------------------------------------------------------------
+  /**
+   * @description
+   * Signal readonly con el estado actual del filtro.
+   * Se usa para mostrar valores actuales en la barra de filtros.
+   */
   filter = this.service.filter;
 
-  // ==========================================================================
-  //  TUTORES FILTRADOS
-  //  -------------------------------------------------------------------------
-  //  `filteredTutors()` viene del servicio y aplica:
-  //    • instrumento
-  //    • estilo
-  //    • nivel
-  //    • modalidad
-  //    • comuna
-  //    • texto de búsqueda
-  //
-  //  computed() → se recalcula en automático si cambia el filtro
-  // ==========================================================================
+  // ---------------------------------------------------------------------------
+  // LISTA DE TUTORES FILTRADOS
+  // ---------------------------------------------------------------------------
+  /**
+   * @description
+   * Lista final de tutores ya filtrados según:
+   * - instrumento
+   * - nivel
+   * - estilo
+   * - modalidad
+   * - rango de precio
+   * - texto de búsqueda
+   *
+   * @returns Tutor[]
+   * @example
+   * <app-tutor-card *ngFor="let t of tutors()" [tutor]="t"></app-tutor-card>
+   */
   tutors = computed(() => this.service.filteredTutors());
 
-  // ==========================================================================
-  //  ACTUALIZACIÓN DE FILTROS
-  //  -------------------------------------------------------------------------
-  //  El componente de filtros emite un objeto parcial:
-  //    { instrument?: string, style?: string, ... }
-  //  Aquí se pasa al servicio, que actualiza el signal del filtro.
-  // ==========================================================================
+  // ---------------------------------------------------------------------------
+  // EVENTO: CAMBIO DE FILTROS
+  // ---------------------------------------------------------------------------
+  /**
+   * @description
+   * Recibe un objeto parcial con cambios del filtro emitido por
+   * <app-tutor-filter-bar>. El servicio actualiza el signal del filtro.
+   *
+   * @param {Partial<TutorFilter>} partial - Campos del filtro a sobrescribir.
+   *
+   * @example
+   * onFilterChange({ instrument: 'guitarra' });
+   */
   onFilterChange(partial: Partial<TutorFilter>) {
     this.service.setFilter(partial);
   }
 
-  // ==========================================================================
-  //  RESETEO GENERAL DE FILTROS
-  //  -------------------------------------------------------------------------
-  //  Resetea todos los filtros del servicio a sus valores iniciales.
-  // ==========================================================================
+  // ---------------------------------------------------------------------------
+  // EVENTO: RESET GENERAL DE FILTROS
+  // ---------------------------------------------------------------------------
+  /**
+   * @description
+   * Restaura todos los filtros a sus valores por defecto:
+   * - instrument: 'todos'
+   * - level: 'todos'
+   * - style: 'todos'
+   * - modality: 'todos'
+   * - búsqueda vacía
+   * - sin rangos de precio
+   *
+   * @usageNotes
+   * Esto actualiza la UI y el listado automáticamente gracias a signals.
+   */
   onResetFilters() {
     this.service.resetFilter();
   }
 
-  // ==========================================================================
-  //  ALIAS PARA EL TEMPLATE
-  //  -------------------------------------------------------------------------
-  //  Algunas plantillas esperan el método “onResetFilter” (sin 's').
-  //  Creamos una compatibilidad suave para no romper nada.
-  // ==========================================================================
+  // ---------------------------------------------------------------------------
+  // ALIAS PARA COMPATIBILIDAD
+  // ---------------------------------------------------------------------------
+  /**
+   * @description
+   * Alias suave para plantillas antiguas que esperan el nombre
+   * `onResetFilter()` (singular). Internamente reusa el nuevo método plural.
+   */
   onResetFilter(): void {
     if (typeof (this as any).onResetFilters === 'function') {
       (this as any).onResetFilters();

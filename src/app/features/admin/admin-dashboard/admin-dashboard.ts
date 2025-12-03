@@ -1,4 +1,3 @@
-// src/app/features/admin/admin-dashboard/admin-dashboard.ts
 
 import { Component, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -12,42 +11,70 @@ import { TutorService } from '@core/services/tutor.service';
   imports: [CommonModule],
   templateUrl: './admin-dashboard.html',
 })
+/**
+ * Dashboard principal del panel de administración.
+ *
+ * Este componente muestra indicadores globales del sistema:
+ * - Cantidad total de tutores
+ * - Productos cargados y activos en carruseles
+ * - Usuarios internos del panel (admin/editor/viewer)
+ *
+ * Se apoya en dos servicios:
+ * - `TutorService` → ya expone signals reactivos.
+ * - `AdminDataService` → arrays simples envueltos en `computed()` para
+ *   poder actualizarlos de forma reactiva en el template.
+ *
+ * No contiene lógica de CRUD, solo lectura y métricas.
+ */
 export class AdminDashboard {
+
   // ============================================================
   // 1) Inyección de servicios
   // ============================================================
-  // AdminDataService: concentra datos de productos y usuarios internos del panel.
+
+  /** Servicio con datos de productos y usuarios internos del panel admin. */
   private adminData = inject(AdminDataService);
 
-  // TutorService: expone la lista de tutores (ya viene con signals).
+  /** Servicio que entrega la lista de tutores (usa signals). */
   private tutorService = inject(TutorService);
 
   // ============================================================
-  // 2) Fuentes de datos del dashboard (tutores / productos / usuarios)
+  // 2) Fuentes de datos del dashboard
   // ============================================================
 
-  // TUTORES
-  // El servicio de tutores ya expone un signal readonly → lo usamos directo.
+  /**
+   * Lista reactiva de tutores.
+   * Viene como signal readonly desde `TutorService`.
+   */
   tutors = this.tutorService.tutors;
 
-  // PRODUCTOS
-  // AdminDataService NO usa signals, así que lo envolvemos con computed
-  // para poder usarlo como si fuera reactivo en el template.
+  /**
+   * Lista de productos administrados.
+   * `AdminDataService` no usa signals, así que lo envuelvo en computed()
+   * para que el template pueda reaccionar automáticamente a los cambios.
+   */
   products = computed(() => this.adminData.products);
 
-  // USUARIOS ADMIN
-  // Lo mismo: envolvemos la lista en un computed.
+  /**
+   * Lista de usuarios internos (admin/editor/viewer).
+   * También envuelto en computed() por las mismas razones.
+   */
   users = computed(() => this.adminData.users);
 
   // ============================================================
-  // 3) Indicadores de TUTORES (cards KPI)
+  // 3) Indicadores de TUTORES
   // ============================================================
 
-  // Total de tutores registrados.
+  /**
+   * Total de tutores registrados en el sistema.
+   * Se usa en la card "Tutores" del dashboard.
+   */
   totalTutores = computed(() => this.tutors().length);
 
-  // Lista de tutores considerados “destacados” según rating.
-  // Útil para mostrar un pequeño resumen o un listado compacto.
+  /**
+   * Tutores con buen rendimiento (rating ≥ 4.5).
+   * Útil para un pequeño “top” o panel lateral del dashboard.
+   */
   destacadosTutores = computed(() =>
     this.tutors().filter((t) => t.rating >= 4.5),
   );
@@ -56,18 +83,31 @@ export class AdminDashboard {
   // 4) Indicadores de PRODUCTOS
   // ============================================================
 
-  // Cantidad total de productos administrados.
+  /**
+   * Total de productos administrados.
+   * Representa todos los cargados a través del panel /admin.
+   */
   totalProductos = computed(() => this.products().length);
 
-  // Cantidad de productos activos que están marcados para aparecer en carruseles.
-  productosEnCarrusel = computed(
-    () => this.products().filter((p) => p.showInCarousel && p.isActive).length,
+  /**
+   * Cantidad de productos activos marcados para aparecer en el carrusel.
+   * Se usa para ver cuánta oferta está destacada visualmente en el sitio.
+   */
+  productosEnCarrusel = computed(() =>
+    this.products().filter((p) => p.showInCarousel && p.isActive).length,
   );
 
   // ============================================================
   // 5) Indicadores de USUARIOS ADMIN
   // ============================================================
 
-  // Total de usuarios internos (admin/editor/viewer) del panel.
+  /**
+   * Total de usuarios internos del panel:
+   * - admin
+   * - editor
+   * - viewer
+   *
+   * Esto NO es lo mismo que los usuarios del sitio (AuthService).
+   */
   totalUsuarios = computed(() => this.users().length);
 }

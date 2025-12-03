@@ -1,5 +1,3 @@
-// src/app/shared/components/course-card/course-card.ts
-
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
@@ -7,28 +5,49 @@ import { RouterLink } from '@angular/router';
 import { Course } from '@core/models/course.model';
 
 /**
- * ============================================================
- *  COURSE CARD COMPONENT
- * ============================================================
+ * ========================================================================
+ * COURSE CARD COMPONENT
+ * ========================================================================
+ * @description
+ * Componente visual reutilizable para renderizar una tarjeta de curso.
+ * Está diseñado como **dumb component**, lo que significa:
  *
- *  Componente visual reutilizable para mostrar información
- *  resumida de un curso:
+ *  ✔ No contiene lógica de negocio  
+ *  ✔ No consulta servicios  
+ *  ✔ No filtra ni ordena  
+ *  ✔ Solo recibe un `Course` y lo muestra
  *
- *    - imagen
- *    - nombre / título
- *    - dificultad + duración
- *    - modalidad
- *    - precio
+ * Esto permite reutilizar la misma tarjeta en:
+ *  - grids de cursos
+ *  - Sección “Más cursos del tutor”
+ *  - carouseles del home
+ *  - resultados de búsqueda
+ *  - módulos futuros sin duplicar HTML
  *
- *  Este componente es un “dumb component”:
- *    ✔ solo recibe un @Input()
- *    ✔ no contiene lógica de negocio
- *    ✔ no carga datos, no filtra, no consulta servicios
- *    ✔ se limita a representar visualmente un Course
+ * @usageNotes
+ * Importar en cualquier vista standalone:
+ * ```ts
+ * imports: [CourseCardComponent]
+ * ```
  *
- *  Beneficio:
- *    → Permite que page-views, listas, carouseles y perfiles
- *      reutilicen exactamente la misma card sin duplicar HTML.
+ * En un template:
+ * ```html
+ * <app-course-card [course]="curso"></app-course-card>
+ * ```
+ *
+ * @example
+ * ```html
+ * <app-course-card
+ *      [course]="{
+ *        id: 'guitarra-basica',
+ *        title: 'Guitarra Básica',
+ *        difficulty: 'Principiante',
+ *        duration: '12 h · 6 clases',
+ *        modalities: ['Online'],
+ *        priceCLP: 19900
+ *      }"
+ * ></app-course-card>
+ * ```
  */
 @Component({
   selector: 'app-course-card',
@@ -38,54 +57,61 @@ import { Course } from '@core/models/course.model';
   styleUrls: ['./course-card.css'],
 })
 export class CourseCardComponent {
+
   /**
-   * ============================================================
-   *  INPUT PRINCIPAL
-   * ============================================================
+   * @description
+   * Modelo completo del curso que se desea mostrar.
+   *  
+   * **required: true** → evita que se renderice sin datos válidos.
    *
-   *  course → modelo completo de un curso.
-   *  El decorador required: true exige que siempre se entregue.
+   * @param course - Objeto `Course` con toda la información del curso.
    */
   @Input({ required: true }) course!: Course;
 
+
+  // ------------------------------------------------------------------------
+  // GETTERS DERIVADOS (presentación)
+  // ------------------------------------------------------------------------
+
   /**
-   * ============================================================
-   *  META DEL CURSO (dificultad + duración)
-   * ============================================================
+   * @description
+   * Construye la meta-información del curso:  
+   * `"Intermedio · 16 h · 8 clases"`
    *
-   * Ejemplo: "Intermedio · 16 h · 8 clases"
-   *
-   * Usado en la card bajo el título.
+   * @return string — Cadena lista para mostrarse en la card.
    */
   get meta(): string {
     return `${this.course.difficulty} · ${this.course.duration}`;
   }
 
   /**
-   * ============================================================
-   *  MODALIDADES (texto)
-   * ============================================================
+   * @description
+   * Devuelve la lista de modalidades como texto simple.
    *
-   * El curso puede tener una o varias modalidades:
-   *   ["Presencial", "Online"] → "Presencial,Online"
+   * Ejemplo:
+   * ```
+   * ['Presencial', 'Online'] → "Presencial,Online"
+   * ```
    *
-   * Si en el futuro deseas íconos (walking/video), este getter
-   * seguirá siendo útil como fallback o tooltip.
+   * @return string — Modalidades unidas para uso en texto o tooltip.
+   *
+   * @usageNotes
+   * Puedes reemplazarlo por íconos más adelante sin romper el API.
    */
   get mod(): string {
     return `${this.course.modalities}`;
   }
 
   /**
-   * ============================================================
-   *  PRECIO FORMATEADO
-   * ============================================================
+   * @description
+   * Formatea el precio del curso en pesos chilenos (CLP).
    *
-   * Formatea el precio en CLP de forma consistente con toda la app:
+   * @return string — Precio formateado, ej: `$25.000`.
    *
-   *   25000 → "$25.000"
-   *
-   * Ideal para no repetir Intl.NumberFormat en múltiples templates.
+   * @example
+   * ```ts
+   * priceLabel → "$89.990"
+   * ```
    */
   get priceLabel(): string {
     return new Intl.NumberFormat('es-CL', {

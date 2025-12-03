@@ -1,28 +1,62 @@
-
 import { Injectable, signal, computed } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
+/**
+ * Servicio global de carga (loading indicator).
+ *
+ * Lleva un conteo interno de procesos activos (peticiones HTTP, fetch,
+ * tareas asíncronas o cualquier operación que requiera mostrar un loader).
+ *
+ * Mientras exista al menos un proceso activo, `isLoading` será `true`.
+ * Esto permite mostrar un spinner global, un overlay o alguna animación
+ * consistente en toda la aplicación sin tener que manejar flags por separado.
+ *
+ * @usageNotes
+ * - Llama a `show()` justo antes de iniciar un proceso.
+ * - Llama a `hide()` cuando la operación finalice.
+ * - El contador nunca baja de 0 gracias al `Math.max`.
+ * - Ideal para usarlo junto a interceptores HTTP o eventos de navegación.
+ *
+ * @example
+ * this.loadingService.show();
+ * await apiCall();
+ * this.loadingService.hide();
+ */
 export class LoadingService {
-  // Lleva el conteo de solicitudes activas (fetch, http, procesos de carga).
-  // Cada vez que empieza algo → incremento; cuando termina → decremento.
+  /**
+   * Contador interno de solicitudes activas.
+   * Cada `show()` incrementa, cada `hide()` decrementa.
+   * Nunca debe quedar negativo.
+   */
   private _activeRequests = signal(0);
 
-  // Expone un booleano reactivo para la UI.
-  // isLoading será true cuando haya al menos 1 solicitud activa.
-  // Se usa para mostrar un spinner global o un loader de página.
+  /**
+   * Estado reactivo que indica si existe algún proceso en curso.
+   * `true` → hay al menos una operación activa.
+   * `false` → no hay procesos pendientes.
+   *
+   * Se usa para mostrar el loader global en UI.
+   */
   readonly isLoading = computed(() => this._activeRequests() > 0);
 
-  // Marca el inicio de un proceso.
-  // Ej: antes de un http.get().
+  /**
+   * Marca el inicio de un proceso de carga.
+   *
+   * @example
+   * this.loadingService.show();
+   */
   show(): void {
     this._activeRequests.update(v => v + 1);
   }
 
-  // Marca el fin de un proceso.
-  // Aseguro que nunca baje de 0, por seguridad.
+  /**
+   * Marca el término de un proceso de carga.
+   * El contador nunca baja de 0 por seguridad.
+   *
+   * @example
+   * this.loadingService.hide();
+   */
   hide(): void {
     this._activeRequests.update(v => Math.max(v - 1, 0));
   }
 }
-
-

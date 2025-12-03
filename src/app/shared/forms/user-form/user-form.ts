@@ -30,25 +30,53 @@ import { User, UserRole } from '@core/models/user.model';
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './user-form.html',
 })
+
+/**
+ * @description
+ * Formulario de administración para crear y editar usuarios (`User`).
+ *
+ * Responsabilidades:
+ * - Construir un `FormGroup` consistente usando `buildUserForm`.
+ * - Soportar modo creación (`initialValue = null`) y modo edición (`initialValue` con datos).
+ * - Emitir un `User` completo y normalizado al componente padre cuando el form es válido.
+ *
+ * @usageNotes
+ * ```html
+ * <app-user-form
+ *   [roles]="['admin','instructor','user']"
+ *   [initialValue]="usuarioSeleccionado"
+ *   (save)="onSaveUser($event)"
+ *   (cancel)="onCancelUser()">
+ * </app-user-form>
+ * ```
+ */
 export class UserFormComponent implements OnInit {
   // ==========================================================================
   // INPUTS
   // ==========================================================================
 
   /**
-   * roles:
-   *   Lista de roles válidos que puede asignar el admin a un usuario.
-   *   - Se usa para poblar el <select> de rol en el template.
-   *   - El valor por defecto incluye los tres roles principales.
-   *   Si en el futuro se agregan roles nuevos se pueden inyectar desde fuera.
+   * @description
+   * Lista de roles válidos que puede asignar el admin a un usuario.
+   * Se usa para poblar el `<select>` de rol en el template.
+   *
+   * @usageNotes
+   * Puedes inyectar una lista distinta de roles desde el padre:
+   * ```html
+   * <app-user-form [roles]="['admin','user']"></app-user-form>
+   * ```
    */
   @Input() roles: UserRole[] = ['admin', 'instructor', 'user'];
 
   /**
-   * initialValue:
-   *   - Si viene null → el formulario se usa para crear un usuario nuevo.
-   *   - Si trae un User → el formulario se rellena con esos datos
-   *     (modo edición).
+   * @description
+   * Valor inicial del formulario.
+   *
+   * - `null` → modo creación (usuario nuevo).
+   * - `User` → modo edición (el formulario se rellena con esos datos).
+   *
+   * @usageNotes
+   * Útil para reutilizar el mismo componente en "crear" y "editar".
    */
   @Input() initialValue: User | null = null;
 
@@ -57,16 +85,31 @@ export class UserFormComponent implements OnInit {
   // ==========================================================================
 
   /**
-   * cancel:
-   *   Evento simple para indicar al componente padre que se canceló
-   *   la operación (cerrar modal, panel, etc.).
+   * @description
+   * Evento simple para indicar al componente padre que se canceló
+   * la operación (cerrar modal, panel lateral, etc.).
+   *
+   * @example
+   * ```ts
+   * onCancelUser() {
+   *   this.showForm = false;
+   * }
+   * ```
    */
+
   @Output() cancel = new EventEmitter<void>();
 
   /**
-   * save:
-   *   Emite el User ya armado y normalizado cuando el formulario pasa
-   *   las validaciones y se hace submit.
+   * @description
+   * Emite el `User` ya armado y normalizado cuando el formulario
+   * pasa las validaciones y se hace submit.
+   *
+   * @example
+   * ```ts
+   * onSaveUser(user: User) {
+   *   this.userService.upsert(user);
+   * }
+   * ```
    */
   @Output() save = new EventEmitter<User>();
 
@@ -75,19 +118,20 @@ export class UserFormComponent implements OnInit {
   // ==========================================================================
 
   /**
-   * form:
-   *   FormGroup que contiene todos los campos del usuario:
-   *   nombre, correo, rol, password (provisorio), dirección, etc.
-   *   Se construye usando buildUserForm para mantener consistencia
-   *   con otros formularios de usuario.
+   * @description
+   * `FormGroup` que contiene todos los campos del usuario:
+   * nombre, correo, rol, password (provisoria), dirección, etc.
+   *
+   * Se construye usando `buildUserForm` para mantener consistencia
+   * con otros formularios de usuario.
    */
   form: FormGroup;
 
   /**
-   * submitted:
-   *   Flag para marcar que se intentó enviar el formulario.
-   *   Se puede usar en el template si se quiere diferenciar
-   *   errores "antes/después" del submit.
+   * @description
+   * Flag para marcar que se intentó enviar el formulario.
+   * Se puede usar en el template para diferenciar errores
+   * antes y después del submit.
    */
   submitted = false;
 
@@ -95,16 +139,19 @@ export class UserFormComponent implements OnInit {
   // CONSTRUCTOR
   // ==========================================================================
 
+  /**
+   * @description
+   * Constructor del componente. Crea el formulario base usando
+   * el builder compartido `buildUserForm`.
+   *
+   * @param fb Servicio `FormBuilder` de Angular para formularios reactivos.
+   *
+   * @usageNotes
+   * El builder recibe opciones:
+   * - `includeRole: true`     → incluye el control de rol.
+   * - `includeIsActive: true` → incluye el control `isActive`.
+   */
   constructor(private fb: FormBuilder) {
-    /**
-     * Se crea el form usando un builder compartido:
-     * - includeRole: true     → incluye el control de rol en el form.
-     * - includeIsActive: true → incluye el switch/checkbox de "isActive".
-     *
-     * Ventaja:
-     * - Si en algún momento se necesita el mismo formulario en otra parte,
-     *   basta con reutilizar buildUserForm con otras opciones.
-     */
     this.form = buildUserForm(this.fb, {
       includeRole: true,
       includeIsActive: true,
@@ -116,15 +163,16 @@ export class UserFormComponent implements OnInit {
   // ==========================================================================
 
   /**
-   * ngOnInit:
-   *   Si initialValue trae un usuario, se hace patchValue para pasar
-   *   el formulario directo a modo edición.
+   * @description
+   * Hook de inicialización del componente.
    *
-   *   Nota:
-   *   - Se copian campo a campo para mantener claro qué se mapea.
-   *   - La password se carga también, pero está marcada como "temporal"
-   *     porque en un escenario real esto debería manejarse desde el backend
-   *     (nunca deberíamos manejar passwords en claro).
+   * Si `initialValue` trae un usuario:
+   * - Se hace `patchValue` para pasar el formulario directo a modo edición.
+   * - Se copian los campos uno a uno para mantener claro el mapeo.
+   *
+   * @usageNotes
+   * El campo `password` se carga también, pero está marcado como temporal:
+   * en un escenario real las passwords deberían manejarse siempre en el backend.
    */
   ngOnInit(): void {
     if (this.initialValue) {
@@ -146,17 +194,30 @@ export class UserFormComponent implements OnInit {
   // ==========================================================================
 
   /**
-   * hasError:
-   *   Helper pequeño para el HTML.
+   * @description
+   * Helper pequeño de validación para el template.
    *
-   *   Uso típico:
-   *     [class.is-invalid]="hasError('email','required')"
-   *     *ngIf="hasError('email','email')"
+   * Devuelve `true` si:
+   * - El control existe.
+   * - Fue tocado (`touched`).
+   * - Tiene el error con el código indicado (`errorCode`).
    *
-   *   Condición:
-   *   - El control debe existir.
-   *   - Debe estar "touched".
-   *   - Debe tener el error con el código indicado (errorCode).
+   * @param controlName Nombre del control dentro del formulario (ej: `"email"`).
+   * @param errorCode Código de error (ej: `"required"`, `"email"`).
+   * @returns `true` si el control cumple las condiciones anteriores.
+   *
+   * @example
+   * ```html
+   * <input
+   *   type="email"
+   *   class="form-control"
+   *   formControlName="email"
+   *   [class.is-invalid]="hasError('email','required') || hasError('email','email')"
+   * />
+   * <div class="invalid-feedback" *ngIf="hasError('email','required')">
+   *   El correo es obligatorio.
+   * </div>
+   * ```
    */
   hasError(controlName: string, errorCode: string): boolean {
     const control = this.form.get(controlName);
@@ -168,28 +229,27 @@ export class UserFormComponent implements OnInit {
   // ==========================================================================
 
   /**
-   * onSubmit:
-   *   Lógica principal de guardado.
+   * @description
+   * Maneja el envío del formulario de usuario.
    *
-   *   Flujo:
-   *   1. Marca el formulario como sometido (submitted = true).
-   *   2. Si el formulario es inválido:
-   *        - Llama a markAllAsTouched() para que se muestren todos
-   *          los errores en pantalla.
-   *        - No hace nada más.
-   *   3. Si es válido:
-   *        - Toma form.value.
-   *        - Construye un objeto User completo:
-   *            • Si ya existe un id → lo reutiliza (modo edición).
-   *            • Si no, genera un UUID nuevo.
-   *            • Preserva createdAt si estaba definido, o lo crea nuevo.
-   *            • Actualiza siempre updatedAt con el momento actual.
-   *        - Emite el usuario por el EventEmitter `save`.
+   * Flujo:
+   * 1. Marca el formulario como sometido (`submitted = true`).
+   * 2. Si el formulario es inválido:
+   *    - Llama a `markAllAsTouched()` para mostrar todos los errores.
+   *    - No emite nada.
+   * 3. Si es válido:
+   *    - Toma `form.value`.
+   *    - Construye un objeto `User` completo:
+   *        • Si ya existe un `id` → lo reutiliza (modo edición).
+   *        • Si no, genera un `crypto.randomUUID()` (modo creación).
+   *        • Preserva `createdAt` si estaba definido o lo inicializa ahora.
+   *        • Siempre actualiza `updatedAt` con la fecha/hora actual.
+   *    - Emite el usuario mediante el `EventEmitter` `save`.
    *
-   *   Nota importante:
-   *   - El campo password está aquí solo como campo plano y marcado
-   *     como "temporal". En un entorno real debería ser gestionado
-   *     en el backend (hash, reset, etc.).
+   * @usageNotes
+   * El campo `password` en este componente se trata como texto plano
+   * solo de manera temporal. En un sistema real, la contraseña debería
+   * ser enviada a un backend que la procese (hash, reset, etc.).
    */
   onSubmit(): void {
     this.submitted = true;
@@ -212,7 +272,7 @@ export class UserFormComponent implements OnInit {
       role: formValue.role,
       dateOfBirth: formValue.dateOfBirth,
 
-      // ⚠️ Campo sensible: solo temporal mientras no exista un backend real
+      // Campo sensible: solo temporal mientras no exista un backend real
       // que maneje la password de forma segura.
       password: formValue.password,
 
@@ -237,10 +297,18 @@ export class UserFormComponent implements OnInit {
   // ==========================================================================
 
   /**
-   * onCancel:
-   *   Simplemente emite el evento cancel para que el padre
-   *   cierre el formulario o vuelva a la vista anterior.
-   *   No modifica el form ni los datos.
+   * @description
+   * Notifica al componente padre que se canceló la operación.
+   *
+   * No modifica el formulario ni los datos; solo emite el evento `cancel`,
+   * para que el padre cierre el formulario o navegue a otra vista.
+   *
+   * @example
+   * ```ts
+   * onCancelUserForm(): void {
+   *   this.showUserForm = false;
+   * }
+   * ```
    */
   onCancel(): void {
     this.cancel.emit();

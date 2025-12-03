@@ -1,6 +1,35 @@
-
 import { Service } from '@core/models/service.model';
 
+/**
+ * Listado estático de servicios disponibles en SoundSeeker.
+ *
+ * Este mock funciona como base para construir toda la sección de “Servicios”:
+ * compra, venta, intercambio, mantención, reparaciones y pintura.  
+ * Su idea es mantener información clara, simple y directa para desarrollar
+ * la UI, probar navegación y cargar contenido sin depender todavía de un backend.
+ *
+ * Cada servicio incluye:
+ * - Identificador (`id`, `slug`)
+ * - Nombre y resumen corto para tarjetas
+ * - Imagen de referencia (unsplash)
+ * - Ícono (Bootstrap Icons)
+ * - Descripción detallada dividida en párrafos
+ *
+ * @usageNotes
+ * - Este mock puede reemplazarse por una API en el futuro sin cambiar la estructura.
+ * - Útil para pruebas de UI: cards, grids, rutas dinámicas, navegación por slug.
+ * - Mantiene el mismo tono que se busca en el proyecto: simple, humano y útil para el usuario final.
+ * - Si agrego campos nuevos en `Service`, recordar mantener actualizado este mock.
+ *
+ * @example
+ * // Ejemplo en ServiceService:
+ * getAll(): Service[] {
+ *   return SERVICES_MOCK;
+ * }
+ *
+ * // Ejemplo en un componente:
+ * this.services = this.serviceService.getAll();
+ */
 export const SERVICES_MOCK: Service[] = [
   {
     id: 'compra',

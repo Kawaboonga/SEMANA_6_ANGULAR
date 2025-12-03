@@ -43,18 +43,56 @@ import {
   templateUrl: './course-form.html',
   styleUrls: ['./course-form.css'],
 })
+/**
+ * @description
+ * Componente de formulario avanzado para crear y editar entidades `Course`.
+ *
+ * Responsabilidades:
+ * - Orquestar un `FormGroup` con todos los campos necesarios del modelo.
+ * - Ofrecer presets configurables (duración, modalidad, precios, rating, tags).
+ * - Convertir inputs “amigables” del admin (selects, textareas) en un
+ *   objeto `Course` completo, coherente y listo para persistir.
+ * - Emitir el curso normalizado hacia el componente padre mediante `@Output()`.
+ *
+ * @usageNotes
+ * ```html
+ * <app-course-form
+ *   [course]="cursoSeleccionado"
+ *   (save)="onSave($event)"
+ *   (cancel)="onCancel()">
+ * </app-course-form>
+ * ```
+ */
 export class CourseFormComponent implements OnChanges {
   // ============================================================
   // INPUT / OUTPUT
   // ============================================================
 
-  /** Curso a editar. Si es null → modo crear. */
+  /**
+   * @description
+   * Curso a editar. Si es `null`, el formulario funciona en modo “crear”.
+   */
   @Input() course: Course | null = null;
 
-  /** Emite el curso completo y normalizado cuando el form es válido. */
+  /**
+   * @description
+   * Emite un objeto `Course` completamente normalizado cuando el formulario
+   * es válido y se confirma el envío.
+   *
+   * @example
+   * ```ts
+   * onSave(course: Course) {
+   *   this.courseService.upsert(course);
+   * }
+   * ```
+   */
   @Output() save = new EventEmitter<Course>();
 
-  /** Emite cuando el usuario cancela (cerrar modal / panel). */
+  /**
+   * @description
+   * Evento simple para notificar al componente padre que el usuario canceló
+   * la edición/creación. Ideal para cerrar modales, drawers o paneles.
+   */
   @Output() cancel = new EventEmitter<void>();
 
   /** Formulario reactivo interno. */
@@ -75,12 +113,15 @@ export class CourseFormComponent implements OnChanges {
   ];
 
   /**
+   * @description
    * Presets de duración:
-   * - duration → etiqueta visible en el front.
-   * - durationHours → horas totales numéricas.
-   * - totalLessons → cantidad de clases.
+   * - `duration`       → etiqueta visible en el front.
+   * - `durationHours`  → horas totales numéricas.
+   * - `totalLessons`   → cantidad de clases.
    *
-   * El admin solo elige el preset; no tiene que calcular nada.
+   * @usageNotes
+   * El formulario guarda el índice del preset (`durationPreset`) y
+   * estos valores se copian automáticamente a los campos derivados.
    */
   durationPresets = [
     {
@@ -110,10 +151,16 @@ export class CourseFormComponent implements OnChanges {
   ];
 
   /**
+   * @description
    * Modalidades preconfiguradas:
-   * - value   → lo que se guarda en el form como "preset".
-   * - label   → lo que se muestra en el select.
-   * - modalities → arreglo real de CourseModality que se persiste en el modelo.
+   * - `value`      → lo que se guarda temporalmente en el form.
+   * - `label`      → texto visible en el select.
+   * - `modalities` → arreglo real de `CourseModality` que termina en el modelo.
+   *
+   * @example
+   * ```ts
+   * // value 'presencial-online' → ['Presencial', 'Online']
+   * ```
    */
   modalityPresets: {
     value: string;
@@ -144,8 +191,9 @@ export class CourseFormComponent implements OnChanges {
   pricePerHourPresets: number[] = [10000, 15000, 20000, 25000];
 
   /**
+   * @description
    * Presets de rating para no inventar números cada vez.
-   * Permite marcar cursos como “nuevo” o “top” rápidamente.
+   * Permiten marcar cursos como “nuevo”, “consolidado” o “top” rápidamente.
    */
   ratingPresets = [
     {
@@ -171,8 +219,11 @@ export class CourseFormComponent implements OnChanges {
   ];
 
   /**
+   * @description
    * Catálogo global de tags para cursos.
-   * Se usan tanto como checkboxes (selectedTags) como string CSV (tags).
+   * Se manejan tanto como:
+   * - checkboxes (colección `selectedTags`)
+   * - string CSV en el form (`tags`).
    */
   allTags: string[] = [
     'guitarra',
@@ -197,6 +248,23 @@ export class CourseFormComponent implements OnChanges {
   // ============================================================
   // CONSTRUCTOR
   // ============================================================
+
+  /**
+   * @description
+   * Constructor del componente.
+   *
+   * - Inyecta `FormBuilder`.
+   * - Construye el `FormGroup` inicial con todos los campos y defaults.
+   *
+   * @param fb Servicio `FormBuilder` para crear formularios reactivos.
+   *
+   * @example
+   * ```ts
+   * constructor(private fb: FormBuilder) {
+   *   this.buildForm();
+   * }
+   * ```
+   */
   constructor(private fb: FormBuilder) {
     this.buildForm();
   }
@@ -206,7 +274,14 @@ export class CourseFormComponent implements OnChanges {
   // ============================================================
 
   /**
-   * Se dispara cuando cambia el @Input() course (modo crear / editar).
+   * @description
+   * Hook que se dispara cuando cambia el `@Input() course`.
+   *
+   * Casos:
+   * - `course === null` → modo crear (reset con defaults).
+   * - `course` con valor → modo editar (se rellenan los campos).
+   *
+   * @param changes Cambios detectados en las propiedades de entrada.
    */
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['course']) {
@@ -217,6 +292,22 @@ export class CourseFormComponent implements OnChanges {
   // ============================================================
   // FORM GROUP: definición de campos y defaults
   // ============================================================
+
+  /**
+   * @description
+   * Construye el `FormGroup` principal del formulario con:
+   * - campos básicos de identificación
+   * - dificultad, duración, modalidad
+   * - descripciones
+   * - rating
+   * - precios
+   * - tags y flags de visibilidad
+   *
+   * También aplica el preset inicial de duración para mantener coherencia.
+   *
+   * @usageNotes
+   * Este método solo se llama una vez en el constructor.
+   */
   private buildForm(): void {
     this.form = this.fb.group({
       // Identificación básica
@@ -270,8 +361,15 @@ export class CourseFormComponent implements OnChanges {
   }
 
   /**
-   * Rellena el formulario cuando hay un curso (modo edición).
-   * Si no hay curso → resetea con valores por defecto (modo crear).
+   * @description
+   * Rellena el formulario en función del `@Input() course`.
+   *
+   * - Si no hay curso → configura el form en modo “crear” con valores default.
+   * - Si existe curso → detecta presets de duración y modalidad, y carga
+   *   el resto de campos incluyendo textareas y tags.
+   *
+   * @usageNotes
+   * Llamado automáticamente desde `ngOnChanges`.
    */
   private patchForm(): void {
     // MODO CREAR
@@ -377,8 +475,18 @@ export class CourseFormComponent implements OnChanges {
   }
 
   /**
-   * A partir del array de CourseModality, devuelve el value del preset
-   * que mejor lo representa.
+   * @description
+   * A partir del array de `CourseModality`, devuelve el `value` del preset
+   * de modalidad que mejor representa esa combinación.
+   *
+   * @param modalities Arreglo de modalidades del curso.
+   * @returns `presencial`, `online` o `presencial-online`.  
+   *          Si no se puede inferir, devuelve el preset por defecto.
+   *
+   * @example
+   * ```ts
+   * inferModalityPreset(['Presencial', 'Online']); // 'presencial-online'
+   * ```
    */
   private inferModalityPreset(modalities: CourseModality[] = []): string {
     const hasPresencial = modalities.includes('Presencial');
@@ -402,9 +510,21 @@ export class CourseFormComponent implements OnChanges {
   }
 
   /**
+   * @description
    * Helper genérico de validación:
-   * devuelve true si un control tiene un error específico y ya fue tocado
-   * o se hizo submit.
+   * devuelve `true` si un control tiene un error específico y ya fue tocado,
+   * modificado o el formulario fue enviado.
+   *
+   * @param controlName Nombre del control dentro del formulario.
+   * @param error Nombre del error (ej: 'required', 'minlength').
+   * @returns `true` si el control debe mostrar ese mensaje de error.
+   *
+   * @example
+   * ```html
+   * <div *ngIf="hasError('title', 'required')">
+   *   El título es obligatorio.
+   * </div>
+   * ```
    */
   hasError(controlName: string, error: string): boolean {
     const control = this.form.get(controlName);
@@ -416,7 +536,16 @@ export class CourseFormComponent implements OnChanges {
   }
 
   /**
-   * Aplica un preset de duración al form sin disparar valueChanges.
+   * @description
+   * Aplica un preset de duración (por índice) y copia sus valores
+   * a los campos derivados del formulario:
+   * - `duration`
+   * - `durationHours`
+   * - `totalLessons`
+   *
+   * No emite eventos de cambio (`emitEvent: false`).
+   *
+   * @param index Índice del preset dentro de `durationPresets`.
    */
   private applyDurationPreset(index: number): void {
     const preset = this.durationPresets[index];
@@ -436,7 +565,13 @@ export class CourseFormComponent implements OnChanges {
   // HANDLERS DE EVENTOS (selects, checkboxes, etc.)
   // ============================================================
 
-  /** Cambio en el select de duración → actualiza campos derivados. */
+  /**
+   * @description
+   * Handler para el cambio en el select de duración.
+   * Toma el valor seleccionado (índice) y aplica el preset correspondiente.
+   *
+   * @param event Evento `change` del `<select>`.
+   */
   onDurationPresetChange(event: Event): void {
     const select = event.target as HTMLSelectElement | null;
     if (!select) return;
@@ -446,7 +581,12 @@ export class CourseFormComponent implements OnChanges {
     this.applyDurationPreset(index);
   }
 
-  /** Aplica un preset de rating (nota + cantidad de reseñas). */
+  /**
+   * @description
+   * Aplica un preset de rating (nota + cantidad de reseñas) en el formulario.
+   *
+   * @param event Evento `change` del `<select>` de presets de rating.
+   */
   onRatingPresetChange(event: Event): void {
     const select = event.target as HTMLSelectElement | null;
     if (!select) return;
@@ -463,7 +603,12 @@ export class CourseFormComponent implements OnChanges {
     });
   }
 
-  /** Setea precio por hora en base al preset seleccionado. */
+  /**
+   * @description
+   * Establece el `pricePerHour` en base a un preset seleccionado.
+   *
+   * @param event Evento `change` del `<select>` de precio/hora.
+   */
   onPricePerHourPreset(event: Event): void {
     const select = event.target as HTMLSelectElement | null;
     if (!select) return;
@@ -473,8 +618,17 @@ export class CourseFormComponent implements OnChanges {
   }
 
   /**
-   * Activa / desactiva un tag en la colección selectedTags,
-   * y sincroniza el campo string `tags` del formulario.
+   * @description
+   * Activa o desactiva un tag en la colección `selectedTags` y sincroniza
+   * el campo `tags` del formulario como string CSV.
+   *
+   * @param tag Tag a activar/desactivar.
+   * @param checked Estado del checkbox (`true` = seleccionado).
+   *
+   * @example
+   * ```ts
+   * onToggleTag('rock', true); // agrega 'rock' a selectedTags
+   * ```
    */
   onToggleTag(tag: string, checked: boolean): void {
     if (checked) {
@@ -492,10 +646,14 @@ export class CourseFormComponent implements OnChanges {
   }
 
   /**
-   * Convierte un título a slug:
-   * - minúsculas
-   * - sin acentos
-   * - espacios / símbolos → guiones
+   * @description
+   * Convierte un título a `slug` URL-friendly:
+   * - pasa a minúsculas
+   * - elimina acentos
+   * - reemplaza espacios/símbolos por guiones
+   *
+   * @param value Texto de entrada (generalmente el título del curso).
+   * @returns Slug normalizado (ej: `"Curso de Guitarra Rock"` → `"curso-de-guitarra-rock"`).
    */
   private slugify(value: string): string {
     return value
@@ -512,11 +670,21 @@ export class CourseFormComponent implements OnChanges {
   // ============================================================
 
   /**
-   * Construye un objeto Course completo a partir del form:
-   * - Genera slug si está vacío.
-   * - Aplica presets de modalidad / duración.
-   * - Convierte textos multilinea a arrays (stages, learnOutcomes).
-   * - Normaliza tags, precios, rating y flags.
+   * @description
+   * Construye un objeto `Course` completo a partir de los valores del form:
+   *
+   * - Genera `slug` si está vacío (usando el título).
+   * - Aplica presets de modalidad y duración.
+   * - Convierte textareas multilínea en arrays (`stages`, `learnOutcomes`).
+   * - Normaliza tags, precios, rating y flags de visibilidad.
+   * - Preserva `id` y propiedades previas si ya existía un curso.
+   *
+   * Al final, emite el curso resultante mediante `this.save.emit(course)`.
+   *
+   * @usageNotes
+   * Si el form es inválido:
+   * - marca todos los campos como tocados
+   * - no emite ningún valor
    */
   onSubmit(): void {
     this.submitted = true;
@@ -634,7 +802,18 @@ export class CourseFormComponent implements OnChanges {
     this.save.emit(course);
   }
 
-  /** Notifica al padre que se canceló la edición. */
+  /**
+   * @description
+   * Notifica al componente padre que el usuario canceló la edición/creación.
+   *
+   * No altera el estado del formulario; se delega al padre la decisión
+   * de cerrar modales, descartar cambios, etc.
+   *
+   * @example
+   * ```html
+   * <button type="button" (click)="onCancel()">Cancelar</button>
+   * ```
+   */
   onCancel(): void {
     this.cancel.emit();
   }

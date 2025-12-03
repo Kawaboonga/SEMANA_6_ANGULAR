@@ -3,18 +3,21 @@
 // ----------------------------------------------------------------------------
 // Tarjeta reutilizable para mostrar un producto individual.
 // Usado en:
-//   - Grid de productos
-//   - Carruseles del home
-//   - Listados filtrados
+//   • Grid de productos
+//   • Carruseles del home
+//   • Listados filtrados (ProductListComponent)
 //
 // Características:
-//   - Soporta precio actual + precio anterior (para ofertas).
-//   - Calcula automáticamente si existe descuento.
-//   - Muestra el porcentaje de rebaja.
-//   - Genera un resumen corto (shortDescription / description).
+//   • Precio actual + precio anterior (ofertas).
+//   • Cálculo automático del porcentaje de rebaja.
+//   • Resumen corto basado en shortDescription/description.
+//   • Standalone + RouterLink.
 //
-// Entrada principal:
-//   @Input() product: Product
+// Este componente es completamente "dumb":
+//   - No filtra.
+//   - No ordena.
+//   - No usa servicios.
+//   Solo pinta los datos que se le entregan.
 // ============================================================================
 
 import { Component, Input } from '@angular/core';
@@ -33,21 +36,42 @@ import { Product } from '@core/models/product.model';
 export class ProductCardComponent {
 
   // ==========================================================================
-  // INPUT
+  // INPUT PRINCIPAL
   // ==========================================================================
-  /** Producto a renderizar en la card (obligatorio). */
+  /**
+   * @property product
+   * @description
+   * Producto que será renderizado por la tarjeta.
+   *
+   * Este input es obligatorio y debe contener un objeto `Product`
+   * completo, proveniente normalmente de ProductGridComponent.
+   *
+   * @usageNotes
+   * El componente NO valida que el producto exista.
+   * Esa responsabilidad es del contenedor que haga el render.
+   *
+   * @example
+   * <app-product-card [product]="item"></app-product-card>
+   */
   @Input({ required: true }) product!: Product;
 
 
   // ==========================================================================
-  // DESCUENTO
-  // --------------------------------------------------------------------------
-  // - Existe descuento si:
-  //      previousPrice > price
-  // - Se usa para mostrar badge tipo "-20%"
+  // DESCUENTO → BADGE "-20%"
   // ==========================================================================
-  
-  /** ¿El producto tiene precio anterior mayor al actual? */
+  /**
+   * @property hasDiscount
+   * @description
+   * Indica si el producto tiene un descuento activo.
+   * Un producto está en oferta cuando:
+   *
+   *   previousPrice > price
+   *
+   * @return {boolean} true si existe precio anterior mayor al actual.
+   *
+   * @example
+   * if (hasDiscount) { mostrarBadge() }
+   */
   get hasDiscount(): boolean {
     return !!(
       this.product.previousPrice &&
@@ -55,7 +79,24 @@ export class ProductCardComponent {
     );
   }
 
-  /** Porcentaje de descuento redondeado (ej: 20, 35, 50). */
+  /**
+   * @property discountPercent
+   * @description
+   * Calcula el porcentaje de descuento basado en:
+   *
+   *   (1 - price / previousPrice) * 100
+   *
+   * Redondea al número entero más cercano.
+   *
+   * @return {number} porcentaje entero (ej: 25).
+   *
+   * @example
+   * // price=75, previousPrice=100 → 25
+   * card.discountPercent  // 25
+   *
+   * @usageNotes
+   * Si no hay descuento, devuelve 0.
+   */
   get discountPercent(): number {
     if (!this.hasDiscount) return 0;
 
@@ -67,18 +108,29 @@ export class ProductCardComponent {
 
 
   // ==========================================================================
-  // RESUMEN / DESCRIPCIÓN CORTA
-  // --------------------------------------------------------------------------
-  // - Usa shortDescription si existe.
-  // - Si no, cae en description.
-  // - Limita longitud para mantener simetría entre cards.
+  // RESUMEN DESCRIPTIVO
   // ==========================================================================
-  
   /**
-   * Devuelve un resumen corto del producto:
-   *    - Elige entre shortDescription o description.
-   *    - Limita a ~90 caracteres.
-   *    - Agrega "…" si es necesario.
+   * @method getSummary
+   * @description
+   * Construye una descripción corta del producto.
+   *
+   * Regla:
+   *   • Si existe `shortDescription`, se usa esa.
+   *   • Si no, se cae en `description`.
+   *   • Se limita a ~90 caracteres para mantener
+   *     consistencia visual en el grid.
+   *
+   * @param {Product} product - Instancia de producto cuyo resumen se generará.
+   * @return {string} texto final recortado o completo según longitud.
+   *
+   * @example
+   * getSummary(product)
+   * // "Guitarra Fender Stratocaster ideal para rock y blues…"
+   *
+   * @usageNotes
+   * Este método solo afecta a la vista de la card.
+   * No modifica el modelo original.
    */
   getSummary(product: Product): string {
     const text = product.shortDescription || product.description || '';

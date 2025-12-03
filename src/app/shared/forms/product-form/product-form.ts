@@ -46,6 +46,25 @@ import { ProductCategory } from '@core/models/product-category.model';
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './product-form.html',
 })
+/**
+ * @description
+ * Componente de administración para crear y editar entidades `Product` del catálogo.
+ *
+ * Responsabilidades:
+ * - Orquestar un formulario reactivo con todos los campos del producto.
+ * - Soportar dos modos: creación (`product = null`) y edición (`product` con datos).
+ * - Normalizar el objeto `Product` antes de emitirlo (slug, opcionales, flags).
+ * - Mantener flags editoriales que controlan visibilidad en home, carruseles y ofertas.
+ *
+ * @usageNotes
+ * ```html
+ * <app-product-form
+ *   [product]="productoSeleccionado"
+ *   (save)="onSaveProduct($event)"
+ *   (cancel)="onCancelEdit()">
+ * </app-product-form>
+ * ```
+ */
 export class ProductFormComponent implements OnChanges {
 
   // ==========================================================================
@@ -53,27 +72,39 @@ export class ProductFormComponent implements OnChanges {
   // ==========================================================================
 
   /**
+   * @description
    * Producto que se está editando.
+   *
    * - Si viene con datos → modo edición.
-   * - Si es null → modo creación (se asume producto nuevo).
+   * - Si es `null` → modo creación (producto nuevo).
    */
   @Input() product: Product | null = null;
 
   /**
-   * Evento que emite el objeto Product final cuando el formulario es válido
+   * @description
+   * Evento que emite el objeto `Product` final cuando el formulario es válido
    * y el usuario hace submit.
+   *
+   * @example
+   * ```ts
+   * onSave(product: Product) {
+   *   this.productService.upsert(product);
+   * }
+   * ```
    */
   @Output() save = new EventEmitter<Product>();
 
   /**
+   * @description
    * Evento simple para avisar al padre que el usuario canceló
-   * (cerrar modal, panel lateral, etc.).
+   * (cerrar modal, panel lateral, dialog, etc.).
    */
   @Output() cancel = new EventEmitter<void>();
 
   /**
-   * Formulario reactivo principal.
-   * Se inicializa en el constructor con todos los campos del producto.
+   * @description
+   * Formulario reactivo principal que contiene todos los campos
+   * del modelo `Product` que se administran desde esta vista.
    */
   form: FormGroup;
 
@@ -82,9 +113,13 @@ export class ProductFormComponent implements OnChanges {
   // ==========================================================================
 
   /**
+   * @description
    * Categorías permitidas para los productos.
-   * Es importante mantener este listado alineado con lo que entiende el modelo
-   * ProductCategory y con los filtros del front (cards, listados, etc.).
+   *
+   * Debe estar alineado con:
+   * - el tipo `ProductCategory`
+   * - los filtros de la vista de productos
+   * - el banner de categorías del frontend.
    */
   categoryOptions: ProductCategory[] = [
     'guitarras',
@@ -96,27 +131,41 @@ export class ProductFormComponent implements OnChanges {
   ];
 
   /**
-   * Condiciones del producto (estado).
-   * - nuevo  → producto sin uso.
-   * - usado  → producto de segunda mano.
-   * Ayuda a mostrar badges o textos distintos en las cards.
+   * @description
+   * Condiciones del producto (estado de uso).
+   *
+   * - `"nuevo"` → producto sin uso.
+   * - `"usado"` → producto de segunda mano.
+   *
+   * Se usa para mostrar badges o textos específicos en las cards.
    */
   conditionOptions: ProductCondition[] = ['nuevo', 'usado'];
 
   // ==========================================================================
   // CONSTRUCTOR: definición del formulario
   // ==========================================================================
+
+  /**
+   * @description
+   * Constructor del componente.
+   *
+   * - Inyecta `FormBuilder`.
+   * - Define el `FormGroup` con campos obligatorios y opcionales.
+   * - Configura valores por defecto coherentes para modo creación.
+   *
+   * @param fb Servicio `FormBuilder` para construir formularios reactivos.
+   *
+   * @usageNotes
+   * - `category` comienza en `null` para obligar a elegir.
+   * - `condition` comienza en `"usado"` como caso frecuente.
+   * - `stock` comienza en `1` como mínimo razonable para publicar algo.
+   */
   constructor(private fb: FormBuilder) {
     /**
      * Definición del FormGroup con:
      * - campos base obligatorios (name, category, price, description)
      * - campos opcionales (brand, model, year, imageUrl, etc.)
      * - flags editoriales para controlar visibilidad en el sitio.
-     *
-     * Notas:
-     * - category parte en null para obligar a elegir.
-     * - condition parte en "usado" como caso más frecuente.
-     * - stock parte en 1 (mínimo razonable para publicar algo a la venta).
      */
     this.form = this.fb.group({
       // Datos principales del producto
@@ -150,15 +199,21 @@ export class ProductFormComponent implements OnChanges {
   // ==========================================================================
 
   /**
-   * ngOnChanges
-   * Se ejecuta cada vez que cambia algún @Input del componente.
-   * Aquí nos interesa especialmente el cambio en `product`:
+   * @description
+   * Hook de ciclo de vida que se ejecuta cada vez que cambia un `@Input`.
    *
-   * - Si llega un product con datos:
-   *   Relleno el formulario con sus valores (modo edición).
+   * Aquí nos interesa el cambio en `product`:
+   * - Si llega un producto con datos → modo edición (se rellenan campos).
+   * - Si pasa de tener producto a `null` → modo creación (form reset con defaults).
    *
-   * - Si pasa de tener producto a null:
-   *   Reseteo el formulario con valores por defecto (modo creación).
+   * @param changes Mapa de cambios detectados en las propiedades de entrada.
+   *
+   * @example
+   * ```ts
+   * ngOnChanges(changes: SimpleChanges) {
+   *   if (changes['product']) { ... }
+   * }
+   * ```
    */
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['product']) {
@@ -215,15 +270,20 @@ export class ProductFormComponent implements OnChanges {
   // ==========================================================================
 
   /**
-   * hasError
-   * Helper rápido para el template.
-   * Retorna true si el control tiene el error indicado y ya fue "tocado".
+   * @description
+   * Helper rápido para el template que indica si un control
+   * tiene un error específico y ya fue tocado.
    *
-   * Uso típico en el HTML:
-   *   *ngIf="hasError('name', 'required')"
+   * @param ctrl Nombre del control dentro del `FormGroup`.
+   * @param type Tipo de error a comprobar (ej. `'required'`, `'min'`).
+   * @returns `true` si el control tiene ese error y está `touched`.
    *
-   * Esto evita repetir lógica de:
-   *   const c = this.form.get('name'); c && c.touched && c.hasError('required')
+   * @example
+   * ```html
+   * <div *ngIf="hasError('name', 'required')">
+   *   El nombre del producto es obligatorio.
+   * </div>
+   * ```
    */
   hasError(ctrl: string, type: string): boolean {
     const c = this.form.get(ctrl);
@@ -235,19 +295,25 @@ export class ProductFormComponent implements OnChanges {
   // ==========================================================================
 
   /**
-   * onSubmit
-   * Se ejecuta cuando el usuario envía el formulario.
+   * @description
+   * Maneja el envío del formulario.
    *
    * Flujo:
-   * 1. Si el formulario es inválido → marco todos los controles como "touched"
-   *    para que aparezcan los mensajes de error y no hago nada más.
+   * 1. Si el formulario es inválido:
+   *    - Marca todos los controles como `touched`.
+   *    - No emite nada.
+   *
    * 2. Si es válido:
-   *    - Tomo los valores del form.
-   *    - Armo un objeto Product completo.
-   *    - Mantengo id y slug existentes si es modo edición.
-   *    - Si no hay slug previo, lo genero desde el nombre.
-   *    - Normalizo campos opcionales a undefined cuando están vacíos.
-   *    - Emite el Product final al padre mediante this.save.emit().
+   *    - Obtiene los valores crudos del form.
+   *    - Construye un objeto `Product` completo.
+   *    - Mantiene `id` y `slug` existentes en modo edición.
+   *    - Genera un `slug` nuevo desde el nombre si no existía.
+   *    - Normaliza campos opcionales vacíos a `undefined`.
+   *    - Emite el `Product` final mediante `this.save.emit(product)`.
+   *
+   * @usageNotes
+   * El componente padre debe suscribirse al evento `(save)` para persistir
+   * o actualizar el producto en la capa de datos.
    */
   onSubmit() {
     if (this.form.invalid) {
@@ -297,9 +363,15 @@ export class ProductFormComponent implements OnChanges {
   }
 
   /**
-   * onCancel
+   * @description
    * Notifica al componente padre que se canceló la edición/creación.
-   * No toca el form ni los datos, solo emite el evento.
+   *
+   * No modifica el formulario ni los datos; solo emite el evento `cancel`.
+   *
+   * @example
+   * ```html
+   * <button type="button" (click)="onCancel()">Cancelar</button>
+   * ```
    */
   onCancel() {
     this.cancel.emit();
@@ -310,18 +382,23 @@ export class ProductFormComponent implements OnChanges {
   // ==========================================================================
 
   /**
-   * slugify
+   * @description
    * Convierte el nombre del producto en un slug "URL-friendly".
    *
    * Pasos:
    * - Normaliza el nombre para eliminar acentos.
    * - Lo pasa a minúsculas.
-   * - Reemplaza cualquier cosa que no sea [a-z0-9] por guiones.
-   * - Limpia guiones sobrantes al inicio y al final.
+   * - Reemplaza cualquier carácter que no sea `[a-z0-9]` por guiones.
+   * - Quita guiones sobrantes al inicio y al final.
    *
-   * Ejemplo:
-   *   "Guitarra Eléctrica Stratocaster 2024" →
-   *   "guitarra-electrica-stratocaster-2024"
+   * @param name Nombre crudo del producto (ej: `"Guitarra Eléctrica Stratocaster 2024"`).
+   * @returns Slug normalizado (ej: `"guitarra-electrica-stratocaster-2024"`).
+   *
+   * @example
+   * ```ts
+   * const slug = this.slugify('Pedal Overdrive Súper Vintage');
+   * // 'pedal-overdrive-super-vintage'
+   * ```
    */
   private slugify(name: string): string {
     return name

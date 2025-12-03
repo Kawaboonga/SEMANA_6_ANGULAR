@@ -2,39 +2,59 @@
 // NEWS CARD COMPONENT
 // ----------------------------------------------------------------------------
 // Tarjeta reutilizable para mostrar noticias en listados, carruseles u otros.
+//
 // - Recibe un objeto News (modelo real del proyecto).
-// - Se usa principalmente en la vista de noticias y en sliders/carouseles.
-// - Mantiene estructura minimalista para poder usarse dentro de grids.
+// - Click navega al detalle mediante routerLink.
+// - Es un componente completamente presentacional (dumb component).
+// - No hace lógica de negocio ni transforma datos.
+//
+// Se utiliza en:
+//   • Listado de noticias (grid principal)
+//   • Carrusel de noticias destacadas
+//   • Secciones de sidebar / relacionadas
 // ============================================================================
 
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
-import { News } from '@core/models/news.model'; // 👉 Modelo real de noticia
+import { News } from '@core/models/news.model';
 
 @Component({
   selector: 'app-news-card',
   standalone: true,
-
-  // Módulos necesarios para routerLink y directivas comunes
   imports: [CommonModule, RouterLink],
-
   templateUrl: './news-card.html',
   styleUrls: ['./news-card.css'],
 })
 export class NewsCard {
 
   // ==========================================================================
-  // INPUTS
+  // INPUT PRINCIPAL
   // ==========================================================================
 
   /**
-   * Objeto de noticia recibido desde la lista o carrusel.
-   * Debe ser el modelo News real:
-   * { id, title, subtitle, imageUrl, createdAt, content, ... }
+   * @property item
+   * @description
+   * Noticia que se va a representar visualmente en la card.
    *
-   * Se marca como obligatorio (!).
+   * Este input debe ser siempre una instancia válida del modelo `News`,
+   * que incluye:
+   *   - id
+   *   - slug
+   *   - title
+   *   - imageUrl
+   *   - date (YYYY-MM-DD)
+   *   - excerpt
+   *   - content[]
+   *   - type: "news"
+   *
+   * @usageNotes
+   * • Esta card NO transforma ni filtra el contenido.
+   * • Toda la lógica de paginación, filtrado o selección ocurre fuera.
+   *
+   * @example
+   * <app-news-card [item]="n"></app-news-card>
    */
   @Input({ required: true })
   item!: News;

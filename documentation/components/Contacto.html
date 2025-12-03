@@ -1,0 +1,1089 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>proyecto-semana4 documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+          <script>
+              // --- Iframe navigation tracking for Template Playground ---
+              function sendCurrentUrlToParent() {
+                  if (window.parent && window.parent !== window) {
+                      window.parent.postMessage({
+                          type: 'compodoc-iframe-navigate',
+                          url: window.location.pathname + window.location.hash
+                      }, '*');
+                  }
+              }
+              window.addEventListener('hashchange', sendCurrentUrlToParent, false);
+              window.addEventListener('popstate', sendCurrentUrlToParent, false);
+              window.addEventListener('DOMContentLoaded', sendCurrentUrlToParent, false);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">proyecto-semana4 documentation</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Components</li>
+  <li class="breadcrumb-item"
+  >
+  Contacto</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" class="nav-link"
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+        <li class="nav-item">
+            <a href="#templateData" class="nav-link"
+                role="tab" id="templateData-tab" data-bs-toggle="tab" data-link="template">Template</a>
+        </li>
+        <li class="nav-item">
+            <a href="#tree" class="nav-link"
+                role="tab" id="tree-tab" data-bs-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info"><p class="comment">
+    <h3>File</h3>
+</p>
+<p class="comment">
+    <code>src/app/features/contacto/contacto.ts</code>
+</p>
+
+
+
+
+
+
+<section data-compodoc="block-metadata">
+    <h3>Metadata</h3>
+    <table class="table table-sm table-hover metadata">
+        <tbody>
+
+
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>app-contacto</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">standalone</td>
+                <td class="col-md-9"><code>true</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">imports</td>
+                <td class="col-md-9">
+                            <code>CommonModule</code>
+                            <code>ReactiveFormsModule</code>
+                                <code><a href="../directives/FadeUpDirective.html" target="_self" >FadeUpDirective</a></code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./contacto.html</code></td>
+            </tr>
+
+
+
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#form" >form</a>
+                            </li>
+                            <li>
+                                <a href="#sending" >sending</a>
+                            </li>
+                            <li>
+                                <a href="#submitted" >submitted</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#hasError" >hasError</a>
+                            </li>
+                            <li>
+                                <a href="#onClear" >onClear</a>
+                            </li>
+                            <li>
+                                <a href="#onSubmit" >onSubmit</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-constructor">
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(fb: FormBuilder)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="43" class="link-to-prism">src/app/features/contacto/contacto.ts:43</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div class="io-description"><p>Construye el formulario con validaciones básicas:</p>
+<ul>
+<li>name: requerido + mínimo 3 caracteres</li>
+<li>email: requerido + formato válido</li>
+<li>subject: requerido + mínimo 5 caracteres</li>
+<li>message: requerido + mínimo 10 caracteres</li>
+</ul>
+</div>
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>fb</td>
+                                                  
+                                                        <td>
+                                                                    <code>FormBuilder</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+
+
+
+
+    <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="hasError"></a>
+                    <span class="name">
+                        <span ><b>hasError</b></span>
+                        <a href="#hasError"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>hasError(controlName: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, error: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="72"
+                                    class="link-to-prism">src/app/features/contacto/contacto.ts:72</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Verifica si un control tiene un error concreto y si ya fue tocado.
+Se usa directamente desde la plantilla para mostrar mensajes.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>controlName</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <p>Nombre del campo.</p>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                <td>error</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <p>Tipo de error a validar (required, minlength, email…).</p>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="onClear"></a>
+                    <span class="name">
+                        <span ><b>onClear</b></span>
+                        <a href="#onClear"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>onClear()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="121"
+                                    class="link-to-prism">src/app/features/contacto/contacto.ts:121</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Limpia todos los campos del formulario y oculta el mensaje de éxito.
+Útil cuando el usuario quiere “partir de cero”.</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="onSubmit"></a>
+                    <span class="name">
+                        <span ><b>onSubmit</b></span>
+                        <a href="#onSubmit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>onSubmit()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="90"
+                                    class="link-to-prism">src/app/features/contacto/contacto.ts:90</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Maneja el flujo completo del envío:</p>
+<ul>
+<li>valida el form,</li>
+<li>muestra spinner,</li>
+<li>simula el envío,</li>
+<li>limpia y muestra mensaje final.</li>
+</ul>
+<p>En un proyecto real, este método enviaría los datos a una API.</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+    <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Properties
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="form"></a>
+                    <span class="name">
+                        <span ><b>form</b></span>
+                        <a href="#form"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>FormGroup</code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="37" class="link-to-prism">src/app/features/contacto/contacto.ts:37</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Formulario reactivo con los campos principales del contacto.</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="sending"></a>
+                    <span class="name">
+                        <span ><b>sending</b></span>
+                        <a href="#sending"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>false</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="43" class="link-to-prism">src/app/features/contacto/contacto.ts:43</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Flag que controla el estado de &quot;enviando&quot;.</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="submitted"></a>
+                    <span class="name">
+                        <span ><b>submitted</b></span>
+                        <a href="#submitted"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>false</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="40" class="link-to-prism">src/app/features/contacto/contacto.ts:40</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Flag que indica si se mostró el mensaje de éxito.</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+</section>
+
+</div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component } from &#x27;@angular/core&#x27;;
+import { CommonModule } from &#x27;@angular/common&#x27;;
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule,} from &#x27;@angular/forms&#x27;;
+
+import { FadeUpDirective } from &#x27;@shared/directives/fade-up&#x27;;
+
+@Component({
+  selector: &#x27;app-contacto&#x27;,
+  standalone: true,
+  templateUrl: &#x27;./contacto.html&#x27;,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    FadeUpDirective, // animación appFadeUp
+  ],
+})
+
+/**
+ * Página de contacto del sitio.
+ *
+ * Este formulario permite que un usuario envíe un mensaje interno
+ * (consulta, sugerencia o problema). No existe backend real, por lo que
+ * el envío se simula con un &#x60;setTimeout&#x60; y se muestra un mensaje de éxito.
+ *
+ * UX:
+ * - Validaciones claras en cada campo.
+ * - Botón deshabilitado mientras &quot;se envía&quot;.
+ * - Mensaje de confirmación tras completar el flujo.
+ * - Botón para limpiar todo el formulario.
+ *
+ * El componente está pensado para mantenerse liviano: no usa servicios,
+ * solo consola y estados locales.
+ */
+export class Contacto {
+  /** Formulario reactivo con los campos principales del contacto. */
+  form: FormGroup;
+
+  /** Flag que indica si se mostró el mensaje de éxito. */
+  submitted &#x3D; false;
+
+  /** Flag que controla el estado de &quot;enviando&quot;. */
+  sending &#x3D; false;
+
+  /**
+   * Construye el formulario con validaciones básicas:
+   * - name: requerido + mínimo 3 caracteres
+   * - email: requerido + formato válido
+   * - subject: requerido + mínimo 5 caracteres
+   * - message: requerido + mínimo 10 caracteres
+   */
+  constructor(private fb: FormBuilder) {
+    this.form &#x3D; this.fb.group({
+      name: [&#x27;&#x27;, [Validators.required, Validators.minLength(3)]],
+      email: [&#x27;&#x27;, [Validators.required, Validators.email]],
+      subject: [&#x27;&#x27;, [Validators.required, Validators.minLength(5)]],
+      message: [&#x27;&#x27;, [Validators.required, Validators.minLength(10)]],
+    });
+  }
+
+  // &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+  // VALIDACIONES
+  // &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+
+  /**
+   * Verifica si un control tiene un error concreto y si ya fue tocado.
+   * Se usa directamente desde la plantilla para mostrar mensajes.
+   *
+   * @param controlName Nombre del campo.
+   * @param error Tipo de error a validar (required, minlength, email…).
+   */
+  hasError(controlName: string, error: string): boolean {
+    const control &#x3D; this.form.get(controlName);
+    return !!control &amp;&amp; control.touched &amp;&amp; control.hasError(error);
+  }
+
+  // &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+  // ENVIAR FORMULARIO
+  // &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+
+  /**
+   * Maneja el flujo completo del envío:
+   * - valida el form,
+   * - muestra spinner,
+   * - simula el envío,
+   * - limpia y muestra mensaje final.
+   *
+   * En un proyecto real, este método enviaría los datos a una API.
+   */
+  onSubmit(): void {
+    this.submitted &#x3D; false;
+
+    // Si el formulario tiene errores, los mostramos de inmediato
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
+
+    // Spinner ON
+    this.sending &#x3D; true;
+
+    const payload &#x3D; this.form.value;
+    console.log(&#x27;Formulario de contacto enviado:&#x27;, payload);
+
+    // Simulación de envío real
+    setTimeout(() &#x3D;&gt; {
+      this.sending &#x3D; false;
+      this.submitted &#x3D; true;
+      this.form.reset();
+    }, 800);
+  }
+
+  // &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+  // LIMPIAR FORMULARIO
+  // &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+
+  /**
+   * Limpia todos los campos del formulario y oculta el mensaje de éxito.
+   * Útil cuando el usuario quiere “partir de cero”.
+   */
+  onClear(): void {
+    this.form.reset();
+    this.submitted &#x3D; false;
+  }
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="templateData">
+        <pre class="line-numbers"><code class="language-html">
+&lt;!--
+  Layout general:
+  - Contenedor centrado con padding vertical.
+  - appFadeUp aplica la animación al entrar en viewport.
+--&gt;
+&lt;div class&#x3D;&quot;container py-4&quot; appFadeUp&gt;
+  &lt;div class&#x3D;&quot;row justify-content-center&quot;&gt;
+    &lt;div class&#x3D;&quot;col-lg-9 col-md-10&quot;&gt;
+      &lt;!-- Card principal que envuelve imagen + formulario --&gt;
+      &lt;div class&#x3D;&quot;card shadow-sm border-0 overflow-hidden rounded-4&quot;&gt;
+        &lt;div class&#x3D;&quot;row g-0&quot;&gt;
+
+          &lt;!-- &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+               COLUMNA IZQUIERDA: IMAGEN 
+               Solo visible en pantallas md en adelante.
+          &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D; --&gt;
+          &lt;div class&#x3D;&quot;col-md-5 d-none d-md-block position-relative&quot;&gt;
+            &lt;div class&#x3D;&quot;h-100 w-100&quot;&gt;
+              &lt;img
+                src&#x3D;&quot;assets/img/general/g5.png&quot;
+                alt&#x3D;&quot;Contacto SoundSeeker&quot;
+                class&#x3D;&quot;img-fluid h-100 w-100 object-fit-cover&quot;
+              /&gt;
+            &lt;/div&gt;
+
+            &lt;!-- Capa oscurecida con gradiente para mejorar la lectura del texto --&gt;
+            &lt;div
+              class&#x3D;&quot;position-absolute top-0 start-0 w-100 h-100&quot;
+              style&#x3D;&quot;
+                background: linear-gradient(
+                  135deg,
+                  rgba(15, 23, 42, 0.85),
+                  rgba(15, 23, 42, 0.3)
+                );
+              &quot;
+            &gt;&lt;/div&gt;
+
+            &lt;!-- Texto de branding sobre la imagen --&gt;
+            &lt;div class&#x3D;&quot;position-absolute bottom-0 start-0 p-4 text-white&quot;&gt;
+              &lt;div class&#x3D;&quot;small text-uppercase mb-1 opacity-75&quot;&gt;
+                SoundSeeker
+              &lt;/div&gt;
+              &lt;h2 class&#x3D;&quot;h5 mb-1&quot;&gt;Hablemos de tu sonido&lt;/h2&gt;
+              &lt;p class&#x3D;&quot;small mb-0 opacity-85&quot;&gt;
+                Clases, servicios y equipos pensados para músicos reales.
+              &lt;/p&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+
+          &lt;!-- &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+               COLUMNA DERECHA: FORMULARIO DE CONTACTO
+          &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D; --&gt;
+          &lt;div class&#x3D;&quot;col-md-7&quot;&gt;
+            &lt;div class&#x3D;&quot;card-body p-4 p-md-5&quot;&gt;
+
+              &lt;!-- Encabezado del formulario --&gt;
+              &lt;h1 class&#x3D;&quot;h4 mb-2 text-center text-md-start&quot;&gt;
+                Contacto
+              &lt;/h1&gt;
+              &lt;p class&#x3D;&quot;text-muted small text-center text-md-start mb-4&quot;&gt;
+                ¿Tienes dudas sobre clases, servicios o equipos? Escríbenos y te respondemos pronto.
+              &lt;/p&gt;
+
+              &lt;!-- Mensaje de éxito tras envío correcto (controlado por submitted en el TS) --&gt;
+              &lt;div
+                *ngIf&#x3D;&quot;submitted&quot;
+                class&#x3D;&quot;alert alert-success py-2 small mb-4&quot;
+                role&#x3D;&quot;alert&quot;
+              &gt;
+                ¡Gracias por tu mensaje! Te contactaremos a la brevedad.
+              &lt;/div&gt;
+
+              &lt;!--
+                Formulario reactivo:
+                - Vinculado al FormGroup &quot;form&quot; de Contacto.
+                - onSubmit() gestiona validaciones y simulación de envío.
+              --&gt;
+              &lt;form [formGroup]&#x3D;&quot;form&quot; (ngSubmit)&#x3D;&quot;onSubmit()&quot; novalidate&gt;
+
+                &lt;!-- &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+                     CAMPO: NOMBRE
+                &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D; --&gt;
+                &lt;div class&#x3D;&quot;mb-3&quot;&gt;
+                  &lt;label class&#x3D;&quot;form-label&quot;&gt;Nombre&lt;/label&gt;
+                  &lt;input
+                    type&#x3D;&quot;text&quot;
+                    class&#x3D;&quot;form-control&quot;
+                    formControlName&#x3D;&quot;name&quot;
+                    [class.is-invalid]&#x3D;&quot;
+                      hasError(&#x27;name&#x27;, &#x27;required&#x27;) ||
+                      hasError(&#x27;name&#x27;, &#x27;minlength&#x27;)
+                    &quot;
+                    placeholder&#x3D;&quot;Tu nombre&quot;
+                  /&gt;
+                  &lt;div class&#x3D;&quot;invalid-feedback&quot; *ngIf&#x3D;&quot;hasError(&#x27;name&#x27;, &#x27;required&#x27;)&quot;&gt;
+                    El nombre es obligatorio.
+                  &lt;/div&gt;
+                  &lt;div class&#x3D;&quot;invalid-feedback&quot; *ngIf&#x3D;&quot;hasError(&#x27;name&#x27;, &#x27;minlength&#x27;)&quot;&gt;
+                    El nombre debe tener al menos 3 caracteres.
+                  &lt;/div&gt;
+                &lt;/div&gt;
+
+                &lt;!-- &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+                     CAMPO: CORREO ELECTRÓNICO
+                &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D; --&gt;
+                &lt;div class&#x3D;&quot;mb-3&quot;&gt;
+                  &lt;label class&#x3D;&quot;form-label&quot;&gt;Correo electrónico&lt;/label&gt;
+                  &lt;input
+                    type&#x3D;&quot;email&quot;
+                    class&#x3D;&quot;form-control&quot;
+                    formControlName&#x3D;&quot;email&quot;
+                    [class.is-invalid]&#x3D;&quot;
+                      hasError(&#x27;email&#x27;, &#x27;required&#x27;) ||
+                      hasError(&#x27;email&#x27;, &#x27;email&#x27;)
+                    &quot;
+                    placeholder&#x3D;&quot;tucorreo@ejemplo.com&quot;
+                  /&gt;
+                  &lt;div class&#x3D;&quot;invalid-feedback&quot; *ngIf&#x3D;&quot;hasError(&#x27;email&#x27;, &#x27;required&#x27;)&quot;&gt;
+                    El correo es obligatorio.
+                  &lt;/div&gt;
+                  &lt;div class&#x3D;&quot;invalid-feedback&quot; *ngIf&#x3D;&quot;hasError(&#x27;email&#x27;, &#x27;email&#x27;)&quot;&gt;
+                    Ingresa un correo electrónico válido.
+                  &lt;/div&gt;
+                &lt;/div&gt;
+
+                &lt;!-- &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+                     CAMPO: ASUNTO
+                &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D; --&gt;
+                &lt;div class&#x3D;&quot;mb-3&quot;&gt;
+                  &lt;label class&#x3D;&quot;form-label&quot;&gt;Asunto&lt;/label&gt;
+                  &lt;input
+                    type&#x3D;&quot;text&quot;
+                    class&#x3D;&quot;form-control&quot;
+                    formControlName&#x3D;&quot;subject&quot;
+                    [class.is-invalid]&#x3D;&quot;
+                      hasError(&#x27;subject&#x27;, &#x27;required&#x27;) ||
+                      hasError(&#x27;subject&#x27;, &#x27;minlength&#x27;)
+                    &quot;
+                    placeholder&#x3D;&quot;Por ejemplo: Consulta por clases de guitarra&quot;
+                  /&gt;
+                  &lt;div class&#x3D;&quot;invalid-feedback&quot; *ngIf&#x3D;&quot;hasError(&#x27;subject&#x27;, &#x27;required&#x27;)&quot;&gt;
+                    El asunto es obligatorio.
+                  &lt;/div&gt;
+                  &lt;div class&#x3D;&quot;invalid-feedback&quot; *ngIf&#x3D;&quot;hasError(&#x27;subject&#x27;, &#x27;minlength&#x27;)&quot;&gt;
+                    El asunto debe tener al menos 5 caracteres.
+                  &lt;/div&gt;
+                &lt;/div&gt;
+
+                &lt;!-- &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+                     CAMPO: MENSAJE
+                &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D; --&gt;
+                &lt;div class&#x3D;&quot;mb-3&quot;&gt;
+                  &lt;label class&#x3D;&quot;form-label&quot;&gt;Mensaje&lt;/label&gt;
+                  &lt;textarea
+                    rows&#x3D;&quot;4&quot;
+                    class&#x3D;&quot;form-control&quot;
+                    formControlName&#x3D;&quot;message&quot;
+                    [class.is-invalid]&#x3D;&quot;
+                      hasError(&#x27;message&#x27;, &#x27;required&#x27;) ||
+                      hasError(&#x27;message&#x27;, &#x27;minlength&#x27;)
+                    &quot;
+                    placeholder&#x3D;&quot;Cuéntanos qué necesitas: tipo de clases, instrumento, nivel, horarios, etc.&quot;
+                  &gt;&lt;/textarea&gt;
+                  &lt;div class&#x3D;&quot;invalid-feedback&quot; *ngIf&#x3D;&quot;hasError(&#x27;message&#x27;, &#x27;required&#x27;)&quot;&gt;
+                    El mensaje es obligatorio.
+                  &lt;/div&gt;
+                  &lt;div class&#x3D;&quot;invalid-feedback&quot; *ngIf&#x3D;&quot;hasError(&#x27;message&#x27;, &#x27;minlength&#x27;)&quot;&gt;
+                    El mensaje debe tener al menos 10 caracteres.
+                  &lt;/div&gt;
+                &lt;/div&gt;
+
+                &lt;!-- &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+                     PIE DEL FORMULARIO: BOTONES + INFO DE CONTACTO
+                &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D; --&gt;
+                &lt;div class&#x3D;&quot;d-flex flex-column gap-3 mt-3&quot;&gt;
+                  &lt;!-- Botones de acción (enviar / limpiar) --&gt;
+                  &lt;div class&#x3D;&quot;d-flex flex-column flex-md-row gap-2&quot;&gt;
+                    &lt;!-- Botón enviar, deshabilitado mientras sending &#x3D; true --&gt;
+                    &lt;button
+                      type&#x3D;&quot;submit&quot;
+                      class&#x3D;&quot;btn btn-primary px-4 flex-grow-1&quot;
+                      [disabled]&#x3D;&quot;sending&quot;
+                    &gt;
+                      &lt;span *ngIf&#x3D;&quot;!sending&quot;&gt;
+                        &lt;i class&#x3D;&quot;bi bi-send me-1&quot;&gt;&lt;/i&gt;
+                        Enviar mensaje
+                      &lt;/span&gt;
+                      &lt;span *ngIf&#x3D;&quot;sending&quot;&gt;
+                        Enviando...
+                      &lt;/span&gt;
+                    &lt;/button&gt;
+
+                    &lt;!-- Botón limpiar → llama a onClear() en el componente --&gt;
+                    &lt;button
+                      type&#x3D;&quot;button&quot;
+                      class&#x3D;&quot;btn btn-outline-secondary px-4&quot;
+                      (click)&#x3D;&quot;onClear()&quot;
+                    &gt;
+                      &lt;i class&#x3D;&quot;bi bi-eraser me-1&quot;&gt;&lt;/i&gt;
+                      Limpiar
+                    &lt;/button&gt;
+                  &lt;/div&gt;
+
+                  &lt;!-- Información alternativa de contacto --&gt;
+                  &lt;div class&#x3D;&quot;text-muted small text-md-end&quot;&gt;
+                    También puedes escribirnos a&lt;br /&gt;
+                    &lt;span class&#x3D;&quot;fw-semibold&quot;&gt;contacto@soundseeker.cl&lt;/span&gt;
+                  &lt;/div&gt;
+                &lt;/div&gt;
+              &lt;/form&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+          &lt;!-- /col-md-7 --&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;!-- Nota informativa bajo la card --&gt;
+      &lt;div class&#x3D;&quot;text-center text-muted small mt-3&quot;&gt;
+        &lt;i class&#x3D;&quot;bi bi-info-circle me-1&quot;&gt;&lt;/i&gt;
+        Respondemos la mayoría de los mensajes dentro de las próximas 24 horas hábiles.
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+    </div>
+
+
+    <div class="tab-pane fade " id="tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Legend</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Html element</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Component</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Html element with directive</span>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<script src="../js/libs/vis-network.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div><!--  Layout general:  - Contenedor centrado con padding vertical.  - appFadeUp aplica la animación al entrar en viewport.--><div class="container py-4" appFadeUp>  <div class="row justify-content-center">    <div class="col-lg-9 col-md-10">      <!-- Card principal que envuelve imagen + formulario -->      <div class="card shadow-sm border-0 overflow-hidden rounded-4">        <div class="row g-0">          <!-- ======================================================               COLUMNA IZQUIERDA: IMAGEN                Solo visible en pantallas md en adelante.          ======================================================= -->          <div class="col-md-5 d-none d-md-block position-relative">            <div class="h-100 w-100">              <img                src="assets/img/general/g5.png"                alt="Contacto SoundSeeker"                class="img-fluid h-100 w-100 object-fit-cover"              />            </div>            <!-- Capa oscurecida con gradiente para mejorar la lectura del texto -->            <div              class="position-absolute top-0 start-0 w-100 h-100"              style="                background: linear-gradient(                  135deg,                  rgba(15, 23, 42, 0.85),                  rgba(15, 23, 42, 0.3)                );              "            ></div>            <!-- Texto de branding sobre la imagen -->            <div class="position-absolute bottom-0 start-0 p-4 text-white">              <div class="small text-uppercase mb-1 opacity-75">                SoundSeeker              </div>              <h2 class="h5 mb-1">Hablemos de tu sonido</h2>              <p class="small mb-0 opacity-85">                Clases, servicios y equipos pensados para músicos reales.              </p>            </div>          </div>          <!-- ======================================================               COLUMNA DERECHA: FORMULARIO DE CONTACTO          ======================================================= -->          <div class="col-md-7">            <div class="card-body p-4 p-md-5">              <!-- Encabezado del formulario -->              <h1 class="h4 mb-2 text-center text-md-start">                Contacto              </h1>              <p class="text-muted small text-center text-md-start mb-4">                ¿Tienes dudas sobre clases, servicios o equipos? Escríbenos y te respondemos pronto.              </p>              <!-- Mensaje de éxito tras envío correcto (controlado por submitted en el TS) -->              <div                *ngIf="submitted"                class="alert alert-success py-2 small mb-4"                role="alert"              >                ¡Gracias por tu mensaje! Te contactaremos a la brevedad.              </div>              <!--                Formulario reactivo:                - Vinculado al FormGroup "form" de Contacto.                - onSubmit() gestiona validaciones y simulación de envío.              -->              <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>                <!-- ============================                     CAMPO: NOMBRE                ============================= -->                <div class="mb-3">                  <label class="form-label">Nombre</label>                  <input                    type="text"                    class="form-control"                    formControlName="name"                    [class.is-invalid]="                      hasError(\'name\', \'required\') ||                      hasError(\'name\', \'minlength\')                    "                    placeholder="Tu nombre"                  />                  <div class="invalid-feedback" *ngIf="hasError(\'name\', \'required\')">                    El nombre es obligatorio.                  </div>                  <div class="invalid-feedback" *ngIf="hasError(\'name\', \'minlength\')">                    El nombre debe tener al menos 3 caracteres.                  </div>                </div>                <!-- ============================                     CAMPO: CORREO ELECTRÓNICO                ============================= -->                <div class="mb-3">                  <label class="form-label">Correo electrónico</label>                  <input                    type="email"                    class="form-control"                    formControlName="email"                    [class.is-invalid]="                      hasError(\'email\', \'required\') ||                      hasError(\'email\', \'email\')                    "                    placeholder="tucorreo@ejemplo.com"                  />                  <div class="invalid-feedback" *ngIf="hasError(\'email\', \'required\')">                    El correo es obligatorio.                  </div>                  <div class="invalid-feedback" *ngIf="hasError(\'email\', \'email\')">                    Ingresa un correo electrónico válido.                  </div>                </div>                <!-- ============================                     CAMPO: ASUNTO                ============================= -->                <div class="mb-3">                  <label class="form-label">Asunto</label>                  <input                    type="text"                    class="form-control"                    formControlName="subject"                    [class.is-invalid]="                      hasError(\'subject\', \'required\') ||                      hasError(\'subject\', \'minlength\')                    "                    placeholder="Por ejemplo: Consulta por clases de guitarra"                  />                  <div class="invalid-feedback" *ngIf="hasError(\'subject\', \'required\')">                    El asunto es obligatorio.                  </div>                  <div class="invalid-feedback" *ngIf="hasError(\'subject\', \'minlength\')">                    El asunto debe tener al menos 5 caracteres.                  </div>                </div>                <!-- ============================                     CAMPO: MENSAJE                ============================= -->                <div class="mb-3">                  <label class="form-label">Mensaje</label>                  <textarea                    rows="4"                    class="form-control"                    formControlName="message"                    [class.is-invalid]="                      hasError(\'message\', \'required\') ||                      hasError(\'message\', \'minlength\')                    "                    placeholder="Cuéntanos qué necesitas: tipo de clases, instrumento, nivel, horarios, etc."                  ></textarea>                  <div class="invalid-feedback" *ngIf="hasError(\'message\', \'required\')">                    El mensaje es obligatorio.                  </div>                  <div class="invalid-feedback" *ngIf="hasError(\'message\', \'minlength\')">                    El mensaje debe tener al menos 10 caracteres.                  </div>                </div>                <!-- ======================================================                     PIE DEL FORMULARIO: BOTONES + INFO DE CONTACTO                ======================================================= -->                <div class="d-flex flex-column gap-3 mt-3">                  <!-- Botones de acción (enviar / limpiar) -->                  <div class="d-flex flex-column flex-md-row gap-2">                    <!-- Botón enviar, deshabilitado mientras sending = true -->                    <button                      type="submit"                      class="btn btn-primary px-4 flex-grow-1"                      [disabled]="sending"                    >                      <span *ngIf="!sending">                        <i class="bi bi-send me-1"></i>                        Enviar mensaje                      </span>                      <span *ngIf="sending">                        Enviando...                      </span>                    </button>                    <!-- Botón limpiar → llama a onClear() en el componente -->                    <button                      type="button"                      class="btn btn-outline-secondary px-4"                      (click)="onClear()"                    >                      <i class="bi bi-eraser me-1"></i>                      Limpiar                    </button>                  </div>                  <!-- Información alternativa de contacto -->                  <div class="text-muted small text-md-end">                    También puedes escribirnos a<br />                    <span class="fw-semibold">contacto@soundseeker.cl</span>                  </div>                </div>              </form>            </div>          </div>          <!-- /col-md-7 -->        </div>      </div>      <!-- Nota informativa bajo la card -->      <div class="text-center text-muted small mt-3">        <i class="bi bi-info-circle me-1"></i>        Respondemos la mayoría de los mensajes dentro de las próximas 24 horas hábiles.      </div>    </div>  </div></div></div>'
+    var COMPONENTS = [{'name': 'AdBanner', 'selector': 'app-ad-banner'},{'name': 'AdminCursosComponent', 'selector': 'app-admin-cursos'},{'name': 'AdminDashboard', 'selector': 'app-admin-dashboard'},{'name': 'AdminLayout', 'selector': 'app-admin-layout'},{'name': 'AdminProductos', 'selector': 'app-admin-productos'},{'name': 'AdminTutores', 'selector': 'app-admin-tutores'},{'name': 'AdminUsuarios', 'selector': 'app-admin-usuarios'},{'name': 'App', 'selector': 'app-root'},{'name': 'BreadcrumbComponent', 'selector': 'app-breadcrumb'},{'name': 'Carousel', 'selector': 'app-carousel'},{'name': 'Contacto', 'selector': 'app-contacto'},{'name': 'CourseCardComponent', 'selector': 'app-course-card'},{'name': 'CourseFormComponent', 'selector': 'app-course-form'},{'name': 'CursoDetailComponent', 'selector': 'app-curso-detail'},{'name': 'CursosListComponent', 'selector': 'app-cursos-list'},{'name': 'FooterComponent', 'selector': 'app-footer'},{'name': 'Home', 'selector': 'app-home'},{'name': 'LoadingComponent', 'selector': 'app-loading'},{'name': 'LoginComponent', 'selector': 'app-login'},{'name': 'MainLayout', 'selector': 'app-main-layout'},{'name': 'NavbarComponent', 'selector': 'app-navbar'},{'name': 'NewsCard', 'selector': 'app-news-card'},{'name': 'NoticiaDetalle', 'selector': 'app-noticias-detail'},{'name': 'Noticias', 'selector': 'app-noticias'},{'name': 'ProductCardComponent', 'selector': 'app-product-card'},{'name': 'ProductCategoryBannerComponent', 'selector': 'app-product-category-banner'},{'name': 'ProductDetailComponent', 'selector': 'app-product-detail'},{'name': 'ProductFiltersComponent', 'selector': 'app-product-filters'},{'name': 'ProductFormComponent', 'selector': 'app-product-form'},{'name': 'ProductGridComponent', 'selector': 'app-product-grid'},{'name': 'ProductListComponent', 'selector': 'app-product-list'},{'name': 'Profile', 'selector': 'app-profile'},{'name': 'Recover', 'selector': 'app-recover-password'},{'name': 'RegisterComponent', 'selector': 'app-register'},{'name': 'ServicioDetail', 'selector': 'app-servicio-detail'},{'name': 'ServiciosList', 'selector': 'app-servicios-list'},{'name': 'Somos', 'selector': 'app-somos'},{'name': 'TutorCardComponent', 'selector': 'app-tutor-card'},{'name': 'TutoresListComponent', 'selector': 'app-tutores-list'},{'name': 'TutorFilterBarComponent', 'selector': 'app-tutor-filter-bar'},{'name': 'TutorFormComponent', 'selector': 'app-tutor-form'},{'name': 'TutorProfileComponent', 'selector': 'app-tutor-profile-page'},{'name': 'UserFormComponent', 'selector': 'app-user-form'}];
+    var DIRECTIVES = [{'name': 'FadeUpDirective', 'selector': '[appFadeUp]'}];
+    var ACTUAL_COMPONENT = {'name': 'Contacto'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
+            var COMPODOC_CURRENT_PAGE_URL = 'Contacto.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

@@ -1,102 +1,144 @@
-// src/app/core/models/product.ts
 
 import { ProductCategory } from './product-category.model';
 
-// Estado físico del producto.
-// Mantengo union types porque acá sí conviene restringir valores.
+/**
+ * Estado físico del producto.
+ * Mantengo union types porque acá sí conviene restringir valores.
+ *
+ * @usageNotes
+ * - Ideal para filtros: nuevo/usado.
+ * - Evita inconsistencias al ingresar productos.
+ */
 export type ProductCondition = 'nuevo' | 'usado';
 
-// Para indicar el tipo de operación que se puede hacer con el producto.
+/**
+ * Tipo de operación que se puede realizar con el producto.
+ * Permite distinguir venta, intercambio, servicios o reparaciones.
+ *
+ * @usageNotes
+ * - Se usa en filtros del listado y en vistas de detalle.
+ */
 export type ProductModality = 'venta' | 'intercambio' | 'servicio' | 'reparación';
 
-// Nivel del usuario al que está dirigido (útil para instrumentos).
+/**
+ * Nivel recomendado del usuario que lo utilizará.
+ * Útil especialmente para instrumentos o equipos educativos.
+ */
 export type ProductLevel = 'principiante' | 'intermedio' | 'avanzado';
 
-// Modelo principal del producto.
-// Este modelo es usado en cards, detalles, listados, admin, carrousels, etc.
+/**
+ * Modelo principal del producto dentro del sistema.
+ *
+ * Se usa en:
+ * - cards de productos
+ * - listados y grillas
+ * - página de detalle
+ * - administración
+ * - carrousels del home
+ *
+ * Este modelo es flexible porque muchos productos pueden no tener
+ * todos los campos (por ejemplo, tags, modelo o previousPrice).
+ *
+ * @usageNotes
+ * - `slug` es opcional: no todos los productos necesitan página dedicada.
+ * - `previousPrice` permite manejar ofertas reales (antes / ahora).
+ * - `year` puede ser string porque algunos equipos tienen rangos (“1990–1993”).
+ * - Flags como `isFeatured`, `isOffer` o `showInCarousel` controlan la UI,
+ *   no la lógica de negocio.
+ *
+ * @example
+ * const p: Product = {
+ *   id: '123',
+ *   slug: 'fender-stratocaster',
+ *   name: 'Fender Stratocaster Player',
+ *   description: 'Strat moderna con tono brillante.',
+ *   category: 'guitarras',
+ *   price: 680000,
+ *   condition: 'usado',
+ *   level: 'intermedio',
+ *   modality: 'venta',
+ *   imageUrl: '/assets/img/products/strato.jpg'
+ * };
+ */
 export interface Product {
-  id: string;             
-  // ID único del producto. Lo manejo yo mismo y no proviene de backend aún.
+  id: string;
+  // ID único del producto (por ahora generado desde el front).
 
-  slug?: string;          
-  // Identificador para URLs limpias: /productos/mi-guitarra-fender.
-  // Lo dejo opcional por si hay productos sin página de detalle.
+  slug?: string;
+  // Identificador para URLs limpias. Ej: /productos/mi-guitarra-fender.
 
-  name: string;           
-  // Nombre completo del producto (visible en cards y detalle).
+  name: string;
+  // Nombre completo visible en cards, listas y detalle.
 
-  description: string;    
-  // Descripción larga para la página de detalle.
+  description: string;
+  // Descripción larga para la vista de detalle.
 
   shortDescription?: string;
-  // Descripción corta para cards o listados rápidos.
+  // Resumen breve pensado para cards y listados rápidos.
 
   category: ProductCategory;
-  // Categoría del producto: guitarras, bajos, pedales, amplis, etc.
-  // Esto define filtros y organización en la UI.
+  // Categoría general: guitarras, bajos, pedales, amplis, etc.
 
-  price: number;          
-  // Precio actual del producto (obligatorio).
+  price: number;
+  // Precio actual (obligatorio).
 
   previousPrice?: number;
-  // Para mostrar ofertas o rebajas: antes / ahora.
+  // Para mostrar ofertas: precio anterior.
 
   currency?: string;
-  // Permite manejar otras monedas si es necesario.
-  // Por defecto uso CLP desde el front.
+  // Moneda (por defecto CLP).
 
-  brand?: string;         
-  // Marca del instrumento o equipo (Fender, Ibanez, Boss...).
+  brand?: string;
+  // Marca del instrumento o equipo: Fender, Ibanez, Boss, etc.
 
-  model?: string;         
-  // Modelo específico.
+  model?: string;
+  // Modelo específico (Player, RG421, DS-1...).
 
-  year?: number | string;    
-  // Año del instrumento (muchos equipos tienen rango, ej: "1990-1993").
-  // Por eso permito número o string.
+  year?: number | string;
+  // Año o rango. Puede venir como string para casos especiales.
 
   condition?: ProductCondition;
-  // Estado: nuevo o usado.
+  // nuevo / usado.
 
   level?: ProductLevel;
-  // Nivel recomendado para el usuario (útil para instrumentos educativos).
+  // Nivel recomendado del usuario.
 
   modality?: ProductModality;
-  // Tipo de operación: venta, intercambio, reparación, etc.
+  // venta / intercambio / servicio / reparación.
 
   stock?: number;
-  // Cantidad disponible (en admin puede ser útil para controlar inventario).
+  // Cantidad disponible (útil para admin futuro).
 
   location?: string;
-  // Ciudad/Comuna donde está disponible el producto.
+  // Ciudad/comuna donde está disponible.
 
   imageUrl?: string;
   // Imagen principal para mostrar en cards y detalle.
 
   tags?: string[];
-  // Palabras clave para filtros, búsquedas o agrupaciones.
+  // Palabras clave para filtros y búsquedas.
 
   createdAt?: string;
-  // Fecha de creación. Sirve para destacar productos "nuevos" en el carrusel.
+  // Fecha de creación (ISO). Para destacar “nuevos ingresos”.
 
   rating?: number;
   reviewCount?: number;
-  // Información para mostrar estrellas y cantidad de reseñas.
+  // Datos para mostrar estrellas y cantidad de reseñas.
 
-  // ---- FLAGS PARA LA UI ----
+  // ---- FLAGS PARA UI ----
 
   showInCarousel?: boolean;
   // Si es true → aparece en carrousels del home.
 
   isFeatured?: boolean;
-  // Producto destacado (prioridad visual).
+  // Producto destacado (más visibilidad).
 
   isOffer?: boolean;
-  // Indica oferta (si hay previousPrice).
+  // Activa la UI de oferta cuando hay previousPrice.
 
   isNew?: boolean;
   // Para destacar productos recientes.
 
   isActive?: boolean;
-  // Si está activo o pausado (para admin futuro).
+  // Control de visibilidad (para administración).
 }

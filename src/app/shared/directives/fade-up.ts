@@ -16,15 +16,56 @@ import {
   OnDestroy,
 } from '@angular/core';
 
+/**
+ * @description
+ * Directiva estructural que aplica un efecto de “fade-up” a cualquier elemento
+ * sobre el que se use el atributo `appFadeUp`.
+ *
+ * Funcionamiento:
+ *  - Inicialmente deja el elemento con `opacity: 0` y `translateY(12px)`.
+ *  - Cuando el elemento entra en el viewport, anima a `opacity: 1` y `translateY(0)`.
+ *  - Usa `IntersectionObserver` para detectar la entrada en pantalla.
+ *  - Incluye un fallback con `setTimeout` para evitar que el contenido
+ *    quede invisible si el observer falla o se retrasa.
+ *
+ * @usageNotes
+ * ```html
+ * <!-- Cualquier componente / elemento -->
+ * <section class="container" appFadeUp>
+ *   <h2>Sección animada</h2>
+ *   <p>Este contenido se desvanece hacia arriba al entrar en pantalla.</p>
+ * </section>
+ * ```
+ */
+
 @Directive({
   selector: '[appFadeUp]',
   standalone: true,
 })
 export class FadeUpDirective implements OnInit, OnDestroy {
 
-  /** Observer que escucha cuando el elemento entra al viewport. */
+  /**
+   * @description
+   * Observer que detecta cuando el elemento asociado entra en el viewport.
+   * Se inicializa en `ngOnInit` y se limpia en `ngOnDestroy`.
+   */
   private observer?: IntersectionObserver;
 
+  /**
+   * @description
+   * Constructor de la directiva.
+   *
+   * @param el Referencia al elemento DOM nativo donde se aplica `appFadeUp`.
+   * @param renderer Abstracción segura de Angular para manipular estilos/DOM.
+   *
+   * @example
+   * ```ts
+   * constructor(
+   *   private el: ElementRef<HTMLElement>,
+   *   private renderer: Renderer2
+   * ) {}
+   * ```
+   */
   constructor(
     private el: ElementRef<HTMLElement>,
     private renderer: Renderer2
@@ -34,6 +75,25 @@ export class FadeUpDirective implements OnInit, OnDestroy {
   // CICLO: INIT
   // Prepara estilos iniciales + configura el IntersectionObserver.
   // --------------------------------------------------------------------------
+
+  /**
+   * @description
+   * Hook de inicialización de la directiva.
+   *
+   * Responsabilidades:
+   *  - Configurar el estado inicial del elemento (oculto + desplazado).
+   *  - Crear el `IntersectionObserver` que aplica el fade cuando el
+   *    elemento entra en el viewport.
+   *  - Configurar un fallback con `setTimeout` por si el observer
+   *    no llega a dispararse (casos edge/SSR/hidratación lenta).
+   *
+   * @example
+   * ```ts
+   * ngOnInit(): void {
+   *   // Estilos iniciales + observer + fallback
+   * }
+   * ```
+   */
   ngOnInit(): void {
     const native = this.el.nativeElement;
 
@@ -83,6 +143,22 @@ export class FadeUpDirective implements OnInit, OnDestroy {
   // --------------------------------------------------------------------------
   // Muestra el contenido con la animación final del fade.
   // --------------------------------------------------------------------------
+
+  /**
+   * @description
+   * Aplica los estilos finales de la animación:
+   *  - `opacity: 1`
+   *  - `translateY(0)`
+   *
+   * Se invoca tanto desde el `IntersectionObserver` como desde el fallback.
+   *
+   * @param native Elemento sobre el que se aplican los estilos.
+   *
+   * @example
+   * ```ts
+   * this.show(this.el.nativeElement);
+   * ```
+   */
   private show(native: HTMLElement) {
     this.renderer.setStyle(native, 'opacity', '1');
     this.renderer.setStyle(native, 'transform', 'translateY(0)');
@@ -91,6 +167,22 @@ export class FadeUpDirective implements OnInit, OnDestroy {
   // --------------------------------------------------------------------------
   // Limpieza del observer para evitar memory leaks en scroll pesado.
   // --------------------------------------------------------------------------
+
+  /**
+   * @description
+   * Hook de limpieza de la directiva.
+   *
+   * Se asegura de desconectar el `IntersectionObserver` para evitar
+   * fugas de memoria (especialmente en páginas con mucho scroll o
+   * en navegación frecuente entre vistas).
+   *
+   * @example
+   * ```ts
+   * ngOnDestroy(): void {
+   *   this.observer?.disconnect();
+   * }
+   * ```
+   */
   ngOnDestroy(): void {
     this.observer?.disconnect();
   }

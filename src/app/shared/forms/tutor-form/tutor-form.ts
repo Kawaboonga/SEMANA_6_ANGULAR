@@ -54,35 +54,73 @@ interface AvailabilityOption {
   templateUrl: './tutor-form.html',
   imports: [CommonModule, ReactiveFormsModule],
 })
+/**
+ * @description
+ * Formulario de administración para crear y editar tutores (`Tutor`).
+ *
+ * Responsabilidades:
+ * - Construir un `FormGroup` con todos los campos relevantes de un tutor.
+ * - Soportar modo creación (`value = null`) y modo edición (`value` con datos).
+ * - Mapear campos UI (selects múltiples, availabilityIds) al modelo real
+ *   (`weeklyAvailability`, `instruments`, `modalities`, etc.).
+ * - Emitir un `Tutor` completo y coherente al componente padre.
+ *
+ * @usageNotes
+ * ```html
+ * <app-tutor-form
+ *   [value]="tutorSeleccionado"
+ *   (save)="onSaveTutor($event)"
+ *   (cancel)="onCancelTutor()">
+ * </app-tutor-form>
+ * ```
+ */
 export class TutorFormComponent implements OnInit, OnChanges {
   // ==========================================================================
   // INPUTS / OUTPUTS
   // ==========================================================================
 
   /**
-   * value:
-   *   - Si viene null → modo creación (tutor nuevo).
-   *   - Si viene con datos → modo edición.
-   * Se usa como "estado inicial" del formulario.
+   * @description
+   * Estado inicial del formulario.
+   *
+   * - Si viene `null` → modo creación (tutor nuevo).
+   * - Si viene con datos → modo edición (se patchan los valores).
+   *
+   * @usageNotes
+   * El componente no crea ni destruye el tutor en la capa de datos, solo
+   * prepara el payload y lo emite en el evento `save`.
    */
   @Input() value: Tutor | null = null;
 
   /**
-   * save:
-   *   Emite el Tutor final cuando el formulario es válido y se hace submit.
+   * @description
+   * Evento que emite el `Tutor` final cuando el formulario es válido
+   * y el usuario hace submit.
+   *
+   * @example
+   * ```ts
+   * onSaveTutor(tutor: Tutor) {
+   *   this.tutorService.upsert(tutor);
+   * }
+   * ```
    */
   @Output() save = new EventEmitter<Tutor>();
 
   /**
-   * cancel:
-   *   Evento simple para avisar al padre que se canceló la edición / creación.
+   * @description
+   * Evento simple para avisar al padre que se canceló la edición / creación.
+   *
+   * @example
+   * ```html
+   * <button type="button" (click)="onCancel()">Cancelar</button>
+   * ```
    */
   @Output() cancel = new EventEmitter<void>();
 
   /**
-   * form:
-   *   FormGroup que agrupa todos los campos del tutor.
-   *   Se define en buildForm() y se usa en el template con [formGroup].
+   * @description
+   * FormGroup que agrupa todos los campos del tutor.
+   * Se define en `buildForm()` y se enlaza en la plantilla vía `[formGroup]`.
    */
   form!: FormGroup;
 
@@ -91,10 +129,10 @@ export class TutorFormComponent implements OnInit, OnChanges {
   // ============================================================
 
   /**
-   * communes:
-   *   Listado de comunas de referencia dentro de la RM.
-   *   Se usan como opciones en un <select>, para estandarizar la ubicación
-   *   y permitir filtros futuros (por comuna).
+   * @description
+   * Listado de comunas de referencia dentro de la RM.
+   * Se usan como opciones en un `<select>` para estandarizar ubicación
+   * y facilitar filtros futuros por comuna.
    */
   communes: string[] = [
     'Santiago Centro',
@@ -114,10 +152,12 @@ export class TutorFormComponent implements OnInit, OnChanges {
   ];
 
   /**
-   * instrumentOptions:
-   *   Cada opción tiene un value "técnico" (para el modelo)
-   *   y un label legible para mostrar en el UI.
-   *   Se piensa para chips / checkboxes / selects múltiples.
+   * @description
+   * Opciones de instrumentos:
+   * - `value` → clave técnica usada en el modelo (`Tutor.instruments`).
+   * - `label` → texto legible para el UI.
+   *
+   * Pensado para checkboxes / chips / multiselect.
    */
   instrumentOptions: { value: string; label: string }[] = [
     { value: 'guitarra-electrica', label: 'Guitarra eléctrica' },
@@ -130,9 +170,9 @@ export class TutorFormComponent implements OnInit, OnChanges {
   ];
 
   /**
-   * styleOptions:
-   *   Estilos musicales que puede manejar el tutor.
-   *   Se almacenan como strings simples en un array.
+   * @description
+   * Estilos musicales que puede manejar el tutor.
+   * Se guardan como `string[]` en el modelo (`Tutor.styles`).
    */
   styleOptions: string[] = [
     'rock',
@@ -146,41 +186,42 @@ export class TutorFormComponent implements OnInit, OnChanges {
   ];
 
   /**
-   * modalityOptions:
-   *   Modalidades de clases ofrecidas:
-   *   - presencial
-   *   - online
-   *   Se maneja como array de string, lo que facilita usar
-   *   checkboxes múltiples.
+   * @description
+   * Modalidades de clases ofrecidas:
+   * - `"presencial"`
+   * - `"online"`
+   *
+   * Se combina como array (`['presencial', 'online']`) cuando aplica.
    */
   modalityOptions: string[] = ['presencial', 'online'];
 
   /**
-   * ratingOptions:
-   *   Valores de referencia para rating de tutor.
-   *   Pensado para no estar inventando números a cada rato
-   *   cuando se cargan tutores nuevos.
+   * @description
+   * Valores de referencia para rating de tutor.
+   * Útil para no inventar números en cada alta manual.
    */
   ratingOptions: number[] = [5, 4.8, 4.5, 4.2, 4, 3.8, 3.5];
 
   /**
-   * ratingCountOptions:
-   *   Números de reseñas predefinidos para simular experiencia.
+   * @description
+   * Números de reseñas predefinidos (ratingCount) para simular experiencia.
    */
   ratingCountOptions: number[] = [0, 3, 5, 10, 20, 30, 50, 100];
 
   /**
-   * languageOptions:
-   *   Idiomas en los que el tutor puede hacer clases.
-   *   Se guardan como array de strings.
+   * @description
+   * Idiomas en los que el tutor puede hacer clases.
+   * Se guardan como `string[]` (`Tutor.languages`).
    */
   languageOptions: string[] = ['Español', 'Inglés', 'Portugués'];
 
   /**
-   * availabilityOptions:
-   *   Presets de disponibilidad que el admin puede marcar.
-   *   Cada opción se convierte luego en un conjunto de días/horas
-   *   más detallado, usando mapAvailabilityFromIds().
+   * @description
+   * Presets de disponibilidad para el admin.
+   *
+   * Cada opción:
+   * - se selecciona en un `<select multiple>` (availabilityIds)
+   * - luego se transforma a `weeklyAvailability` usando `mapAvailabilityFromIds`.
    */
   availabilityOptions: AvailabilityOption[] = [
     {
@@ -197,6 +238,12 @@ export class TutorFormComponent implements OnInit, OnChanges {
     },
   ];
 
+  /**
+   * @description
+   * Constructor del componente.
+   *
+   * @param fb Servicio `FormBuilder` para crear formularios reactivos.
+   */
   constructor(private fb: FormBuilder) {}
 
   // ============================================================
@@ -204,10 +251,11 @@ export class TutorFormComponent implements OnInit, OnChanges {
   // ============================================================
 
   /**
-   * ngOnInit:
-   *   - Construye el formulario (buildForm).
-   *   - Si viene un tutor en @Input() value, se hace patchForm
-   *     para entrar directo en modo edición.
+   * @description
+   * Hook de inicialización del componente.
+   *
+   * - Construye el formulario (`buildForm()`).
+   * - Si viene un `Tutor` en `@Input() value`, se cargan sus datos con `patchForm`.
    */
   ngOnInit(): void {
     this.buildForm();
@@ -218,12 +266,14 @@ export class TutorFormComponent implements OnInit, OnChanges {
   }
 
   /**
-   * ngOnChanges:
-   *   - Se ejecuta cuando cambian los inputs del componente.
-   *   - Si cambia `value` y el form ya está construido, se actualiza
-   *     el contenido del formulario con patchForm().
-   *   Esto permite refrescar el formulario si el padre cambia el tutor
-   *   seleccionado sin recrear el componente.
+   * @description
+   * Hook que se ejecuta cuando cambian los `@Input` del componente.
+   *
+   * - Si cambia `value` y el form ya existe → se actualiza el contenido con `patchForm`.
+   * - Permite refrescar el formulario si el padre cambia el tutor seleccionado
+   *   sin recrear el componente.
+   *
+   * @param changes Mapa de cambios detectados en las propiedades de entrada.
    */
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['value'] && this.form) {
@@ -232,15 +282,18 @@ export class TutorFormComponent implements OnInit, OnChanges {
   }
 
   // ============================================================
-  // 3. CREACIÓN Y CARGA DEL FORM
+  // 3. CREACIÓN AND CARGA DEL FORM
   // ============================================================
 
   /**
-   * buildForm:
-   *   Define la estructura completa del FormGroup:
-   *   - Campos simples (name, city, avatarUrl, etc.).
-   *   - Controles de tipo array para instruments, styles, modalities, languages.
-   *   - Valores por defecto razonables (ej: rating, ratingCount, languages).
+   * @description
+   * Define la estructura completa del `FormGroup`:
+   * - Campos simples (name, commune, city, avatarUrl, etc.).
+   * - Controles de tipo array para `instruments`, `styles`, `modalities`, `languages`.
+   * - Valores por defecto razonables (rating, ratingCount, idioma).
+   *
+   * @usageNotes
+   * Debe llamarse una vez en `ngOnInit` antes de usar el formulario.
    */
   private buildForm(): void {
     this.form = this.fb.group({
@@ -295,9 +348,16 @@ export class TutorFormComponent implements OnInit, OnChanges {
   }
 
   /**
-   * patchForm:
-   *   Carga los datos de un Tutor en el formulario.
-   *   Se preocupa de aplicar defaults si algunos campos vienen undefined.
+   * @description
+   * Carga los datos de un `Tutor` en el formulario.
+   * Aplica defaults si algunos campos vienen `undefined`.
+   *
+   * @param tutor Tutor a editar; si es `null`, no hace nada.
+   *
+   * @example
+   * ```ts
+   * this.patchForm(tutorSeleccionado);
+   * ```
    */
   private patchForm(tutor: Tutor | null): void {
     if (!tutor) return;
@@ -346,11 +406,23 @@ export class TutorFormComponent implements OnInit, OnChanges {
   // ============================================================
 
   /**
-   * hasError:
-   *   Helper para usar en el template:
-   *   - Devuelve true si el control tiene el error indicado
-   *     y además ya fue tocado.
-   *   Esto evita mostrar errores mientras el usuario aún no interactúa.
+   * @description
+   * Helper para el template:
+   * - Devuelve `true` si el control tiene el error indicado
+   *   **y** ya fue tocado (`touched`).
+   *
+   * Esto evita mostrar errores mientras el usuario aún no interactúa.
+   *
+   * @param controlName Nombre del control en el formulario.
+   * @param error Código de error a verificar (ej: `"required"`).
+   * @returns `true` si el control tiene ese error y está `touched`.
+   *
+   * @example
+   * ```html
+   * <div *ngIf="hasError('name', 'required')">
+   *   El nombre del tutor es obligatorio.
+   * </div>
+   * ```
    */
   hasError(controlName: string, error: string): boolean {
     const control = this.form.get(controlName);
@@ -362,12 +434,20 @@ export class TutorFormComponent implements OnInit, OnChanges {
   // ============================================================
 
   /**
-   * mapAvailabilityFromIds:
-   *   Convierte una lista de ids de disponibilidad (availabilityIds)
-   *   en una estructura weeklyAvailability que entiende el front.
+   * @description
+   * Convierte una lista de `availabilityIds` en una estructura
+   * `weeklyAvailability` que entiende el front.
    *
-   *   Cada id representa un patrón de días/horas.
-   *   Si llega un id desconocido, se ignora (para no romper nada).
+   * Cada id representa un patrón de días/horas.
+   * Ids desconocidos se ignoran silenciosamente.
+   *
+   * @param ids Lista de ids de disponibilidad seleccionados en el formulario.
+   * @returns Arreglo de objetos `{ day: string; times: string[] }`.
+   *
+   * @example
+   * ```ts
+   * const weekly = this.mapAvailabilityFromIds(['lun-vie-tarde', 'sab-manana']);
+   * ```
    */
   private mapAvailabilityFromIds(ids: string[]): any[] {
     const result: any[] = [];
@@ -408,10 +488,20 @@ export class TutorFormComponent implements OnInit, OnChanges {
   }
 
   /**
-   * slugify:
-   *   Genera un id/slug a partir del nombre del tutor.
-   *   Se pasa a minúsculas, se eliminan acentos y se reemplazan
-   *   espacios/símbolos por guiones.
+   * @description
+   * Genera un id/slug a partir del nombre del tutor.
+   * - Minúsculas
+   * - Sin acentos
+   * - Espacios/símbolos → guiones
+   *
+   * @param text Texto base (normalmente `name`).
+   * @returns Slug normalizado sin espacios ni caracteres especiales.
+   *
+   * @example
+   * ```ts
+   * const id = this.slugify('Marco Vidal – Guitarra Rock');
+   * // 'marco-vidal-guitarra-rock'
+   * ```
    */
   private slugify(text: string): string {
     return text
@@ -427,14 +517,24 @@ export class TutorFormComponent implements OnInit, OnChanges {
   // ============================================================
 
   /**
-   * onMultiSelectChange:
-   *   Maneja los cambios de un <select multiple> en el template.
-   *   - Lee las opciones seleccionadas.
-   *   - Actualiza el control correspondiente en el form.
-   *   - Marca el control como dirty y touched para activar validaciones.
+   * @description
+   * Maneja los cambios de un `<select multiple>` en el template.
    *
-   *   Se utiliza para availabilityIds, pero el método es genérico
-   *   por si quisieras reutilizarlo en otros selects múltiples.
+   * - Lee las opciones seleccionadas.
+   * - Actualiza el control correspondiente en el formulario.
+   * - Marca el control como `dirty` y `touched` para activar validaciones.
+   *
+   * Se utiliza para `availabilityIds`, pero es genérico para otros multiselect.
+   *
+   * @param controlName Nombre del control que se debe actualizar.
+   * @param event Evento `change` del `<select multiple>`.
+   *
+   * @example
+   * ```html
+   * <select multiple (change)="onMultiSelectChange('availabilityIds', $event)">
+   *   ...
+   * </select>
+   * ```
    */
   onMultiSelectChange(controlName: string, event: Event): void {
     const select = event.target as HTMLSelectElement;
@@ -448,16 +548,20 @@ export class TutorFormComponent implements OnInit, OnChanges {
   }
 
   /**
-   * onSubmit:
-   *   - Valida el formulario.
-   *   - Si es inválido → marca todo como touched y no hace nada más.
-   *   - Si es válido:
-   *       • Obtiene los valores en bruto (getRawValue).
-   *       • Convierte availabilityIds a weeklyAvailability.
-   *       • Construye un payload Partial<Tutor> manteniendo los datos
-   *         previos si existían (modo edición).
-   *       • Si no hay id, lo genera usando slugify(nombre).
-   *       • Emite el tutor final a través del EventEmitter save.
+   * @description
+   * Maneja el envío del formulario.
+   *
+   * Flujo:
+   * 1. Si el formulario es inválido:
+   *    - Marca todos los controles como `touched`.
+   *    - No emite nada.
+   * 2. Si es válido:
+   *    - Obtiene los valores crudos (`getRawValue()`).
+   *    - Convierte `availabilityIds` → `weeklyAvailability`.
+   *    - Construye un payload `Partial<Tutor>`, preservando datos previos
+   *      si existían (modo edición).
+   *    - Si no hay `id`, lo genera con `slugify(nombre)`.
+   *    - Emite el `Tutor` final a través de `save`.
    */
   onSubmit(): void {
     if (this.form.invalid) {
@@ -506,9 +610,10 @@ export class TutorFormComponent implements OnInit, OnChanges {
   }
 
   /**
-   * onCancel:
-   *   Notifica al padre que se canceló la operación.
-   *   No toca el formulario ni los datos; solo emite el evento.
+   * @description
+   * Notifica al padre que se canceló la operación.
+   *
+   * No modifica el formulario ni los datos; solo emite el evento `cancel`.
    */
   onCancel(): void {
     this.cancel.emit();

@@ -1,14 +1,3 @@
-// ============================================================================
-// TUTOR FILTER BAR COMPONENT
-// ----------------------------------------------------------------------------
-// Barra de filtros para la vista de instructores.
-// Se integra con el servicio TutorService a través de la interfaz TutorFilter.
-//
-// Este componente es "tonto" (dumb component):
-//   - No filtra nada por sí mismo.
-//   - Solo emite eventos al componente padre.
-//   - Mantiene una copia local para trabajar con ngModel sin mutar el @Input().
-// ============================================================================
 
 import {
   Component,
@@ -21,9 +10,31 @@ import {
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
-// Interfaz compartida entre el filtro y el servicio
 import { TutorFilter } from '@core/services/tutor.service';
 
+/**
+ * ============================================================================
+ * TutorFilterBarComponent
+ * ============================================================================
+ *
+ * @description
+ * Componente de barra de filtros reutilizable para la sección de tutores.
+ * Expone inputs y outputs simples, permitiendo que el componente padre tome
+ * control total del filtrado real mediante TutorService.
+ *
+ * @usageNotes
+ * - No aplica filtros directamente: solo emite eventos.
+ * - Siempre mantiene una copia local (`local`) para trabajar con ngModel
+ *   sin mutar el @Input().
+ * - Cuando cambia el @Input() `filter`, se sincroniza automáticamente.
+ *
+ * @example
+ * <app-tutor-filter-bar
+ *    [filter]="filter()"
+ *    (filterChange)="onFilterChange($event)"
+ *    (reset)="onResetFilters()"
+ * ></app-tutor-filter-bar>
+ */
 @Component({
   selector: 'app-tutor-filter-bar',
   standalone: true,
@@ -33,44 +44,59 @@ import { TutorFilter } from '@core/services/tutor.service';
 export class TutorFilterBarComponent implements OnChanges {
 
   // ==========================================================================
-  // 1) ENTRADA + SALIDAS
+  // 1) ENTRADAS Y SALIDAS
   // ==========================================================================
+
   /**
-   * Filtro actual recibido desde el componente padre.
-   * TutorFilter está definido en el servicio para asegurar consistencia global.
+   * Filtro actual proveniente del componente padre.
+   *
+   * @type {TutorFilter}
+   * @input
    */
   @Input() filter!: TutorFilter;
 
   /**
-   * Se emite cuando cualquier control cambia.
-   * El padre actualiza el servicio, el service recalcula los tutores filtrados.
+   * Evento emitido cada vez que cambia cualquier valor del formulario local.
+   * El componente padre recibirá el nuevo filtro y actualizará TutorService.
+   *
+   * @type {EventEmitter<TutorFilter>}
+   * @output
    */
   @Output() filterChange = new EventEmitter<TutorFilter>();
 
   /**
-   * Evento independiente para el botón "Limpiar filtros".
-   * Algunos componentes/servicios pueden querer reaccionar distinto al reset.
+   * Evento separado que se dispara al presionar "Limpiar filtros".
+   * Útil cuando el padre también necesita ejecutar lógica adicional.
+   *
+   * @type {EventEmitter<void>}
+   * @output
    */
   @Output() reset = new EventEmitter<void>();
 
 
   // ==========================================================================
-  // 2) COPIA LOCAL DEL FILTRO
+  // 2) ESTADO LOCAL
   // ==========================================================================
+
   /**
-   * Internamente usamos una copia local del filtro para evitar
-   * mutar directamente el @Input().
-   * Esto permite el uso de ngModel sin side-effects.
+   * Copia local del filtro, usada para binding con ngModel.
+   * Evita mutaciones accidentales del @Input() original.
+   *
+   * @type {TutorFilter}
    */
   local: TutorFilter = this.createDefaultFilter();
 
 
   // ==========================================================================
-  // 3) SINCRONIZACIÓN CON @Input()
+  // 3) SINCRONIZACIÓN CON INPUT
   // ==========================================================================
+
   /**
-   * Cada vez que cambia `@Input() filter`, sincronizamos nuestra copia local.
-   * Mezclamos defaults + valores entrantes para evitar undefined.
+   * Lifecycle hook que detecta cambios en los @Input().
+   * Mezcla defaults + valores entrantes para reconstruir `local`.
+   *
+   * @param {SimpleChanges} changes
+   * @returns {void}
    */
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['filter'] && this.filter) {
@@ -83,11 +109,15 @@ export class TutorFilterBarComponent implements OnChanges {
 
 
   // ==========================================================================
-  // 4) VALORES POR DEFECTO DEL FILTRO
+  // 4) VALORES INICIALES DEL FILTRO
   // ==========================================================================
+
   /**
-   * Define el estado inicial del filtro.
-   * Si en el futuro agregas más filtros, solo actualizas este método.
+   * Genera un filtro limpio con todos los valores por defecto.
+   *
+   * @returns {TutorFilter}
+   * @example
+   * const f = this.createDefaultFilter();
    */
   private createDefaultFilter(): TutorFilter {
     return {
@@ -104,11 +134,14 @@ export class TutorFilterBarComponent implements OnChanges {
 
 
   // ==========================================================================
-  // 5) MANEJO DE CAMBIOS DE FORMULARIO
+  // 5) MANEJO DE CAMBIOS EN LOS SELECT / INPUTS
   // ==========================================================================
+
   /**
-   * Se ejecuta con cada ngModelChange.
-   * Emite el filtro actualizado hacia el componente padre.
+   * Emite un evento cada vez que un control del formulario cambia.
+   * El padre recibe `{...local}` y actualiza el TutorService.
+   *
+   * @returns {void}
    */
   onChange(): void {
     this.filterChange.emit({ ...this.local });
@@ -116,13 +149,20 @@ export class TutorFilterBarComponent implements OnChanges {
 
 
   // ==========================================================================
-  // 6) RESET DEL FORMULARIO
+  // 6) RESETEAR FILTROS
   // ==========================================================================
+
   /**
-   * Resetea todos los filtros a sus valores por defecto.
-   *  - Actualiza this.local
-   *  - Emite filterChange para aplicar inmediatamente
-   *  - Emite el evento reset() por si el padre quiere reaccionar aparte
+   * Reset completo del formulario de filtros.
+   *
+   * @returns {void}
+   * @usageNotes
+   * - Restaura valores por defecto.
+   * - Emite filterChange() inmediatamente para aplicar el filtro limpio.
+   * - Emite reset() por si el padre desea lógica propia adicional.
+   *
+   * @example
+   * this.onReset();
    */
   onReset(): void {
     this.local = this.createDefaultFilter();

@@ -4,39 +4,75 @@ import { News } from '@core/models/news.model';
 @Injectable({
   providedIn: 'root',
 })
+/**
+ * Servicio encargado de manejar las noticias del proyecto.
+ *
+ * Por ahora funciona con una lista estática declarada en el propio servicio,
+ * pero está pensado para reemplazarse fácilmente por:
+ * - una API externa,
+ * - un archivo JSON,
+ * - o un backend real.
+ *
+ * Se usa en:
+ * - el carrusel del home,
+ * - la sección completa de “Noticias”,
+ * - las páginas de detalle de cada noticia.
+ *
+ * @usageNotes
+ * - Cada noticia incluye campos del modelo base `CarouselItem` + campos propios.
+ * - `date` es la fecha real en ISO; `dateLabel` es la versión formateada para UI.
+ * - Mantener el tipo fijo `"news"` permite que el carrusel sepa cómo mostrarlo.
+ *
+ * @example
+ * // En un componente:
+ * const noticias = this.newsService.getAll();
+ *
+ * @example
+ * // Para detalle:
+ * const noticia = this.newsService.getById('n1');
+ */
 export class NewsService {
-  // Lista local de noticias.
-  // Estas noticias se usan tanto en el carrusel del home como en la sección de "Noticias".
-  // Más adelante esto puede venir desde una API o un JSON externo.
+  /**
+   * Lista local de noticias.
+   *
+   * Se usa tanto en el carrusel como en el listado completo.
+   * Cada noticia contiene:
+   * - id
+   * - type: 'news'
+   * - título, subtítulo, imagen
+   * - fecha real + fecha formateada
+   * - excerpt y descripción breve
+   * - contenido extendido para la página de detalle
+   * - CTA opcional para navegar
+   */
   private news: News[] = [
     {
       id: 'n1',
-      type: 'news',  // requerido por el modelo News/CarouselItem para identificar el tipo
+      type: 'news',
 
-      // Campos base compartidos con el carrusel
+      // Campos base del carrusel
       title: 'Lanzamiento oficial de SoundSeeker',
       subtitle: 'Comunidad de tutores y alumnos',
       imageUrl:
         'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=900&q=80',
 
-      // Campos específicos de noticias + mapeo a carrusel
-      date: '2025-11-26',              // fecha "real" de la noticia (ISO)
-      dateLabel: '26-11-2025',         // fecha formateada para el badge en la UI
+      // Campos propios del modelo News
+      date: '2025-11-26',
+      dateLabel: '26-11-2025',
       excerpt: 'Conecta con tutores de tu comuna y encuentra tu sonido.',
-      description: 'Conecta con tutores de tu comuna y encuentra tu sonido.', // texto breve que ve el carrusel/card
-      ctaLabel: 'Leer más',            // texto del botón de acción
+      description: 'Conecta con tutores de tu comuna y encuentra tu sonido.',
+      ctaLabel: 'Leer más',
 
-      // Contenido extendido para la página de detalle de la noticia.
       content: [
         'Primer párrafo...',
         'Segundo párrafo...',
         'Tercer párrafo...',
       ],
     },
+
     {
       id: 'n2',
       type: 'news',
-
       title: 'Nueva categoría: pedales de bajo',
       subtitle: 'Más opciones para tu low end',
       imageUrl:
@@ -54,7 +90,6 @@ export class NewsService {
     {
       id: 'n3',
       type: 'news',
-
       title: 'Nueva categoría: pedales de bajo',
       subtitle: 'Más opciones para tu low end',
       imageUrl:
@@ -68,17 +103,31 @@ export class NewsService {
 
       content: ['Texto largo...'],
     },
-    // puedes seguir agregando más noticias con la misma estructura
   ];
 
-  // Devuelve todas las noticias.
-  // Se usa para el listado general o para armar el carrusel de noticias.
+  /**
+   * Devuelve todas las noticias.
+   * Ideal para el listado general y para generar el carrusel.
+   *
+   * @returns News[]
+   *
+   * @example
+   * const lista = this.newsService.getAll();
+   */
   getAll(): News[] {
     return this.news;
   }
 
-  // Busca una noticia por ID.
-  // Ideal para la página de detalle: /noticias/:id o similar.
+  /**
+   * Busca una noticia específica usando su ID.
+   * Usado directamente en la página de detalle: `/noticias/:id`.
+   *
+   * @param id ID de la noticia
+   * @returns News | undefined
+   *
+   * @example
+   * const noticia = this.newsService.getById('n2');
+   */
   getById(id: string): News | undefined {
     return this.news.find((n) => n.id === id);
   }

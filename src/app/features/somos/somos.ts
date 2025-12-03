@@ -1,52 +1,63 @@
+// ============================================================================
 // src/app/featured/somos/somos.ts
+//
+// Página informativa “Somos / Sobre SoundSeeker”.
+// Componente estático, minimalista y orientado a contenido.
+// Incluye soporte de animación con FadeUpDirective.
+// ============================================================================
 
 import { Component } from '@angular/core';
 import { FadeUpDirective } from '@shared/directives/fade-up';
 
 /**
- * ============================================================
- * COMPONENTE: Somos
- * ------------------------------------------------------------
- * - Standalone component (Angular 20)
- * - Carga su propio HTML y CSS
- * - No tiene lógica interna por ahora, es una página estática
- *   informativa (quiénes somos / filosofía SoundSeeker).
- * - Incluye FadeUpDirective para animaciones de entrada.
- * ============================================================
+ * Componente de la página "Somos".
+ *
+ * Página estática orientada a presentar:
+ * - Identidad del proyecto
+ * - Filosofía SoundSeeker
+ * - Objetivos, misión y visión
+ * - Texto narrativo con animaciones suaves
+ *
+ * @component
+ * @example
+ * <app-somos></app-somos>
+ *
+ * @usageNotes
+ * - No requiere lógica en TypeScript por ahora.
+ * - Puede extenderse con signals o servicios si deseas
+ *   cargar contenido dinámico más adelante.
+ * - El estilo visual y las animaciones se controlan
+ *   exclusivamente desde el HTML + CSS.
  */
 @Component({
   selector: 'app-somos',
 
   /**
-   * ------------------------------------------------------------
-   * IMPORTS
-   * ------------------------------------------------------------
-   * FadeUpDirective → permite usar el atributo `appFadeUp`
-   * para animaciones basadas en IntersectionObserver.
+   * Módulos y directivas utilizadas por el componente.
+   *
+   * FadeUpDirective → permite usar `appFadeUp`
+   * para animaciones de entrada basadas en scroll.
    */
   imports: [FadeUpDirective],
 
   /**
-   * ------------------------------------------------------------
-   * TEMPLATE Y ESTILOS
-   * ------------------------------------------------------------
-   * - templateUrl → HTML propio de la página
-   * - styleUrl    → CSS modular específico
+   * Vistas asociadas.
+   * - templateUrl → estructura HTML
+   * - styleUrl    → estilos específicos del componente
    */
   templateUrl: './somos.html',
   styleUrl: './somos.css',
 })
 export class Somos {
   /**
-   * ============================================================
-   * NOTA:
-   * Este componente no requiere lógica en TS de momento.
-   * Si más adelante necesitas:
-   *  - Cargar información desde un servicio
-   *  - Mostrar un timeline animado
-   *  - Usar signals para contenido dinámico
-   * 
-   * Solo me avisas y te lo implemento.
-   * ============================================================
+   * Componente sin lógica interna.
+   *
+   * @remarks
+   * Este componente funciona como un contenedor estático de contenido
+   * visual/textual. Se deja preparado para ampliaciones futuras, como:
+   *  - Carga de testimonios desde un servicio
+   *  - Timeline interactivo sobre la historia del proyecto
+   *  - Sección dinámica usando signals
+   *  - Animaciones avanzadas
    */
 }

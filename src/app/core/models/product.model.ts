@@ -1,4 +1,3 @@
-
 import { ProductCategory } from './product-category.model';
 
 /**
@@ -141,4 +140,17 @@ export interface Product {
 
   isActive?: boolean;
   // Control de visibilidad (para administración).
+
+  isPreSale?: boolean;
+  /**
+   * Indica que el producto pertenece a la sección de PREVENTAS.
+   *
+   * @usageNotes
+   * - Se puede usar para:
+   *   - Filtrar productos en ProductService.getPreSales().
+   *   - Mostrar una categoría/landing exclusiva de preventas.
+   *   - Controlar qué productos aparecen en el módulo /preventas del admin.
+   * - No reemplaza la categoría: una preventa sigue siendo, por ejemplo,
+   *   una guitarra, pedal, ampli, etc.
+   */
 }

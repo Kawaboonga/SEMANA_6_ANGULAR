@@ -23,20 +23,19 @@ import { HttpInterceptorFn } from '@angular/common/http';
  *   provideHttpClient(withInterceptors([authTokenInterceptor])),
  * ]
  */
+
 export const authTokenInterceptor: HttpInterceptorFn = (req, next) => {
-  /**
-   * No enviamos token en llamados a assets locales.
-   * Angular requiere esto para no intentar agregar Authorization
-   * a imágenes, JSON o archivos estáticos.
-   */
-  if (req.url.startsWith('/assets')) {
+
+  // ---------------------------------------------------------------------------
+  // 1) Ignorar peticiones a archivos estáticos (JSON, imágenes, CSS, etc.)
+  // ---------------------------------------------------------------------------
+  if (req.url.includes('/assets/') || req.url.startsWith('assets/')) {
     return next(req);
   }
 
-  /**
-   * No enviamos token en peticiones relacionadas con autenticación.
-   * Ejemplos típicos: login, register, recover-password, etc.
-   */
+  // ---------------------------------------------------------------------------
+  // 2) Ignorar peticiones de autenticación
+  // ---------------------------------------------------------------------------
   if (
     req.url.includes('/auth/login') ||
     req.url.includes('/auth/register') ||
@@ -45,19 +44,15 @@ export const authTokenInterceptor: HttpInterceptorFn = (req, next) => {
     return next(req);
   }
 
-  /**
-   * Recuperamos el token almacenado por AuthService.persistSession().
-   * Si no existe, la petición continúa sin header adicional.
-   */
+  // ---------------------------------------------------------------------------
+  // 3) Obtener token y agregar header si existe
+  // ---------------------------------------------------------------------------
   const token = localStorage.getItem('token');
 
   if (!token) {
     return next(req);
   }
 
-  /**
-   * Clonamos la request y agregamos el header Authorization.
-   */
   const authReq = req.clone({
     setHeaders: {
       Authorization: `Bearer ${token}`,

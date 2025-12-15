@@ -1,0 +1,520 @@
+[
+  {
+    "id": "marco-vidal",
+    "name": "Marco Vidal",
+    "avatarUrl": "/assets/img/trainers/marco-vidal.jpg",
+    "instruments": ["guitarra-electrica", "guitarra-acustica"],
+    "styles": ["rock", "blues", "indie"],
+    "levelRange": ["principiante", "intermedio", "avanzado"],
+    "modalities": ["presencial", "online"],
+    "shortDescription": "Clases centradas en repertorio real, técnica útil y oído con backing tracks.",
+    "fullDescription": "Clases centradas en objetivos reales del alumno: repertorio, técnica útil y oído... (texto largo)",
+    "city": "Santiago",
+    "commune": "Providencia",
+    "hourlyRate": 25000,
+    "rating": 4.7,
+    "ratingCount": 24,
+    "languages": ["Español", "Inglés"],
+    "experience": "8 años de docencia, sesionista en vivo.",
+    "education": "Intérprete Mención Guitarra — Projazz.",
+    "weeklyAvailability": [
+      { "day": "Lun", "times": ["18:00", "19:00"] },
+      { "day": "Mie", "times": ["19:00"] },
+      { "day": "Sab", "times": ["11:00", "12:00"] }
+    ],
+    "courses": [
+      { "id": "curso-rock-basico", "title": "Guitarra Rock para Principiantes" },
+      { "id": "curso-rock", "title": "Guitarra Rock Intermedio" },
+      { "id": "curso-rock2", "title": "Guitarra Rock Avanzado" }
+    ],
+    "reviews": [],
+    "gear": [
+      {
+        "name": "Amplificador Fender Blues Junior",
+        "description": "Combo valvular 15W.",
+        "reason": "Ataque definido para blues y rock clásico."
+      }
+    ]
+  },
+  {
+    "id": "catalina-herrera",
+    "name": "Catalina Herrera",
+    "avatarUrl": "/assets/img/trainers/catalina-herrera.jpg",
+    "instruments": ["voz"],
+    "styles": ["pop"],
+    "levelRange": ["principiante", "intermedio"],
+    "modalities": ["online"],
+    "shortDescription": "Técnica vocal contemporánea enfocada en control, color y expresión artística.",
+    "fullDescription": "Metodología progresiva centrada en respiración, resonadores, interpretación y repertorio personal... (texto largo)",
+    "city": "Santiago",
+    "commune": "Las Condes",
+    "hourlyRate": 30000,
+    "rating": 4.9,
+    "ratingCount": 40,
+    "languages": ["Español", "Inglés"],
+    "experience": "6 años de docencia y grabaciones para artistas locales.",
+    "education": "Canto Popular — UNIACC.",
+    "weeklyAvailability": [
+      { "day": "Lun", "times": ["10:00", "11:00"] },
+      { "day": "Jue", "times": ["18:00", "19:00"] }
+    ],
+    "courses": [
+      { "id": "curso-pop-vocal", "title": "Canto Pop para Principiantes" }
+    ],
+    "reviews": [],
+    "gear": [
+      {
+        "name": "Micrófono Shure SM7B",
+        "description": "Mic dinámico de estudio.",
+        "reason": "Claridad y calidez para grabación vocal profesional."
+      }
+    ]
+  },
+  {
+    "id": "tomas-lagos",
+    "name": "Tomás Lagos",
+    "avatarUrl": "/assets/img/trainers/tomas-lagos.jpg",
+    "instruments": ["bajo-electrico"],
+    "styles": ["funk", "rock", "pop"],
+    "levelRange": ["principiante", "intermedio", "avanzado"],
+    "modalities": ["presencial", "online"],
+    "shortDescription": "Aprende groove, slap, armonía aplicada y lectura rítmica.",
+    "fullDescription": "Clases enfocadas en groove, coordinación, lectura, armonía funcional y repertorio moderno... (texto largo)",
+    "city": "Santiago",
+    "commune": "Ñuñoa",
+    "hourlyRate": 22000,
+    "rating": 4.6,
+    "ratingCount": 32,
+    "languages": ["Español"],
+    "experience": "Bajista en proyectos funk y pop; 7 años enseñando.",
+    "education": "Intérprete en Bajo — Projazz.",
+    "weeklyAvailability": [
+      { "day": "Mar", "times": ["17:00", "18:00"] },
+      { "day": "Vie", "times": ["16:00"] }
+    ],
+    "courses": [
+      { "id": "curso-slap", "title": "Slap desde Cero" },
+      { "id": "curso-funk", "title": "Groove Funk y Pop" }
+    ],
+    "reviews": [],
+    "gear": [
+      {
+        "name": "Bajo Music Man StingRay",
+        "description": "Activo, sonido definido.",
+        "reason": "Punch característico para funk moderno."
+      }
+    ]
+  },
+  {
+    "id": "sofia-arias",
+    "name": "Sofía Arias",
+    "avatarUrl": "/assets/img/trainers/sofia-arias.jpg",
+    "instruments": ["piano"],
+    "styles": ["clasico", "jazz", "pop"],
+    "levelRange": ["principiante", "intermedio"],
+    "modalities": ["presencial"],
+    "shortDescription": "Pianista clásica y moderna: técnica sólida y repertorio variado.",
+    "fullDescription": "Desarrollo técnico progresivo, postura, lectura, armonía y repertorio acorde a los objetivos... (texto largo)",
+    "city": "Santiago",
+    "commune": "La Florida",
+    "hourlyRate": 28000,
+    "rating": 4.8,
+    "ratingCount": 20,
+    "languages": ["Español"],
+    "experience": "Conservatorio + proyectos jazz pop.",
+    "education": "Conservatorio Universidad de Chile.",
+    "weeklyAvailability": [
+      { "day": "Sab", "times": ["10:00", "11:00", "12:00"] }
+    ],
+    "courses": [
+      { "id": "curso-piano-basico", "title": "Piano para Principiantes" }
+    ],
+    "reviews": [],
+    "gear": [
+      {
+        "name": "Piano Yamaha P-125",
+        "description": "88 teclas contrapesadas.",
+        "reason": "Tacto natural y sonido realista."
+      }
+    ]
+  },
+  {
+    "id": "claudio-san-martin",
+    "name": "Claudio San Martín",
+    "avatarUrl": "/assets/img/trainers/claudio-san-martin.jpg",
+    "instruments": ["guitarra-electrica"],
+    "styles": ["metal", "rock"],
+    "levelRange": ["intermedio", "avanzado"],
+    "modalities": ["online"],
+    "shortDescription": "Técnica moderna: palm mute, alternate picking, escalas modales.",
+    "fullDescription": "Especialista en técnica metal moderna: precisión, muting, velocidad, sweep picking, modos... (texto largo)",
+    "city": "Santiago",
+    "commune": "Recoleta",
+    "hourlyRate": 26000,
+    "rating": 4.7,
+    "ratingCount": 29,
+    "languages": ["Español"],
+    "experience": "Guitarrista progresivo, 10 años de enseñanza.",
+    "education": "Intérprete Rock — SCD.",
+    "weeklyAvailability": [
+      { "day": "Mar", "times": ["20:00"] },
+      { "day": "Jue", "times": ["20:00"] }
+    ],
+    "courses": [
+      { "id": "curso-metal", "title": "Técnica Metal desde Cero" }
+    ],
+    "reviews": [],
+    "gear": [
+      {
+        "name": "Ibanez RG Premium",
+        "description": "Puente flotante, 24 trastes.",
+        "reason": "Versatilidad y comodidad técnica."
+      }
+    ]
+  },
+  {
+    "id": "carla-fuentes",
+    "name": "Carla Fuentes",
+    "avatarUrl": "/assets/img/trainers/carla-fuentes.jpg",
+    "instruments": ["voz"],
+    "styles": ["clasico"],
+    "levelRange": ["principiante", "intermedio", "avanzado"],
+    "modalities": ["presencial"],
+    "shortDescription": "Técnica lírica para ampliar registro, proyección y control.",
+    "fullDescription": "Bases del canto lírico: respiración costo-diafragmática, resonancia, dicción y repertorio clásico... (texto largo)",
+    "city": "Santiago",
+    "commune": "Santiago Centro",
+    "hourlyRate": 32000,
+    "rating": 4.9,
+    "ratingCount": 44,
+    "languages": ["Español", "Italiano"],
+    "experience": "Soprano lírica, coros, ópera.",
+    "education": "Licenciatura en Música — Universidad de Chile.",
+    "weeklyAvailability": [
+      { "day": "Mie", "times": ["15:00", "16:00"] }
+    ],
+    "courses": [],
+    "reviews": [],
+    "gear": [
+      {
+        "name": "Micrófono Rode NT1",
+        "description": "Condensador de estudio.",
+        "reason": "Captura natural del color vocal lírico."
+      }
+    ]
+  },
+  {
+    "id": "esteban-rojas",
+    "name": "Esteban Rojas",
+    "avatarUrl": "/assets/img/trainers/esteban-rojas.jpg",
+    "instruments": ["bateria"],
+    "styles": ["rock", "funk", "fusion"],
+    "levelRange": ["principiante", "intermedio"],
+    "modalities": ["presencial", "online"],
+    "shortDescription": "Groove, independencia, lectura rítmica y rudimentos modernos.",
+    "fullDescription": "Desarrollo de independencia, técnica, lectura y repertorio aplicado a estilos modernos... (texto largo)",
+    "city": "Santiago",
+    "commune": "Maipú",
+    "hourlyRate": 23000,
+    "rating": 4.5,
+    "ratingCount": 18,
+    "languages": ["Español"],
+    "experience": "Baterista profesional, sesiones y bandas locales.",
+    "education": "Escuela Moderna de Música.",
+    "weeklyAvailability": [
+      { "day": "Vie", "times": ["19:00"] }
+    ],
+    "courses": [
+      { "id": "curso-bateria-rock", "title": "Batería Rock Básica" }
+    ],
+    "reviews": [],
+    "gear": [
+      {
+        "name": "Batería Pearl Export",
+        "description": "Kit acústico completo.",
+        "reason": "Calidad y respuesta para rock y funk."
+      }
+    ]
+  },
+  {
+    "id": "valentina-zuniga",
+    "name": "Valentina Zúñiga",
+    "avatarUrl": "/assets/img/trainers/valentina-zuniga.jpg",
+    "instruments": ["guitarra-acustica"],
+    "styles": ["pop", "folk"],
+    "levelRange": ["principiante", "intermedio"],
+    "modalities": ["online"],
+    "shortDescription": "Aprende acordes, ritmo y repertorio moderno desde la primera clase.",
+    "fullDescription": "Clases dinámicas centradas en canciones reales, ritmos latinos, pop y folk, técnica básica... (texto largo)",
+    "city": "Santiago",
+    "commune": "Huechuraba",
+    "hourlyRate": 18000,
+    "rating": 4.8,
+    "ratingCount": 15,
+    "languages": ["Español"],
+    "experience": "Sesionista acústica y creadora de contenido musical.",
+    "education": "Talleres populares + estudios independientes.",
+    "weeklyAvailability": [
+      { "day": "Sab", "times": ["16:00", "17:00"] }
+    ],
+    "courses": [],
+    "reviews": [],
+    "gear": [
+      {
+        "name": "Ukelele Kala",
+        "description": "Modelo soprano.",
+        "reason": "Buen tono y afinación estable."
+      }
+    ]
+  },
+  {
+    "id": "felipe-contreras",
+    "name": "Felipe Contreras",
+    "avatarUrl": "/assets/img/trainers/felipe-contreras.jpg",
+    "instruments": ["guitarra-acustica"],
+    "styles": ["jazz", "blues", "funk"],
+    "levelRange": ["principiante", "intermedio"],
+    "modalities": ["presencial"],
+    "shortDescription": "Técnica, sonido, articulación y repertorio jazz-blues.",
+    "fullDescription": "Sonido, articulación, lectura, improvisación modal y repertorio clásico del jazz... (texto largo)",
+    "city": "Santiago",
+    "commune": "Independencia",
+    "hourlyRate": 35000,
+    "rating": 4.9,
+    "ratingCount": 22,
+    "languages": ["Español"],
+    "experience": "Big band, cuartetos, profesor 9 años.",
+    "education": "Jazz — Universidad de las Américas.",
+    "weeklyAvailability": [
+      { "day": "Jue", "times": ["19:00"] }
+    ],
+    "courses": [],
+    "reviews": [],
+    "gear": [
+      {
+        "name": "Saxo Alto Yamaha 62",
+        "description": "Profesional.",
+        "reason": "Afinación estable y sonido versátil."
+      }
+    ]
+  },
+  {
+    "id": "daniela-munoz",
+    "name": "Daniela Muñoz",
+    "avatarUrl": "/assets/img/trainers/daniela-munoz.jpg",
+    "instruments": ["violin"],
+    "styles": ["clasico", "folk"],
+    "levelRange": ["principiante", "intermedio"],
+    "modalities": ["presencial"],
+    "shortDescription": "Técnica clásica, afinación y repertorio tradicional.",
+    "fullDescription": "Metodología Suzuki, técnica básica, afinación y repertorio clásico y folk... (texto largo)",
+    "city": "Santiago",
+    "commune": "Providencia",
+    "hourlyRate": 28000,
+    "rating": 4.7,
+    "ratingCount": 13,
+    "languages": ["Español"],
+    "experience": "Orquesta juvenil y enseñanza desde 2016.",
+    "education": "Escuela Moderna de Música.",
+    "weeklyAvailability": [
+      { "day": "Lun", "times": ["17:00"] }
+    ],
+    "courses": [],
+    "reviews": [],
+    "gear": [
+      {
+        "name": "Violín Stentor 1500",
+        "description": "Estudiante.",
+        "reason": "Sonido cálido para iniciación."
+      }
+    ]
+  },
+  {
+    "id": "mauricio-ibarra",
+    "name": "Mauricio Ibarra",
+    "avatarUrl": "/assets/img/trainers/mauricio-ibarra.jpg",
+    "instruments": ["teoria"],
+    "styles": ["pop"],
+    "levelRange": ["principiante", "intermedio", "avanzado"],
+    "modalities": ["online"],
+    "shortDescription": "Producción en DAW: mezcla, beats, diseño sonoro y composición.",
+    "fullDescription": "Aprende desde cero a producir música: DAW, mezcla, sintes, beats, armonía aplicada y workflow... (texto largo)",
+    "city": "Santiago",
+    "commune": "La Reina",
+    "hourlyRate": 30000,
+    "rating": 4.8,
+    "ratingCount": 28,
+    "languages": ["Español", "Inglés"],
+    "experience": "Productor independiente + estudios.",
+    "education": "Producción Musical — UNIACC.",
+    "weeklyAvailability": [
+      { "day": "Mar", "times": ["18:00"] }
+    ],
+    "courses": [
+      { "id": "curso-produccion", "title": "Producción Musical Moderna" }
+    ],
+    "reviews": [],
+    "gear": [
+      {
+        "name": "Monitores KRK Rokit 5",
+        "description": "Nearfield.",
+        "reason": "Traducción clara del sonido."
+      }
+    ]
+  },
+  {
+    "id": "lorena-sanchez",
+    "name": "Lorena Sánchez",
+    "avatarUrl": "/assets/img/trainers/lorena-sanchez.jpg",
+    "instruments": ["violin"],
+    "styles": ["clasico", "ambient"],
+    "levelRange": ["principiante", "intermedio"],
+    "modalities": ["presencial", "online"],
+    "shortDescription": "Técnica clásica con enfoque moderno y musical.",
+    "fullDescription": "Postura, arco, afinación, repertorio clásico y adaptaciones modernas para cello... (texto largo)",
+    "city": "Santiago",
+    "commune": "Peñalolén",
+    "hourlyRate": 32000,
+    "rating": 4.8,
+    "ratingCount": 12,
+    "languages": ["Español"],
+    "experience": "Orquestas juveniles, cuerdas y ensambles.",
+    "education": "Conservatorio privado.",
+    "weeklyAvailability": [
+      { "day": "Sab", "times": ["14:00", "15:00"] }
+    ],
+    "courses": [],
+    "reviews": [],
+    "gear": [
+      {
+        "name": "Cello Stentor Student II",
+        "description": "Modelo estudiantil.",
+        "reason": "Buen brillo y sustain para principiantes."
+      }
+    ]
+  },
+  {
+    "id": "javier-arancibia",
+    "name": "Javier Arancibia",
+    "avatarUrl": "/assets/img/trainers/javier-arancibia.jpg",
+    "instruments": ["guitarra-acustica"],
+    "styles": ["pop"],
+    "levelRange": ["principiante", "intermedio"],
+    "modalities": ["presencial"],
+    "shortDescription": "Técnica flamenca tradicional: rasgueos, picado y compás.",
+    "fullDescription": "Rasgueos, picado, compás, falsetas, estudio de palos y repertorio tradicional... (texto largo)",
+    "city": "Santiago",
+    "commune": "Santiago Centro",
+    "hourlyRate": 26000,
+    "rating": 4.6,
+    "ratingCount": 17,
+    "languages": ["Español"],
+    "experience": "Formación tradicional con maestros flamencos.",
+    "education": "Escuela de Flamenco (España, modalidad online).",
+    "weeklyAvailability": [
+      { "day": "Mie", "times": ["20:00"] }
+    ],
+    "courses": [],
+    "reviews": [],
+    "gear": [
+      {
+        "name": "Guitarra Flamenca Alhambra 5F",
+        "description": "Modelo flamenco.",
+        "reason": "Golpeador y respuesta rápida."
+      }
+    ]
+  },
+  {
+    "id": "andrea-rivas",
+    "name": "Andrea Rivas",
+    "avatarUrl": "/assets/img/trainers/andrea-rivas.jpg",
+    "instruments": ["teclado"],
+    "styles": ["pop"],
+    "levelRange": ["principiante", "intermedio"],
+    "modalities": ["online"],
+    "shortDescription": "Aprende arreglos, síntesis básica y acompañamiento pop.",
+    "fullDescription": "Clases centradas en acordes, voicings simples, arpegios, acompañamiento y diseño sonoro básico... (texto largo)",
+    "city": "Santiago",
+    "commune": "Las Condes",
+    "hourlyRate": 20000,
+    "rating": 4.7,
+    "ratingCount": 14,
+    "languages": ["Español"],
+    "experience": "Tecladista pop y estudio de producción.",
+    "education": "Cursos independientes + años de escenario.",
+    "weeklyAvailability": [
+      { "day": "Dom", "times": ["11:00"] }
+    ],
+    "courses": [],
+    "reviews": [],
+    "gear": [
+      {
+        "name": "Teclado Roland Juno DS",
+        "description": "Workstation.",
+        "reason": "Sonidos modernos para pop y synthwave."
+      }
+    ]
+  },
+  {
+    "id": "rodrigo-vega",
+    "name": "Rodrigo Vega",
+    "avatarUrl": "/assets/img/trainers/rodrigo-vega.jpg",
+    "instruments": ["guitarra-acustica"],
+    "styles": ["pop"],
+    "levelRange": ["principiante", "intermedio"],
+    "modalities": ["presencial"],
+    "shortDescription": "Congas, bongó, timbal y ritmos afrolatinos desde cero.",
+    "fullDescription": "Clases prácticas de percusión latina: técnica, postura, toques, patrones y acompañamientos... (texto largo)",
+    "city": "Santiago",
+    "commune": "Quilicura",
+    "hourlyRate": 22000,
+    "rating": 4.6,
+    "ratingCount": 11,
+    "languages": ["Español"],
+    "experience": "Bandas de salsa y fusión.",
+    "education": "Talleres en escuelas latinoamericanas.",
+    "weeklyAvailability": [
+      { "day": "Mar", "times": ["19:00"] }
+    ],
+    "courses": [],
+    "reviews": [],
+    "gear": [
+      {
+        "name": "Conga LP Galaxy",
+        "description": "Madera premium.",
+        "reason": "Proyección ideal para estilos latinos."
+      }
+    ]
+  },
+  {
+    "id": "ignacio-sepulveda",
+    "name": "Ignacio Sepúlveda",
+    "avatarUrl": "/assets/img/trainers/ignacio-sepulveda.jpg",
+    "instruments": ["guitarra-acustica"],
+    "styles": ["fingerstyle", "folk", "ambient"],
+    "levelRange": ["intermedio", "avanzado"],
+    "modalities": ["online", "presencial"],
+    "shortDescription": "Fingerstyle moderno: percusiones, acordes abiertos y armonía avanzada.",
+    "fullDescription": "Clases personalizadas de fingerstyle: técnicas percutivas, afinaciones abiertas, arreglos solistas... (texto largo)",
+    "city": "Santiago",
+    "commune": "Puente Alto",
+    "hourlyRate": 27000,
+    "rating": 4.9,
+    "ratingCount": 33,
+    "languages": ["Español", "Inglés"],
+    "experience": "Guitarrista fingerstyle con álbumes propios.",
+    "education": "Autodidacta + cursos internacionales.",
+    "weeklyAvailability": [
+      { "day": "Jue", "times": ["17:00", "18:00"] }
+    ],
+    "courses": [],
+    "reviews": [],
+    "gear": [
+      {
+        "name": "Guitarra Taylor 214ce",
+        "description": "Electroacústica.",
+        "reason": "Claridad y dinámica ideales para fingerstyle."
+      }
+    ]
+  }
+]

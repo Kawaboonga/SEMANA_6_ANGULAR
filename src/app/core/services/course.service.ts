@@ -1,12 +1,32 @@
 
-import { Injectable } from '@angular/core';
-import { Course } from '@core/models/course.model';
-import { COURSES_MOCK } from '@core/mocks/course.mock';
+import {
+  Injectable,
+  computed,
+  inject,
+  signal,
+} from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import {
+  Course,
+  CourseDifficulty,
+  CourseModality,
+} from '@core/models/course.model';
 import { CarouselItem } from '@shared/components/carousel/carousel.types';
 
-@Injectable({
-  providedIn: 'root',
-})
+export interface CourseFilter {
+  search?: string;
+  difficulty?: CourseDifficulty | 'todos';
+  modality?: CourseModality | 'todos';
+  level?: string | 'todos';
+  tutorId?: string | 'todos';
+  minPrice?: number | null;
+  maxPrice?: number | null;
+  sortByPrice?: 'asc' | 'desc' | null;
+  sortByRating?: 'asc' | 'desc' | null;
+}
+
+
+
 /**
  * Servicio encargado de manejar los cursos del proyecto.
  *
@@ -33,109 +53,273 @@ import { CarouselItem } from '@shared/components/carousel/carousel.types';
  * @example
  * const curso = this.courseService.getBySlug('curso-guitarra-rock');
  */
+
+
+
+
+
+
+@Injectable({
+  providedIn: 'root',
+})
 export class CourseService {
   // ============================================================
-  // 1) DATA LOCAL DE CURSOS (mock)
+  // 0) DEPENDENCIAS Y CONSTANTES
   // ============================================================
+
+  private readonly http = inject(HttpClient);
+
+  /** localStorage key */
+  private readonly STORAGE_KEY = 'soundseeker_courses';
+
+  /** JSON desde assets — compatible con GitHub Pages */
+  private readonly JSON_URL = 'assets/data/courses.json';
 
   /**
-   * Lista completa de cursos, almacenada temporalmente en memoria.
-   * Más adelante puede venir desde JSON o servicios HTTP.
+   * Mock aislado — solo se usa como fallback,
+   * NUNCA como fuente primaria.
    */
-  private courses: Course[] = COURSES_MOCK;
+  private get fallbackMock(): Course[] {
+    return [
+      {
+        id: 'curso-guitarra-rock',
+        slug: 'curso-intensivo-guitarra-rock',
+        title: 'Curso intensivo de guitarra rock',
+        tutorId: 'marco-vidal',
+        tutorName: 'Marco Vidal',
+        difficulty: 'Intermedio',
+        level: 'Intermedio',
+        duration: '16 h · 8 clases',
+        durationHours: 16,
+        totalLessons: 8,
+        lessonsCount: 8,
+        shortDescription: 'Domina riffs, power chords y solos básicos de rock.',
+        description:
+          'En este curso trabajarás repertorio real de rock, técnica de púa, palm mute, power chords y construcción de solos sencillos.',
+        imageUrl: '/assets/img/course/curso-guitarra-e2.jpg',
+        rating: 4.8,
+        ratingCount: 32,
+        modalities: ['Presencial', 'Online'],
+        stages: [
+          'Fundamentos de palm mute',
+          'Riffs clásicos',
+          'Power chords y progresiones',
+          'Introducción a solos'
+        ],
+        learnOutcomes: [
+          'Tocar riffs con buen timing.',
+          'Entender progresiones de rock.',
+          'Improvisar solos sencillos.'
+        ],
+        reviews: [],
+        showInCarousel: true,
+        isFeatured: true,
+        isOffer: false,
+        isNew: true,
+        isActive: true,
+        priceCLP: 89990,
+        price: 89990,
+        priceLabel: '$89.990'
+      }
+    ];
+  }
 
   // ============================================================
-  // 2) MÉTODOS PÚBLICOS (LECTURA BÁSICA)
+  // 1) SIGNALS: cursos + filtro
   // ============================================================
 
-  /**
-   * Retorna todos los cursos tal cual están en memoria.
-   * Usado en listados y en el panel del administrador.
-   *
-   * @returns Course[]
-   */
+  private readonly _courses = signal<Course[]>([]);
+  readonly courses = this._courses.asReadonly();
+
+  private readonly _filter = signal<CourseFilter>({
+    difficulty: 'todos',
+    modality: 'todos',
+    level: 'todos',
+    tutorId: 'todos',
+    sortByPrice: null,
+    sortByRating: null,
+  });
+
+  readonly filter = this._filter.asReadonly();
+
+  // ============================================================
+  // 2) LISTA FILTRADA
+  // ============================================================
+
+  readonly filteredCourses = computed(() => {
+    const f = this._filter();
+    let list = [...this._courses()];
+
+    if (f.search) {
+      const q = f.search.toLowerCase();
+      list = list.filter(
+        (c) =>
+          c.title.toLowerCase().includes(q) ||
+          c.tutorName.toLowerCase().includes(q) ||
+          c.shortDescription.toLowerCase().includes(q) ||
+          c.description.toLowerCase().includes(q),
+      );
+    }
+
+    if (f.difficulty && f.difficulty !== 'todos') {
+      list = list.filter((c) => c.difficulty === f.difficulty);
+    }
+
+    if (f.modality && f.modality !== 'todos') {
+      list = list.filter((c) =>
+        (c.modalities ?? []).includes(f.modality as CourseModality),
+      );
+    }
+
+    if (f.level && f.level !== 'todos') {
+      list = list.filter((c) => c.level === f.level);
+    }
+
+    if (f.tutorId && f.tutorId !== 'todos') {
+      list = list.filter((c) => c.tutorId === f.tutorId);
+    }
+
+    if (f.minPrice != null) {
+      list = list.filter((c) => (c.priceCLP ?? c.price ?? 0) >= f.minPrice!);
+    }
+
+    if (f.maxPrice != null) {
+      list = list.filter((c) => (c.priceCLP ?? c.price ?? 0) <= f.maxPrice!);
+    }
+
+    if (f.sortByPrice) {
+      list.sort((a, b) => {
+        const pa = a.priceCLP ?? a.price ?? 0;
+        const pb = b.priceCLP ?? b.price ?? 0;
+        return f.sortByPrice === 'asc' ? pa - pb : pb - pa;
+      });
+    }
+
+    if (f.sortByRating) {
+      list.sort((a, b) => {
+        const ra = a.rating ?? 0;
+        const rb = b.rating ?? 0;
+        return f.sortByRating === 'asc' ? ra - rb : rb - ra;
+      });
+    }
+
+    return list;
+  });
+
+  // ============================================================
+  // 3) CONSTRUCTOR: carga inicial (localStorage → JSON → mock)
+  // ============================================================
+
+  constructor() {
+    this.loadInitialData();
+  }
+
+  private loadInitialData(): void {
+    if (typeof window === 'undefined') {
+      this._courses.set(this.fallbackMock);
+      return;
+    }
+
+    // 1) Intentar leer desde localStorage
+    const raw = localStorage.getItem(this.STORAGE_KEY);
+    if (raw) {
+      try {
+        const parsed = JSON.parse(raw) as Course[];
+        this._courses.set(parsed);
+        return;
+      } catch {
+        /** continua al JSON */
+      }
+    }
+
+    // 2) Intentar cargar desde JSON
+    this.http.get<Course[]>(this.JSON_URL).subscribe({
+      next: (data) => {
+        this._courses.set(data);
+        this.persist();
+      },
+      error: () => {
+        // 3) Fallback final
+        this._courses.set(this.fallbackMock);
+        this.persist();
+      },
+    });
+  }
+
+  private persist(): void {
+    if (typeof window === 'undefined') return;
+    try {
+      localStorage.setItem(
+        this.STORAGE_KEY,
+        JSON.stringify(this._courses()),
+      );
+    } catch {}
+  }
+
+  // ============================================================
+  // 4) FILTROS
+  // ============================================================
+
+  setFilter(partial: Partial<CourseFilter>): void {
+    this._filter.update((f) => ({ ...f, ...partial }));
+  }
+
+  resetFilter(): void {
+    this._filter.set({
+      difficulty: 'todos',
+      modality: 'todos',
+      level: 'todos',
+      tutorId: 'todos',
+      search: '',
+      minPrice: null,
+      maxPrice: null,
+      sortByPrice: null,
+      sortByRating: null,
+    });
+  }
+
+  // ============================================================
+  // 5) MÉTODOS DE LECTURA
+  // ============================================================
+
   getAll(): Course[] {
-    return this.courses;
+    return [...this._courses()];
   }
 
-  /**
-   * Busca un curso por su slug (ruta limpia).
-   * Se usa en la página de detalle `/cursos/:slug`.
-   *
-   * @param slug slug del curso
-   * @returns Course | undefined
-   *
-   * @example
-   * const curso = this.courseService.getBySlug('guitarra-rock');
-   */
   getBySlug(slug: string): Course | undefined {
-    return this.courses.find((c) => c.slug === slug);
+    return this._courses().find((c) => c.slug === slug);
   }
 
-  /**
-   * Alias de `getBySlug`, usado en algunos componentes como el breadcrumb.
-   *
-   * @param slug slug del curso
-   * @returns Course | undefined
-   */
-  getCourseBySlug(slug: string): Course | undefined {
+  getCourseBySlug(slug: string) {
     return this.getBySlug(slug);
   }
 
-  /**
-   * Devuelve todos los cursos impartidos por un tutor.
-   * Se puede excluir un curso específico (útil para “Otros cursos del tutor”).
-   *
-   * @param tutorId ID del tutor
-   * @param exceptId ID opcional para excluir un curso puntual
-   * @returns Course[]
-   *
-   * @example
-   * const cursosDelTutor = this.courseService.getByTutorId('marco-vidal', 'curso-rock');
-   */
   getByTutorId(tutorId: string, exceptId?: string): Course[] {
-    return this.courses.filter(
+    return this._courses().filter(
       (c) => c.tutorId === tutorId && c.id !== exceptId,
     );
   }
 
-  /**
-   * Alias de `getByTutorId`, para casos donde se llama con otro nombre.
-   */
-  getCoursesByTutor(tutorId: string, exceptId?: string): Course[] {
+  getCoursesByTutor(tutorId: string, exceptId?: string) {
     return this.getByTutorId(tutorId, exceptId);
   }
 
   // ============================================================
-  // 3) ARMADO DE DATA PARA EL CARRUSEL
+  // 6) CARRUSEL
   // ============================================================
 
-  /**
-   * Mapea los cursos destacados (`isFeatured`) al modelo genérico `CarouselItem`,
-   * permitiendo reutilizar el carrusel global del home.
-   *
-   * @param limit cantidad máxima a mostrar (por defecto 8)
-   * @returns CarouselItem[]
-   *
-   * @usageNotes
-   * - Reutiliza `duration` como `dateLabel` para mostrar texto secundario.
-   * - Si el curso no tiene imagen, usa un fallback local.
-   *
-   * @example
-   * const destacados = this.courseService.getFeaturedCoursesForCarousel(4);
-   */
   getFeaturedCoursesForCarousel(limit = 8): CarouselItem[] {
-    return this.courses
+    return this._courses()
       .filter((c) => c.isFeatured)
       .slice(0, limit)
-      .map<CarouselItem>((c) => ({
+      .map((c) => ({
         id: c.id,
         type: 'course',
         title: c.title,
         subtitle: c.tutorName,
         description: c.shortDescription,
         imageUrl: c.imageUrl || 'assets/img/courses/default.jpg',
-        price: c.priceCLP,
+        price: c.priceCLP ?? c.price ?? 0,
         rating: c.rating,
         dateLabel: c.duration,
         ctaLabel: 'Ver curso',
@@ -144,45 +328,39 @@ export class CourseService {
   }
 
   // ============================================================
-  // 4) ADMIN (CRUD LOCAL)
+  // 7) CRUD ADMIN + persistencia
   // ============================================================
 
-  /**
-   * Agrega un nuevo curso a la lista local.
-   *
-   * @param course nuevo curso
-   *
-   * @example
-   * this.courseService.addCourse(formValue);
-   */
   addCourse(course: Course): void {
-    this.courses.push(course);
+    const newCourse = {
+      ...course,
+      id: course.id || `course-${Date.now()}`,
+    };
+    this._courses.update((list) => [...list, newCourse]);
+    this.persist();
   }
 
-  /**
-   * Actualiza un curso existente basado en su ID.
-   *
-   * @param updated curso actualizado
-   *
-   * @example
-   * this.courseService.updateCourse(cursoEditado);
-   */
   updateCourse(updated: Course): void {
-    const index = this.courses.findIndex((c) => c.id === updated.id);
-    if (index !== -1) {
-      this.courses[index] = { ...updated };
-    }
+    this._courses.update((list) => {
+      const index = list.findIndex((c) => c.id === updated.id);
+      if (index === -1) return list;
+      const copy = [...list];
+      copy[index] = { ...updated };
+      return copy;
+    });
+    this.persist();
+  }
+
+  deleteCourse(id: string): void {
+    this._courses.update((list) => list.filter((c) => c.id !== id));
+    this.persist();
   }
 
   /**
-   * Elimina un curso por ID.
-   *
-   * @param id ID del curso a eliminar
-   *
-   * @example
-   * this.courseService.deleteCourse('curso-guitarra-rock');
+   * Restablece datos desde JSON original (opción para Admin)
    */
-  deleteCourse(id: string): void {
-    this.courses = this.courses.filter((c) => c.id !== id);
+  resetFromJson(): void {
+    localStorage.removeItem(this.STORAGE_KEY);
+    this.loadInitialData();
   }
 }

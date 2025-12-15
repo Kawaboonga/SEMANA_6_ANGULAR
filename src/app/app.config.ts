@@ -51,7 +51,7 @@ export const appConfig: ApplicationConfig = {
   ],
 };*/
 
-
+/*
 import { ApplicationConfig } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
@@ -63,6 +63,65 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideHttpClient(
       withInterceptors([authTokenInterceptor])
+    ),
+  ],
+};*/
+
+
+
+
+
+
+import { ApplicationConfig } from '@angular/core';
+import { provideRouter } from '@angular/router';
+import { routes } from './app.routes';
+
+// HTTP Client + Interceptores
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { authTokenInterceptor } from '@core/interceptors/auth-token-interceptor';
+
+/**
+ * ============================================================================
+ * ApplicationConfig — Configuración global de la aplicación Angular
+ * ============================================================================
+ *
+ * - define proveedores globales (router, httpclient, interceptores, etc.)
+ * - se usa en main.ts al hacer bootstrapApplication(App, appConfig)
+ *
+ * IMPORTANTE:
+ *  - provideHttpClient habilita HttpClient en toda la app
+ *  - withInterceptors agrega interceptores de manera declarativa
+ *  - Si agregas más interceptores, simplemente los sumas al array
+ *
+ * ============================================================================
+ */
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    /**
+     * ------------------------------------------------------------------------
+     * ROUTER
+     * ------------------------------------------------------------------------
+     * Define todas las rutas principales de la app (public, auth, admin, etc.)
+     */
+    provideRouter(routes),
+
+    /**
+     * ------------------------------------------------------------------------
+     * HTTP CLIENT + INTERCEPTORES
+     * ------------------------------------------------------------------------
+     * Habilita HttpClient y aplica interceptores globales.
+     *
+     * El interceptor authTokenInterceptor:
+     *  - Se ejecuta en cada request HTTP
+     *  - No debería modificar llamadas a /assets/**
+     *    (si es necesario, puedo ajustarlo por ti)
+     */
+    provideHttpClient(
+      withInterceptors([
+        authTokenInterceptor,
+        // Puedes agregar más interceptores aquí si lo necesitas
+      ])
     ),
   ],
 };

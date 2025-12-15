@@ -1,0 +1,75 @@
+[
+  {
+    "id": "compra",
+    "slug": "compra",
+    "name": "Compra de instrumentos",
+    "shortDescription": "Encuentra guitarras, bajos y equipos usados en excelente estado.",
+    "imageUrl": "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=900&q=80",
+    "icon": "bi-bag-check",
+    "description": [
+      "En SoundSeeker conectamos a músicos que desean vender sus instrumentos con quienes buscan su próximo sonido. Filtramos publicaciones para asegurar descripciones claras y fotos útiles.",
+      "Podrás revisar antecedentes del vendedor, detalles de uso del instrumento, estado de mantenimiento y cualquier modificación realizada.",
+      "Nuestro objetivo es que la experiencia de compra sea segura, transparente y enfocada en el sonido que realmente estás buscando."
+    ]
+  },
+  {
+    "id": "venta",
+    "slug": "venta",
+    "name": "Venta de instrumentos",
+    "shortDescription": "Publica tu instrumento y llega a músicos de tu misma comuna.",
+    "imageUrl": "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=900&q=80",
+    "icon": "bi-cash-coin",
+    "description": [
+      "Si tienes instrumentos que ya no usas o quieres hacer un upgrade, puedes publicarlos en la plataforma con fotos, descripción y precio sugerido.",
+      "Te ayudamos con recomendaciones para fijar precios realistas y destacar el valor de tu instrumento (marca, año, modificaciones, estado general)."
+    ]
+  },
+  {
+    "id": "intercambio",
+    "slug": "intercambio",
+    "name": "Intercambio de equipo",
+    "shortDescription": "Trueque entre músicos: cambia tu pedal, ampli o guitarra por otro equipo.",
+    "imageUrl": "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=900&q=80",
+    "icon": "bi-arrow-left-right",
+    "description": [
+      "El intercambio permite que encuentres nuevos sonidos sin necesidad de gastar dinero. Podrás proponer cambios directos o combinados (equipo + dinero).",
+      "La idea es fomentar comunidad y recircular equipo que sigue teniendo mucha vida sonora."
+    ]
+  },
+  {
+    "id": "mantencion",
+    "slug": "mantencion",
+    "name": "Mantención y ajustes",
+    "shortDescription": "Cambio de cuerdas, calibración, ajuste de acción y otros detalles finos.",
+    "imageUrl": "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=900&q=80",
+    "icon": "bi-tools",
+    "description": [
+      "Trabajamos con técnicos y luthiers que realizan mantenciones básicas y ajustes finos a guitarras y bajos.",
+      "Servicios típicos: cambio de cuerdas, limpieza profunda, ajuste de alma, calibración de octavación, ajuste de acción y revisión general."
+    ]
+  },
+  {
+    "id": "reparacion",
+    "slug": "reparacion",
+    "name": "Reparación de amplificadores y circuitos",
+    "shortDescription": "Reparación de amplis, pedales y circuitos de guitarras/bajos.",
+    "imageUrl": "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=900&q=80",
+    "icon": "bi-lightning-charge",
+    "description": [
+      "Si tu ampli dejó de sonar, tu pedal tiene ruido o tu guitarra presenta problemas eléctricos, contamos con técnicos especializados en audio.",
+      "Se realizan diagnósticos, presupuestos y reparaciones en circuitos de amplificadores, pedales y electrónica de instrumentos."
+    ]
+  },
+  {
+    "id": "pintura-case",
+    "slug": "pintura-case",
+    "name": "Pintura y cases de almacenamiento",
+    "shortDescription": "Renueva el look de tu instrumento y protégelo con un buen case.",
+    "imageUrl": "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=900&q=80",
+    "icon": "bi-palette",
+    "description": [
+      "Servicio de pintura y repintado para guitarras y bajos, respetando el tipo de acabado que buscas.",
+      "Además, podrás acceder a cases y estuches para almacenar tu instrumento de forma segura, ya sea para transporte frecuente o guardado en casa."
+    ]
+  }
+]

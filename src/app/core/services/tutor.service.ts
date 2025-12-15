@@ -1,6 +1,14 @@
-import { Injectable, computed, signal } from '@angular/core';
-import {Tutor, TutorInstrument, TutorLevel, TutorStyle, TutorModality,} from '@core/models/tutor.model';
+
+import { Injectable, computed, signal, inject } from '@angular/core';
+import {
+  Tutor,
+  TutorInstrument,
+  TutorLevel,
+  TutorStyle,
+  TutorModality,
+} from '@core/models/tutor.model';
 import { TUTORS_MOCK } from '@core/mocks/tutor.mock';
+import { HttpClient } from '@angular/common/http';
 
 /**
  * Filtros disponibles para el buscador de tutores.
@@ -29,7 +37,7 @@ export interface TutorFilter {
  * Servicio principal para manejar tutores.
  *
  * Se encarga de:
- * - almacenar la lista de tutores (mock por ahora),
+ * - almacenar la lista de tutores (mock/JSON + cache local),
  * - manejar filtros reactivos,
  * - exponer la lista filtrada,
  * - entregar métodos de lectura,
@@ -39,19 +47,37 @@ export interface TutorFilter {
  *
  * @usageNotes
  * - Implementado con Signals, lo que evita store externo.
- * - En el futuro puede reemplazarse `_tutors` por una llamada HTTP real.
- * - `filteredTutors` siempre refleja el estado actual del filtro.
+ * - Carga inicial:
+ *    1) Intenta leer desde localStorage.
+ *    2) Si no hay nada, carga desde /assets/data/tutors.json.
+ *    3) Si falla el JSON, usa TUTORS_MOCK como fallback.
+ * - create / upsert / delete simulan POST/PUT/DELETE y persisten en localStorage.
  */
 export class TutorService {
   // ============================================================
-  // 1) DATA LOCAL (mock)
+  // 0) DEPENDENCIAS E INTERNA
+  // ============================================================
+
+  private readonly http = inject(HttpClient);
+
+  /** Clave para persistir en localStorage */
+  private readonly STORAGE_KEY = 'soundseeker_tutors';
+
+  /** Ruta al JSON estático en assets */
+  private readonly JSON_URL = '/assets/data/tutors.json';
+
+  // ============================================================
+  // 1) DATA LOCAL (mock/JSON + cache)
   // ============================================================
 
   /**
-   * Lista interna de tutores en memoria (por ahora mock local).
-   * Más adelante puede conectarse a una API externa.
+   * Lista interna de tutores en memoria.
+   * Se inicializa vacía y luego se carga desde:
+   * - localStorage, o
+   * - JSON de assets, o
+   * - TUTORS_MOCK como último recurso.
    */
-  private readonly _tutors = signal<Tutor[]>(TUTORS_MOCK);
+  private readonly _tutors = signal<Tutor[]>([]);
 
   // ============================================================
   // 2) ESTADO DE FILTRO
@@ -141,28 +167,98 @@ export class TutorService {
   });
 
   // ============================================================
-  // 4) ACCIONES SOBRE EL FILTRO
+  // ctor: carga inicial
+  // ============================================================
+
+  constructor() {
+    this.loadInitialData();
+  }
+
+  // ============================================================
+  // 3.1) CARGA Y PERSISTENCIA
   // ============================================================
 
   /**
-   * Actualiza parcialmente el filtro.
-   * Ideal para cambios desde selectores, inputs, chips, sliders, etc.
-   *
-   * @param partial valores parciales a mezclar con el filtro actual.
-   *
-   * @example
-   * this.tutorService.setFilter({ instrument: 'guitarra-electrica' });
+   * Carga inicial de tutores:
+   * - Primero intenta desde localStorage.
+   * - Si no hay nada, carga desde el JSON de assets.
+   * - Si algo falla, usa TUTORS_MOCK como fallback.
    */
+  private loadInitialData(): void {
+    // SSR / tests: puede no existir window
+    if (typeof window === 'undefined') {
+      this._tutors.set(TUTORS_MOCK);
+      return;
+    }
+
+    // 1) Intentar leer desde localStorage
+    const raw = localStorage.getItem(this.STORAGE_KEY);
+    if (raw) {
+      try {
+        const parsed = JSON.parse(raw) as Tutor[];
+        this._tutors.set(parsed);
+        return;
+      } catch {
+        // Si falla el parse, seguimos al JSON de assets
+      }
+    }
+
+    // 2) Intentar desde JSON en assets
+    this.http.get<Tutor[]>(this.JSON_URL).subscribe({
+      next: (data) => {
+        this._tutors.set(data);
+        this.persistToStorage();
+      },
+      error: () => {
+        // 3) Fallback: mock en TypeScript
+        this._tutors.set(TUTORS_MOCK);
+        this.persistToStorage();
+      },
+    });
+  }
+
+  /**
+   * Persiste la lista actual de tutores en localStorage.
+   * Se llama automáticamente en los métodos de CRUD local.
+   */
+  private persistToStorage(): void {
+    if (typeof window === 'undefined') return;
+    try {
+      const value = JSON.stringify(this._tutors());
+      localStorage.setItem(this.STORAGE_KEY, value);
+    } catch {
+      // Silencioso: si localStorage falla, no rompemos la app.
+    }
+  }
+
+  /**
+   * Borra la cache local y recarga desde el JSON de assets.
+   * Útil si quieres "resetear" datos de admin al estado original del archivo.
+   */
+  resetFromJson(): void {
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem(this.STORAGE_KEY);
+    }
+    this.http.get<Tutor[]>(this.JSON_URL).subscribe({
+      next: (data) => {
+        this._tutors.set(data);
+        this.persistToStorage();
+      },
+      error: () => {
+        this._tutors.set(TUTORS_MOCK);
+        this.persistToStorage();
+      },
+    });
+  }
+
+  // ============================================================
+  // 4) ACCIONES SOBRE EL FILTRO
+  // ============================================================
+
   setFilter(partial: Partial<TutorFilter>) {
     this._filter.update((f) => ({ ...f, ...partial }));
   }
 
-  /**
-   * Resetea todos los filtros a su estado inicial.
-   *
-   * @example
-   * this.tutorService.resetFilter();
-   */
   resetFilter() {
     this._filter.set({
       instrument: 'todos',
@@ -180,12 +276,7 @@ export class TutorService {
   // 5) MÉTODOS DE LECTURA
   // ============================================================
 
-  /**
-   * Devuelve la lista completa de tutores.
-   * Útil para admin o procesos que no involucran filtros.
-   *
-   * @returns Tutor[]
-   */
+  /** Devuelve la lista completa de tutores (sin filtros). */
   getAll(): Tutor[] {
     return [...this._tutors()];
   }
@@ -195,21 +286,18 @@ export class TutorService {
    *
    * @param id ID del tutor
    * @returns Tutor encontrado o undefined si no existe
-   *
-   * @example
-   * const tutor = this.tutorService.getTutorById('marco-vidal');
    */
   getTutorById(id: string): Tutor | undefined {
     return this._tutors().find((t) => t.id === id);
   }
 
   // ============================================================
-  // 6) CRUD LOCAL (para admin)
+  // 6) CRUD LOCAL (simulación POST/PUT/DELETE)
   // ============================================================
 
   /**
    * Crea un tutor nuevo usando los datos del formulario.
-   * El ID se genera automáticamente con crypto.randomUUID().
+   * Equivale a simular un POST sobre el JSON.
    *
    * @param tutorData datos del tutor sin ID
    * @returns Tutor creado
@@ -221,36 +309,39 @@ export class TutorService {
     };
 
     this._tutors.update((list) => [...list, newTutor]);
+    this.persistToStorage();
     return newTutor;
   }
 
   /**
    * Inserta o actualiza un tutor.
-   * - Si no existe → se agrega.
-   * - Si existe → se actualiza.
+   * - Si no existe → se agrega (simula POST).
+   * - Si existe → se actualiza (simula PUT).
    *
-   * @param tutor tutor completo a actualizar
+   * @param tutor tutor completo a insertar/actualizar
    */
   upsertTutor(tutor: Tutor): void {
     this._tutors.update((list) => {
       const index = list.findIndex((t) => t.id === tutor.id);
       if (index === -1) {
-        return [...list, tutor];
+        const updated = [...list, tutor];
+        return updated;
       }
       const copy = [...list];
       copy[index] = { ...copy[index], ...tutor };
       return copy;
     });
+    this.persistToStorage();
   }
 
   /**
    * Elimina un tutor por ID.
+   * Equivale a simular un DELETE sobre el JSON.
    *
    * @param id ID del tutor
-   * @example
-   * this.tutorService.deleteTutor('marco-vidal');
    */
   deleteTutor(id: string): void {
     this._tutors.update((list) => list.filter((t) => t.id !== id));
+    this.persistToStorage();
   }
 }

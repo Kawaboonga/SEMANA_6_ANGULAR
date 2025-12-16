@@ -1,8 +1,7 @@
-
 <!-- ============================================================
      ENCABEZADO: título de sección + botón "Nuevo producto"
 ============================================================ -->
-<div class="d-flex justify-content-between align-items-center">
+<div class="d-flex justify-content-between align-items-center mb-3">
   <h2 class="h5 mb-0">Productos</h2>
   <button class="btn btn-sm btn-primary" (click)="onCreate()">
     <i class="bi bi-plus-lg me-1"></i> Nuevo producto
@@ -12,22 +11,19 @@
 <div class="row">
   <!-- ============================================================
        PANEL DEL FORMULARIO (crear / editar producto)
-       Solo se muestra cuando showForm = true
+       Solo se muestra cuando showForm() = true
   ============================================================ -->
   <div class="col-lg-12 pb-3">
-    <div class="card shadow-sm border-0" *ngIf="showForm">
+    <div class="card shadow-sm border-0" *ngIf="showForm()">
       <div class="card-body">
         <!-- Título según el modo: edición o creación -->
         <h3 class="h6 mb-3">
-          {{ selectedProduct ? 'Editar producto' : 'Nuevo producto' }}
+          {{ selectedProduct() ? 'Editar producto' : 'Nuevo producto' }}
         </h3>
 
         <!-- Formulario reutilizable de producto -->
-        <!-- [product] recibe el producto actual (o null para crear uno nuevo) -->
-        <!-- (save) emite el producto listo para guardar -->
-        <!-- (cancel) cierra el panel sin aplicar cambios -->
         <app-product-form
-          [product]="selectedProduct"
+          [product]="selectedProduct()"
           (save)="handleSave($event)"
           (cancel)="handleCancel()"
         ></app-product-form>
@@ -37,7 +33,7 @@
 
   <!-- ============================================================
        TABLA DE LISTADO DE PRODUCTOS
-       Usa productos() que viene del signal en admin-productos.ts
+       Usa productos() que viene del computed en admin-productos.ts
   ============================================================ -->
   <div class="col-lg-12">
     <div class="table-responsive mb-3">
@@ -68,12 +64,12 @@
 
             <!-- Categoría (guitarras, bajos, pedales, etc.) -->
             <td class="small">
-              {{ p.category }}
+              {{ p.category || 'Sin categoría' }}
             </td>
 
-            <!-- Precio formateado en CLP -->
+            <!-- Precio formateado (usa currency del modelo o CLP por defecto) -->
             <td class="small">
-              {{ p.price | currency:'CLP':'symbol':'1.0-0' }}
+              {{ p.price | currency:(p.currency || 'CLP'):'symbol-narrow':'1.0-0' }}
             </td>
 
             <!-- Flag: mostrar / ocultar en carrusel -->
@@ -121,7 +117,7 @@
               <input
                 type="checkbox"
                 class="form-check-input"
-                [checked]="p.isActive"
+                [checked]="p.isActive !== false"
                 (change)="onToggleFlag(p, 'isActive')"
               />
             </td>

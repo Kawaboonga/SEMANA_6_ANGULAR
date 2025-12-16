@@ -1,0 +1,19 @@
+<section class="py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h1 class="h3 mb-1">Preventas</h1>
+      <p class="text-secondary mb-0">
+        Productos anunciados en preventa. Reserva tu instrumento antes que salga a la venta general.
+      </p>
+    </div>
+  </div>
+
+  <div appFadeUp>
+    <app-product-grid
+      [products]="products()"
+      [canEdit]="isAdmin()"
+      (editRequest)="onEdit($event)"
+      (deleteRequest)="onDelete($event)"
+    ></app-product-grid>
+  </div>
+</section>

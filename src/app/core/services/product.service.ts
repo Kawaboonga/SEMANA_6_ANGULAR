@@ -1,10 +1,4 @@
-
-import {
-  Injectable,
-  computed,
-  inject,
-  signal,
-} from '@angular/core';
+import { Injectable, computed, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { Product } from '@core/models/product.model';
@@ -30,6 +24,12 @@ import { STORAGE_KEYS } from '@core/constants/storage-keys';
  * NOTA:
  * GitHub Pages solo permite GET. Los "POST/PUT/DELETE" se simulan
  * modificando el arreglo en memoria + localStorage.
+ *
+ * IMPORTANTE (Angular Signals):
+ * - No se permite escribir signals dentro de `computed()`.
+ * - Por eso:
+ *    - `setFilter()` escribe en _activeFilter (debe llamarse desde eventos).
+ *    - `filter()` es puro (no escribe signals) y puede usarse sin romper NG0600.
  */
 export class ProductService {
   // ============================================================
@@ -43,13 +43,22 @@ export class ProductService {
 
   /**
    * URL del JSON remoto.
-  
-   * usar el JSON local empaquetado por Angular, usar:
-   *  - 'assets/data/products.json'
+   *
+   * ✅ Para desarrollo local con PROXY:
+   *    remoteUrl = '/JSON_API/products.json'
+   *    y ejecutar: ng serve --proxy-config proxy.conf.json
+   *
+   * ✅ Para usar JSON local empaquetado:
+   *    remoteUrl = 'assets/data/products.json'
    */
-  private readonly remoteUrl =
-    //'assets/data/products.json'; // ← cambiar a URL de GitHub Pages.
-    'https://kawaboonga.github.io/JSON_API/products.json';
+  private readonly remoteUrl = '/JSON_API/products.json';
+
+  /**
+   * Imagen por defecto (fallback).
+   * Se usa cuando el producto viene sin imageUrl (vacío, null o undefined).
+   */
+  private readonly FALLBACK_IMAGE_URL =
+    'https://polarvectors.com/wp-content/uploads/2023/06/Guitar-SVG.jpg';
 
   // ============================================================
   // 1) STATE REACTIVO: productos + filtro activo
@@ -65,8 +74,8 @@ export class ProductService {
   readonly products = this._products.asReadonly();
 
   /**
-   * Filtro activo opcional, para quienes quieran usar
-   * el modo completamente reactivo.
+   * Filtro activo (para modo reactivo).
+   * Se actualiza con setFilter().
    */
   private readonly _activeFilter = signal<ProductFilter | null>(null);
 
@@ -74,70 +83,18 @@ export class ProductService {
   readonly activeFilter = this._activeFilter.asReadonly();
 
   /**
-   * Lista filtrada reactiva, basada en:
-   * - _products (solo activos)
-   * - _activeFilter
+   * Lista filtrada reactiva basada en:
+   * - getActive()
+   * - _activeFilter()
    */
   readonly filteredProducts = computed(() => {
-    const all = this.getActive(); // usamos solo productos activos
+    const all = this.getActive();
     const filter = this._activeFilter();
 
     // Si no hay filtro activo, devolvemos ordenado por fecha (más nuevos primero)
-    if (!filter) {
-      return this.sortByDateDesc(all);
-    }
+    if (!filter) return this.sortByDateDesc(all);
 
-    let result = [...all];
-
-    // --- Filtro por categoría ---
-    if (filter.category && filter.category !== 'todos') {
-      result = result.filter((p) => p.category === filter.category);
-    }
-
-    // --- Filtro por condición ---
-    if (filter.condition && filter.condition !== 'todos') {
-      result = result.filter((p) => p.condition === filter.condition);
-    }
-
-    // --- Búsqueda por texto ---
-    if (filter.searchTerm && filter.searchTerm.trim()) {
-      const term = filter.searchTerm.toLowerCase();
-      result = result.filter(
-        (p) =>
-          p.name.toLowerCase().includes(term) ||
-          (p.brand ?? '').toLowerCase().includes(term) ||
-          (p.model ?? '').toLowerCase().includes(term) ||
-          (p.tags ?? []).some((t) => t.toLowerCase().includes(term)),
-      );
-    }
-
-    // --- Precio mínimo ---
-    if (filter.minPrice != null) {
-      result = result.filter((p) => (p.price ?? 0) >= filter.minPrice!);
-    }
-
-    // --- Precio máximo ---
-    if (filter.maxPrice != null) {
-      result = result.filter((p) => (p.price ?? 0) <= filter.maxPrice!);
-    }
-
-    // --- Ordenamiento ---
-    switch (filter.sortBy) {
-      case 'priceAsc':
-        result.sort((a, b) => (a.price ?? 0) - (b.price ?? 0));
-        break;
-
-      case 'priceDesc':
-        result.sort((a, b) => (b.price ?? 0) - (a.price ?? 0));
-        break;
-
-      case 'recent':
-      default:
-        result = this.sortByDateDesc(result);
-        break;
-    }
-
-    return result;
+    return this.applyFilterInternal(all, filter);
   });
 
   // ============================================================
@@ -169,7 +126,10 @@ export class ProductService {
         this._products.set(this.normalizeList(parsed));
         return;
       } catch (e) {
-        console.warn('[ProductService] Error parseando localStorage, se ignora.', e);
+        console.warn(
+          '[ProductService] Error parseando localStorage, se ignora.',
+          e,
+        );
         localStorage.removeItem(this.storageKey);
       }
     }
@@ -197,16 +157,24 @@ export class ProductService {
    * - Asegura slug.
    * - Asegura createdAt.
    * - Asegura isActive por defecto.
+   * - Asegura imageUrl con fallback si viene vacío.
    */
   private normalizeList(list: Product[]): Product[] {
     return list.map((p) => {
       const slug = p.slug ?? this.slugify(p.name);
       const createdAt = p.createdAt ?? new Date().toISOString();
 
+      // ✅ Fallback robusto para imagen
+      const safeImageUrl =
+        (p.imageUrl ?? '').toString().trim().length > 0
+          ? (p.imageUrl as string).toString().trim()
+          : this.FALLBACK_IMAGE_URL;
+
       return {
         ...p,
         slug,
         createdAt,
+        imageUrl: safeImageUrl,
         isActive: p.isActive ?? true,
       };
     });
@@ -223,7 +191,6 @@ export class ProductService {
       localStorage.setItem(this.storageKey, value);
     } catch (e) {
       console.error('[ProductService] No se pudo persistir en localStorage.', e);
-      // No rompemos la app si falla localStorage.
     }
   }
 
@@ -307,23 +274,90 @@ export class ProductService {
   }
 
   // ============================================================
-  // 4) FILTRADO IMPERATIVO (API COMPATIBLE)
+  // 4) FILTRADO (REACTIVO + IMPERATIVO)
   // ============================================================
 
   /**
-   * Aplica los filtros definidos en `ProductFilter`.
-   * Combina categoría, condición, búsqueda, rango de precio y ordenamiento.
+   * ✅ Setter del filtro activo (modo reactivo).
    *
-   * Modo "imperativo" clásico: retorna el arreglo filtrado directamente
-   * y además actualiza el filtro activo para quien quiera usar Signals.
+   * IMPORTANTE:
+   * - Esto escribe signals, por lo tanto debe llamarse desde eventos
+   *   (handlers) o constructor, nunca dentro de un computed().
+   */
+  setFilter(filter: ProductFilter | null): void {
+    this._activeFilter.set(filter);
+  }
+
+  /**
+   * Modo imperativo clásico: retorna el arreglo filtrado directamente
+   * SIN escribir signals (evita NG0600 si se llama dentro de computed()).
    */
   filter(filter: ProductFilter): Product[] {
-    this._activeFilter.set(filter);
-    return this.filteredProducts();
+    const all = this.getActive();
+    return this.applyFilterInternal(all, filter);
+  }
+
+  /**
+   * Lógica central de filtrado (pura): NO toca signals.
+   */
+  private applyFilterInternal(all: Product[], filter: ProductFilter): Product[] {
+    let result = [...all];
+
+    // --- Categoría ---
+    if (filter.category && filter.category !== 'todos') {
+      result = result.filter((p) => p.category === filter.category);
+    }
+
+    // --- Condición ---
+    if (filter.condition && filter.condition !== 'todos') {
+      result = result.filter((p) => p.condition === filter.condition);
+    }
+
+    // --- Búsqueda ---
+    if (filter.searchTerm && filter.searchTerm.trim()) {
+      const term = filter.searchTerm.toLowerCase();
+      result = result.filter(
+        (p) =>
+          p.name.toLowerCase().includes(term) ||
+          (p.brand ?? '').toLowerCase().includes(term) ||
+          (p.model ?? '').toLowerCase().includes(term) ||
+          (p.tags ?? []).some((t) => t.toLowerCase().includes(term)),
+      );
+    }
+
+    // --- Precio mínimo (fix TS18048) ---
+    const minPrice = filter.minPrice;
+    if (minPrice != null) {
+      result = result.filter((p) => (p.price ?? 0) >= minPrice);
+    }
+
+    // --- Precio máximo (fix TS18048) ---
+    const maxPrice = filter.maxPrice;
+    if (maxPrice != null) {
+      result = result.filter((p) => (p.price ?? 0) <= maxPrice);
+    }
+
+    // --- Ordenamiento ---
+    switch (filter.sortBy) {
+      case 'priceAsc':
+        result.sort((a, b) => (a.price ?? 0) - (b.price ?? 0));
+        break;
+
+      case 'priceDesc':
+        result.sort((a, b) => (b.price ?? 0) - (a.price ?? 0));
+        break;
+
+      case 'recent':
+      default:
+        result = this.sortByDateDesc(result);
+        break;
+    }
+
+    return result;
   }
 
   // ============================================================
-  // 5) CRUD LOCAL PARA ADMIN (NUEVA API)
+  // 5) CRUD LOCAL PARA ADMIN
   // ============================================================
 
   /**
@@ -336,10 +370,17 @@ export class ProductService {
     const id = (partial as Product).id ?? crypto.randomUUID();
     const slug = partial.slug ?? this.slugify(partial.name);
 
+    // ✅ Asegurar fallback de imagen en creaciones
+    const safeImageUrl =
+      (partial.imageUrl ?? '').toString().trim().length > 0
+        ? (partial.imageUrl as string).toString().trim()
+        : this.FALLBACK_IMAGE_URL;
+
     const created: Product = {
       ...partial,
       id,
       slug,
+      imageUrl: safeImageUrl,
       createdAt: partial.createdAt ?? new Date().toISOString(),
       isActive: partial.isActive ?? true,
     };
@@ -364,8 +405,16 @@ export class ProductService {
    * Actualiza un producto existente basado en su ID.
    */
   update(product: Product): void {
+    // ✅ Si se edita y queda vacía la imagen, aplicamos fallback
+    const safeImageUrl =
+      (product.imageUrl ?? '').toString().trim().length > 0
+        ? (product.imageUrl as string).toString().trim()
+        : this.FALLBACK_IMAGE_URL;
+
     this._products.update((list) =>
-      list.map((p) => (p.id === product.id ? { ...p, ...product } : p)),
+      list.map((p) =>
+        p.id === product.id ? { ...p, ...product, imageUrl: safeImageUrl } : p,
+      ),
     );
     this.persistToStorage();
   }

@@ -12,15 +12,17 @@
 //   • Cálculo automático del porcentaje de rebaja.
 //   • Resumen corto basado en shortDescription/description.
 //   • Standalone + RouterLink.
+//   • (Opcional) Botones de administración (Editar / Eliminar) cuando
+//     el contenedor así lo solicite.
 //
 // Este componente es completamente "dumb":
 //   - No filtra.
 //   - No ordena.
 //   - No usa servicios.
-//   Solo pinta los datos que se le entregan.
+//   Solo pinta los datos que se le entregan y emite eventos simples.
 // ============================================================================
 
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
@@ -34,7 +36,6 @@ import { Product } from '@core/models/product.model';
   styleUrl: './product-card.css',
 })
 export class ProductCardComponent {
-
   // ==========================================================================
   // INPUT PRINCIPAL
   // ==========================================================================
@@ -55,23 +56,83 @@ export class ProductCardComponent {
    */
   @Input({ required: true }) product!: Product;
 
+  // ==========================================================================
+  // FALLBACK IMAGEN (URL PÚBLICA)
+  // ==========================================================================
+  /**
+   * @property FALLBACK_IMAGE_URL
+   * @description
+   * Imagen de relleno (placeholder) usada cuando:
+   *  - product.imageUrl viene vacío/null/undefined
+   *  - la imagen falla al cargar (404, CORS, etc.)
+   *
+   * Nota:
+   * - Se usa URL pública (requerimiento del proyecto).
+   */
+  readonly FALLBACK_IMAGE_URL =
+    'https://polarvectors.com/wp-content/uploads/2023/06/Guitar-SVG.jpg';
+
+  /**
+   * @property imageSrc
+   * @description
+   * Fuente final de la imagen para renderizar en la vista.
+   *
+   * Importante:
+   * - Evita usar `.trim()` directo en el template porque si imageUrl
+   *   no es string (data sucia desde JSON/localStorage) revienta la vista.
+   */
+  get imageSrc(): string {
+    const raw = (this.product?.imageUrl ?? '').toString().trim();
+    return raw.length > 0 ? raw : this.FALLBACK_IMAGE_URL;
+  }
+
+  /**
+   * @method onImgError
+   * @description
+   * Handler para el evento (error) del <img>.
+   * Si la URL de imagen falla, reemplaza por el placeholder.
+   *
+   * @usageNotes
+   * Evitamos un loop infinito verificando que no estemos ya
+   * usando la imagen fallback.
+   */
+  onImgError(event: Event): void {
+    const img = event.target as HTMLImageElement;
+    if (img.src === this.FALLBACK_IMAGE_URL) return;
+    img.src = this.FALLBACK_IMAGE_URL;
+  }
+
+  // ==========================================================================
+  // MODO ADMIN → BOTONES EDITAR / ELIMINAR
+  // ==========================================================================
+  @Input() canEdit = false;
+
+  @Output() editRequest = new EventEmitter<string>();
+  @Output() deleteRequest = new EventEmitter<string>();
+
+  onEditClick(event: MouseEvent): void {
+    event.stopPropagation();
+    event.preventDefault();
+    this.editRequest.emit(this.product.id);
+  }
+
+  onDeleteClick(event: MouseEvent): void {
+    event.stopPropagation();
+    event.preventDefault();
+
+    const ok = confirm(
+      `¿Eliminar el producto "${this.product.name}"?\n` +
+        'Esta acción no se puede deshacer.',
+    );
+
+    if (!ok) return;
+
+    this.deleteRequest.emit(this.product.id);
+  }
 
   // ==========================================================================
   // DESCUENTO → BADGE "-20%"
   // ==========================================================================
-  /**
-   * @property hasDiscount
-   * @description
-   * Indica si el producto tiene un descuento activo.
-   * Un producto está en oferta cuando:
-   *
-   *   previousPrice > price
-   *
-   * @return {boolean} true si existe precio anterior mayor al actual.
-   *
-   * @example
-   * if (hasDiscount) { mostrarBadge() }
-   */
   get hasDiscount(): boolean {
     return !!(
       this.product.previousPrice &&
@@ -79,24 +140,6 @@ export class ProductCardComponent {
     );
   }
 
-  /**
-   * @property discountPercent
-   * @description
-   * Calcula el porcentaje de descuento basado en:
-   *
-   *   (1 - price / previousPrice) * 100
-   *
-   * Redondea al número entero más cercano.
-   *
-   * @return {number} porcentaje entero (ej: 25).
-   *
-   * @example
-   * // price=75, previousPrice=100 → 25
-   * card.discountPercent  // 25
-   *
-   * @usageNotes
-   * Si no hay descuento, devuelve 0.
-   */
   get discountPercent(): number {
     if (!this.hasDiscount) return 0;
 
@@ -106,32 +149,9 @@ export class ProductCardComponent {
     return Math.round(percent * 100);
   }
 
-
   // ==========================================================================
   // RESUMEN DESCRIPTIVO
   // ==========================================================================
-  /**
-   * @method getSummary
-   * @description
-   * Construye una descripción corta del producto.
-   *
-   * Regla:
-   *   • Si existe `shortDescription`, se usa esa.
-   *   • Si no, se cae en `description`.
-   *   • Se limita a ~90 caracteres para mantener
-   *     consistencia visual en el grid.
-   *
-   * @param {Product} product - Instancia de producto cuyo resumen se generará.
-   * @return {string} texto final recortado o completo según longitud.
-   *
-   * @example
-   * getSummary(product)
-   * // "Guitarra Fender Stratocaster ideal para rock y blues…"
-   *
-   * @usageNotes
-   * Este método solo afecta a la vista de la card.
-   * No modifica el modelo original.
-   */
   getSummary(product: Product): string {
     const text = product.shortDescription || product.description || '';
     const maxLength = 90;

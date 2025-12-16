@@ -1,0 +1,18 @@
+# Dependencias locales
+node_modules
+npm-debug.log
+yarn.lock
+
+# Cache de Angular / IDE / SO
+.angular
+dist
+.tmp
+.git
+.gitignore
+.idea
+.vscode
+.DS_Store
+
+# Archivos de pruebas
+coverage
+**/*.spec.ts

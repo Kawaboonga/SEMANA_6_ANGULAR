@@ -27,9 +27,19 @@ import { HttpInterceptorFn } from '@angular/common/http';
 export const authTokenInterceptor: HttpInterceptorFn = (req, next) => {
 
   // ---------------------------------------------------------------------------
-  // 1) Ignorar peticiones a archivos estáticos (JSON, imágenes, CSS, etc.)
+  // 1) Ignorar assets locales (Angular)
   // ---------------------------------------------------------------------------
   if (req.url.includes('/assets/') || req.url.startsWith('assets/')) {
+    return next(req);
+  }
+
+  // ---------------------------------------------------------------------------
+  // 1.1) Ignorar JSON externos (GitHub Pages) para evitar CORS por Authorization
+  // ---------------------------------------------------------------------------
+  if (
+    req.url.startsWith('https://kawaboonga.github.io/JSON_API/') ||
+    req.url.endsWith('.json')
+  ) {
     return next(req);
   }
 
@@ -43,6 +53,8 @@ export const authTokenInterceptor: HttpInterceptorFn = (req, next) => {
   ) {
     return next(req);
   }
+
+
 
   // ---------------------------------------------------------------------------
   // 3) Obtener token y agregar header si existe

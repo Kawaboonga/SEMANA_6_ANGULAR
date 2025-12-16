@@ -47,6 +47,15 @@ export const routes: Routes = [
       },
 
       {
+        path: 'preventas',
+        loadComponent: () =>
+          import('@features/preventas/preventas-list/preventas-list').then(
+            m => m.PreventasListComponent
+          ),
+        data: { breadcrumb: 'Preventas' },
+      },
+
+      {
         path: 'cursos',
         loadComponent: () =>
           import('@features/cursos/cursos-list/cursos-list').then(
@@ -77,6 +86,8 @@ export const routes: Routes = [
           import('@features/servicios/servicios.routes').then(m => m.SERVICIOS_ROUTES),
         data: { breadcrumb: 'Servicios' },
       },
+
+      
 
       {
         path: 'noticias',
@@ -179,6 +190,13 @@ export const routes: Routes = [
             loadComponent: () =>
               import('@features/admin/admin-usuarios/admin-usuarios').then(
                 m => m.AdminUsuarios
+              ),
+          },
+          {
+            path: 'preventas',
+            loadComponent: () =>
+              import('@features/admin/admin-preventas/admin-preventas').then(
+                m => m.AdminPreventasComponent
               ),
           },
         ],

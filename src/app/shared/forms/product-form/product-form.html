@@ -23,7 +23,7 @@ Detalles clave:
     <button type="button" class="btn btn-outline-secondary btn-sm" (click)="onCancel()">
       Cancelar
     </button>
-    <button type="submit" class="btn btn-primary btn-sm">
+    <button type="submit" class="btn btn-primary btn-sm" [disabled]="form.invalid">
       Guardar
     </button>
   </div>
@@ -37,13 +37,13 @@ Detalles clave:
       - generar slug (si no existe uno previo)
     -------------------------------------------------------------------- -->
     <div class="col-md-6">
-      <label class="form-label">Nombre</label>
+      <label class="form-label">Nombre *</label>
       <input
         class="form-control"
         formControlName="name"
-        [class.is-invalid]="hasError('name','required')"
+        [class.is-invalid]="isInvalid('name')"
       />
-      <div class="invalid-feedback" *ngIf="hasError('name','required')">
+      <div class="invalid-feedback" *ngIf="isInvalid('name')">
         Obligatorio.
       </div>
     </div>
@@ -55,11 +55,11 @@ Detalles clave:
     También ayuda a filtrar en páginas de categoría.
     -------------------------------------------------------------------- -->
     <div class="col-md-3">
-      <label class="form-label">Categoría</label>
+      <label class="form-label">Categoría *</label>
       <select
         class="form-select"
         formControlName="category"
-        [class.is-invalid]="hasError('category','required')"
+        [class.is-invalid]="isInvalid('category')"
       >
         <!-- null = obliga a seleccionar -->
         <option [ngValue]="null">Selecciona categoría</option>
@@ -69,6 +69,10 @@ Detalles clave:
           {{ c | titlecase }}
         </option>
       </select>
+
+      <div class="invalid-feedback" *ngIf="isInvalid('category')">
+        Obligatorio.
+      </div>
     </div>
 
     <!-- --------------------------------------------------------------------
@@ -77,15 +81,15 @@ Detalles clave:
     Nota: El form controla solo el valor. El formateo en moneda ocurre afuera.
     -------------------------------------------------------------------- -->
     <div class="col-md-3">
-      <label class="form-label">Precio (CLP)</label>
+      <label class="form-label">Precio (CLP) *</label>
       <input
         type="number"
         class="form-control"
         formControlName="price"
-        [class.is-invalid]="hasError('price','required')"
+        [class.is-invalid]="isInvalid('price')"
       />
-      <div class="invalid-feedback" *ngIf="hasError('price','required')">
-        Obligatorio.
+      <div class="invalid-feedback" *ngIf="isInvalid('price')">
+        Ingresa un precio válido (≥ 0).
       </div>
     </div>
 
@@ -95,12 +99,16 @@ Detalles clave:
     Ideal para 1 o 2 líneas que describen rápidamente el producto.
     -------------------------------------------------------------------- -->
     <div class="col-12">
-      <label class="form-label">Descripción corta</label>
+      <label class="form-label">Descripción corta *</label>
       <textarea
         class="form-control"
         rows="2"
         formControlName="shortDescription"
+        [class.is-invalid]="isInvalid('shortDescription')"
       ></textarea>
+      <div class="invalid-feedback" *ngIf="isInvalid('shortDescription')">
+        Obligatoria (mínimo 10 caracteres).
+      </div>
     </div>
 
     <!-- --------------------------------------------------------------------
@@ -109,15 +117,15 @@ Detalles clave:
     Debe tener suficiente información para compradores reales.
     -------------------------------------------------------------------- -->
     <div class="col-12">
-      <label class="form-label">Descripción completa</label>
+      <label class="form-label">Descripción completa *</label>
       <textarea
         class="form-control"
         rows="4"
         formControlName="description"
-        [class.is-invalid]="hasError('description','required')"
+        [class.is-invalid]="isInvalid('description')"
       ></textarea>
-      <div class="invalid-feedback" *ngIf="hasError('description','required')">
-        Obligatoria.
+      <div class="invalid-feedback" *ngIf="isInvalid('description')">
+        Obligatoria (mínimo 10 caracteres).
       </div>
     </div>
 
@@ -126,8 +134,15 @@ Detalles clave:
     Opcional, pero útil para búsquedas y para mostrar en cards.
     -------------------------------------------------------------------- -->
     <div class="col-md-4">
-      <label class="form-label">Marca</label>
-      <input class="form-control" formControlName="brand" />
+      <label class="form-label">Marca *</label>
+      <input
+        class="form-control"
+        formControlName="brand"
+        [class.is-invalid]="isInvalid('brand')"
+      />
+      <div class="invalid-feedback" *ngIf="isInvalid('brand')">
+        Obligatoria.
+      </div>
     </div>
 
     <!-- --------------------------------------------------------------------
@@ -135,8 +150,15 @@ Detalles clave:
     No obligatorio, pero importante para diferenciar versiones.
     -------------------------------------------------------------------- -->
     <div class="col-md-4">
-      <label class="form-label">Modelo</label>
-      <input class="form-control" formControlName="model" />
+      <label class="form-label">Modelo *</label>
+      <input
+        class="form-control"
+        formControlName="model"
+        [class.is-invalid]="isInvalid('model')"
+      />
+      <div class="invalid-feedback" *ngIf="isInvalid('model')">
+        Obligatorio.
+      </div>
     </div>
 
     <!-- --------------------------------------------------------------------
@@ -145,14 +167,18 @@ Detalles clave:
     Validado con min/max para evitar años imposibles.
     -------------------------------------------------------------------- -->
     <div class="col-md-4">
-      <label class="form-label">Año</label>
+      <label class="form-label">Año *</label>
       <input
         class="form-control"
         type="number"
         min="1900"
         max="2100"
         formControlName="year"
+        [class.is-invalid]="isInvalid('year')"
       />
+      <div class="invalid-feedback" *ngIf="isInvalid('year')">
+        Año inválido.
+      </div>
     </div>
 
     <!-- --------------------------------------------------------------------
@@ -162,12 +188,19 @@ Detalles clave:
     Ayuda a mostrar badges y diferenciar precio.
     -------------------------------------------------------------------- -->
     <div class="col-md-4">
-      <label class="form-label">Condición</label>
-      <select class="form-select" formControlName="condition">
+      <label class="form-label">Condición *</label>
+      <select
+        class="form-select"
+        formControlName="condition"
+        [class.is-invalid]="isInvalid('condition')"
+      >
         <option *ngFor="let c of conditionOptions" [ngValue]="c">
           {{ c | titlecase }}
         </option>
       </select>
+      <div class="invalid-feedback" *ngIf="isInvalid('condition')">
+        Obligatoria.
+      </div>
     </div>
 
     <!-- --------------------------------------------------------------------
@@ -176,8 +209,16 @@ Detalles clave:
     el producto completo.
     -------------------------------------------------------------------- -->
     <div class="col-md-4">
-      <label class="form-label">Stock</label>
-      <input type="number" class="form-control" formControlName="stock" />
+      <label class="form-label">Stock *</label>
+      <input
+        type="number"
+        class="form-control"
+        formControlName="stock"
+        [class.is-invalid]="isInvalid('stock')"
+      />
+      <div class="invalid-feedback" *ngIf="isInvalid('stock')">
+        Stock inválido (≥ 0).
+      </div>
     </div>
 
     <!-- --------------------------------------------------------------------
@@ -188,6 +229,9 @@ Detalles clave:
     <div class="col-md-4">
       <label class="form-label">Imagen (URL)</label>
       <input class="form-control" formControlName="imageUrl" />
+      <div class="form-text">
+        Si lo dejas vacío, se usará una imagen de relleno automáticamente.
+      </div>
     </div>
 
     <!-- --------------------------------------------------------------------
@@ -238,7 +282,7 @@ Detalles clave:
     <button type="button" class="btn btn-outline-secondary btn-sm" (click)="onCancel()">
       Cancelar
     </button>
-    <button type="submit" class="btn btn-primary btn-sm">
+    <button type="submit" class="btn btn-primary btn-sm" [disabled]="form.invalid">
       Guardar
     </button>
   </div>

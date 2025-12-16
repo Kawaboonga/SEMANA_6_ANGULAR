@@ -54,5 +54,61 @@
     "priceCLP": 89990,
     "price": 89990,
     "priceLabel": "$89.990"
+  },
+  {
+    "id": "curso-guitarra",
+    "slug": "curso-guitarra",
+    "title": "Curso intensivo de guitarra rock",
+    "tutorId": "marco-vidal",
+    "tutorName": "Marco Vidal",
+
+    "difficulty": "Intermedio",
+    "level": "Intermedio",
+
+    "duration": "16 h · 8 clases",
+    "durationHours": 16,
+    "totalLessons": 8,
+    "lessonsCount": 8,
+
+    "shortDescription": "Domina riffs, power chords y solos básicos de rock.",
+    "description": "En este curso trabajarás repertorio real de rock, técnica de púa, palm mute, power chords y construcción de solos sencillos sobre backing tracks.",
+    "imageUrl": "/assets/img/course/curso-guitarra-e2.jpg",
+
+    "rating": 4.8,
+    "ratingCount": 32,
+
+    "modalities": ["Presencial", "Online"],
+
+    "stages": [
+      "Fundamentos de palm mute",
+      "Riffs clásicos",
+      "Power chords y progresiones",
+      "Introducción a solos"
+    ],
+
+    "learnOutcomes": [
+      "Tocar riffs con buen timing.",
+      "Entender progresiones de rock.",
+      "Improvisar solos sencillos."
+    ],
+
+    "reviews": [
+      {
+        "author": "Estudiante 1",
+        "rating": 5,
+        "comment": "Curso muy práctico, lleno de ejemplos reales.",
+        "createdAt": "2024-05-10"
+      }
+    ],
+
+    "showInCarousel": true,
+    "isFeatured": true,
+    "isOffer": false,
+    "isNew": true,
+    "isActive": true,
+
+    "priceCLP": 89990,
+    "price": 89990,
+    "priceLabel": "$89.990"
   }
 ]

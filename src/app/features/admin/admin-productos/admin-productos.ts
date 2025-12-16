@@ -1,6 +1,6 @@
-
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
 
 import { Product } from '@core/models/product.model';
 import { ProductService } from '@core/services/product.service';
@@ -19,48 +19,65 @@ import { ProductFormComponent } from '@shared/forms/product-form/product-form';
  * Este componente permite gestionar el ciclo completo de un producto:
  * - Crear nuevos productos
  * - Editar productos ya existentes
- * - Eliminar
+ * - Eliminar productos
  * - Alternar flags visuales (destacado, oferta, activo, etc.)
  *
  * El estado principal proviene de `ProductService`, que expone la lista
- * como signal reactive para usar directamente en el template.
+ * como signal reactivo para usar directamente en el template.
  *
  * @usageNotes
  * - `productos()` siempre refleja el estado actual del servicio.
- * - `selectedProduct` define si el formulario está en modo crear o editar.
- * - Los cambios se aplican siempre mediante `productService.setAll()`.
+ * - `selectedProduct()` define si el formulario está en modo crear o editar.
+ * - Los cambios se aplican siempre mediante los métodos del servicio
+ *   (`create`, `update`, `deleteById`, `toggleFlag`).
  */
 export class AdminProductos {
-
   // ============================================================
   // 1) Inyección de servicios
   // ============================================================
 
-  /** Servicio centralizado de productos (mock local con signals). */
-  private productService = inject(ProductService);
+  /** Servicio centralizado de productos (JSON remoto + localStorage + signals). */
+  private readonly productService = inject(ProductService);
+
+  /** ActivatedRoute → usado para abrir edición directa desde queryParam ?id= */
+  private readonly route = inject(ActivatedRoute);
 
   // ============================================================
   // 2) State del componente
   // ============================================================
 
   /**
-   * Lista de productos como signal readonly.
-   * Ideal para usar directo en el HTML: productos().
+   * Lista de productos como computed, directo desde el servicio.
+   * Ideal para usar en el HTML con productos().
    */
-  productos = this.productService.products;
+  productos = computed(() => this.productService.getAll());
 
   /** Controla la visibilidad del panel del formulario. */
-  showForm = false;
+  showForm = signal(false);
 
   /**
    * Producto actualmente seleccionado para edición.
    * - `null` → modo creación.
    * - `Product` → modo edición.
    */
-  selectedProduct: Product | null = null;
+  selectedProduct = signal<Product | null>(null);
 
   // ============================================================
-  // 3) Acciones básicas (abrir form)
+  // 3) Constructor → abrir edición desde queryParam (opcional)
+  // ============================================================
+
+  constructor() {
+    const idFromQuery = this.route.snapshot.queryParamMap.get('id');
+    if (idFromQuery) {
+      const found = this.productService.getAll().find(p => p.id === idFromQuery);
+      if (found) {
+        this.onEdit(found);
+      }
+    }
+  }
+
+  // ============================================================
+  // 4) Acciones básicas (abrir form)
   // ============================================================
 
   /**
@@ -68,42 +85,40 @@ export class AdminProductos {
    * Resetea cualquier selección previa.
    */
   onCreate(): void {
-    this.selectedProduct = null;
-    this.showForm = true;
+    this.selectedProduct.set(null);
+    this.showForm.set(true);
   }
 
   /**
    * Abre el formulario en modo edición con el producto seleccionado.
-   * El formulario recibe el objeto tal cual.
    *
    * @param product Producto a editar
    */
   onEdit(product: Product): void {
-    this.selectedProduct = product;
-    this.showForm = true;
+    this.selectedProduct.set(product);
+    this.showForm.set(true);
   }
 
   // ============================================================
-  // 4) Eliminar producto
+  // 5) Eliminar producto
   // ============================================================
 
   /**
-   * Confirma y elimina el producto del listado.
+   * Confirma y elimina el producto del listado usando ProductService.
    *
    * @param product Producto a eliminar
    */
   onDelete(product: Product): void {
-    if (!confirm(`¿Eliminar producto "${product.name}"?`)) return;
+    const ok = confirm(
+      `¿Eliminar producto "${product.name}"?\nEsta acción no se puede deshacer.`
+    );
+    if (!ok) return;
 
-    const newList = this.productService
-      .getAll()
-      .filter((p) => p.id !== product.id);
-
-    this.productService.setAll(newList);
+    this.productService.deleteById(product.id);
   }
 
   // ============================================================
-  // 5) Alternar flags del producto
+  // 6) Alternar flags del producto
   // ============================================================
 
   /**
@@ -114,6 +129,8 @@ export class AdminProductos {
    * - isNew
    * - isActive
    *
+   * (Si quieres manejar preventas desde aquí, puedes agregar 'isPreSale').
+   *
    * @param product Producto a modificar
    * @param flag Propiedad booleana a alternar
    */
@@ -121,23 +138,11 @@ export class AdminProductos {
     product: Product,
     flag: 'showInCarousel' | 'isFeatured' | 'isOffer' | 'isNew' | 'isActive',
   ): void {
-    const list = this.productService.getAll();
-    const idx = list.findIndex((p) => p.id === product.id);
-    if (idx === -1) return;
-
-    const updated: Product = {
-      ...product,
-      [flag]: !product[flag],
-    };
-
-    const newList = [...list];
-    newList[idx] = updated;
-
-    this.productService.setAll(newList);
+    this.productService.toggleFlag(product.id, flag);
   }
 
   // ============================================================
-  // 6) Guardar producto (crear / actualizar)
+  // 7) Guardar producto (crear / actualizar)
   // ============================================================
 
   /**
@@ -147,74 +152,25 @@ export class AdminProductos {
    * @param productFromForm Datos enviados por el formulario ya validados.
    */
   handleSave(productFromForm: Product): void {
-    const list = this.productService.getAll();
-    const idx = list.findIndex((p) => p.id === productFromForm.id);
-
-    let newList: Product[];
-
-    if (idx === -1) {
-      // -----------------------------------------
-      // MODO CREAR
-      // -----------------------------------------
-      const slug = productFromForm.slug || this.slugify(productFromForm.name);
-      newList = [...list, { ...productFromForm, slug }];
+    // Si no viene id → creación
+    if (!productFromForm.id) {
+      // Eliminamos id por seguridad y delegamos al servicio
+      const { id: _, ...data } = productFromForm;
+      this.productService.create(data);
     } else {
-      // -----------------------------------------
-      // MODO EDITAR
-      // -----------------------------------------
-      const existing = list[idx];
-
-      const slug =
-        productFromForm.slug ||
-        existing.slug ||
-        this.slugify(productFromForm.name);
-
-      const merged: Product = {
-        ...existing,
-        ...productFromForm,
-        slug,
-      };
-
-      newList = [...list];
-      newList[idx] = merged;
+      // Edición → delegamos en el servicio
+      this.productService.update(productFromForm);
     }
 
-    this.productService.setAll(newList);
-    this.showForm = false;
-    this.selectedProduct = null;
+    this.showForm.set(false);
+    this.selectedProduct.set(null);
   }
 
   /**
    * Acción del formulario para cancelar creación o edición.
    */
   handleCancel(): void {
-    this.showForm = false;
-    this.selectedProduct = null;
-  }
-
-  // ============================================================
-  // 7) Helper: slugify
-  // ============================================================
-
-  /**
-   * Convierte un nombre en un slug válido para URL:
-   * - elimina acentos
-   * - transforma a minúsculas
-   * - reemplaza caracteres no alfanuméricos por guiones
-   * - limpia guiones repetidos o al inicio/fin
-   *
-   * @param name Nombre del producto
-   * @returns Slug limpio y seguro para rutas
-   *
-   * @example
-   * slugify("Fender Stratocaster 2020") → "fender-stratocaster-2020"
-   */
-  private slugify(name: string): string {
-    return name
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/(^-|-$)+/g, '');
+    this.showForm.set(false);
+    this.selectedProduct.set(null);
   }
 }

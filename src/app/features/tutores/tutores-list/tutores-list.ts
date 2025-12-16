@@ -35,7 +35,6 @@ import { FadeUpDirective } from '@shared/directives/fade-up';
   standalone: true,
   imports: [
     CommonModule,
-    RouterLink,
     TutorCardComponent,
     TutorFilterBarComponent,
     FadeUpDirective,

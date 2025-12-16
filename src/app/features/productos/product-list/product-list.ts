@@ -1,9 +1,10 @@
-
 import { Component, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 
 import { ProductService } from '@core/services/product.service';
+import { AuthService } from '@core/services/auth.service';
+import { Product } from '@core/models/product.model';
 import { ProductFilter } from '@core/models/product-filter.model';
 import { ProductCategory } from '@core/models/product-category.model';
 
@@ -11,30 +12,10 @@ import { ProductCategoryBannerComponent } from '@shared/components/product-categ
 import { ProductFiltersComponent } from '@shared/components/product-filters/product-filters';
 import { ProductGridComponent } from '@shared/components/product-grid/product-grid';
 
+import { ProductFormComponent } from '@shared/forms/product-form/product-form';
+
 import { FadeUpDirective } from '@shared/directives/fade-up';
 
-/**
- * Componente que centraliza toda la lógica del módulo de productos.
- *
- * Su responsabilidad es:
- * - Leer la categoría principal desde la URL.
- * - Mantener los filtros secundarios (orden, condición, etc.).
- * - Combinar ambos filtros para producir la lista final mediante signals.
- * - Delegar la UI en componentes hijos totalmente “tontos”.
- * - Controla el banner de categoría
- * - Controla filtros secundarios (estado, orden, etc.)
- * - Produce la lista final mediante signals + computed
- * - Actúa como “smart component”: la UI vive en componentes hijos
- *
- * @usageNotes
- * - Si la ruta incluye :slug, este mismo componente sincroniza banner y filtros.
- * - `products` es un computed que siempre refleja el estado más reciente.
- * - Se usa signal() para mantener la reactividad interna sin depender de stores externos.
- *
- * @example
- * // Navegar a guitarras:
- * router.navigate(['/productos/categoria/guitarras']);
- */
 @Component({
   selector: 'app-product-list',
   standalone: true,
@@ -43,6 +24,7 @@ import { FadeUpDirective } from '@shared/directives/fade-up';
     ProductCategoryBannerComponent,
     ProductFiltersComponent,
     ProductGridComponent,
+    ProductFormComponent,
     FadeUpDirective,
   ],
   templateUrl: './product-list.html',
@@ -53,143 +35,107 @@ export class ProductListComponent {
   // INYECCIONES
   // ============================================================
 
-  /** ActivatedRoute → lectura del slug de categoría */
   private route = inject(ActivatedRoute);
-
-  /** ProductService → fuente única de productos + filtrado */
   private productService = inject(ProductService);
+  private authService = inject(AuthService);
 
   // ============================================================
   // ESTADO: FILTRO SECUNDARIO
   // ============================================================
 
-  /**
-   * Filtros secundarios (orden, estado, búsqueda, etc.).
-   * El banner y este filtro deben mantenerse sincronizados.
-   */
   private _filter = signal<ProductFilter>({
     category: 'todos',
     sortBy: 'recent',
     condition: 'todos',
   });
 
-  /** Versión de solo lectura para los hijos */
   filter = this._filter.asReadonly();
 
   // ============================================================
-  // ESTADO: CATEGORÍA PRINCIPAL (banner)
+  // ESTADO: CATEGORÍA PRINCIPAL (BANNER)
   // ============================================================
 
-  /**
-   * Controla la categoría principal tomada desde la URL.
-   * null   → /productos (sin categoría)
-   * 'todos' → categoría libre
-   * categoría real → guitarras, pedales, amplificadores...
-   */
   bannerCategory = signal<ProductCategory | 'todos' | null>(null);
+
+  // ============================================================
+  // ADMIN: ¿ES ADMINISTRADOR?
+  // ============================================================
+
+  isAdmin = computed(() => this.authService.isAdmin());
+
+  // ============================================================
+  // ADMIN: FORM STATE (CREAR / EDITAR)
+  // ============================================================
+
+  showForm = signal(false);
+  selectedProduct = signal<Product | null>(null);
 
   // ============================================================
   // LISTA FINAL DE PRODUCTOS (computed)
   // ============================================================
 
-  /**
-   * Lista final de productos aplicada en orden:
-   * 1) filter() del servicio → aplica filtros secundarios
-   * 2) categoría principal del banner → override si corresponde
-   *
-   * @returns Product[]
-   */
   products = computed(() => {
-    // Paso 1: aplicar filtros desde el servicio
-    let items = this.productService.filter(this._filter());
+    // ✅ Usamos el computed del servicio (reactivo) y NO escribimos signals aquí
+    let items = this.productService.filteredProducts();
 
-    // Paso 2: aplicar categoría del banner (si viene definida)
     const cat = this.bannerCategory();
     if (cat && cat !== 'todos') {
-      items = items.filter(p => p.category === cat);
+      items = items.filter((p) => p.category === cat);
     }
 
     return items;
   });
 
   // ============================================================
-  // CONSTRUCTOR → sincroniza URL con filtros
+  // CONSTRUCTOR → sincronizar URL con filtros
   // ============================================================
 
-  /**
-   * Lee cada actualización de /productos/:slug y sincroniza:
-   * - bannerCategory
-   * - filtro.category
-   *
-   * Si no existe slug → modo “todos los productos”.
-   */
   constructor() {
-    this.route.paramMap.subscribe(params => {
+    // Inicializa el filtro del servicio (modo reactivo correcto)
+    this.productService.setFilter(this._filter());
+
+    this.route.paramMap.subscribe((params) => {
       const slug = params.get('slug') as ProductCategory | 'todos' | null;
 
       if (slug && slug !== 'todos') {
-        // Caso: categoría desde la URL
         this.bannerCategory.set(slug);
-        this._filter.update(current => ({
+        this._filter.update((current) => ({
           ...current,
           category: slug,
         }));
       } else {
-        // Caso: sin categoría → listado completo
         this.bannerCategory.set(null);
-        this._filter.update(current => ({
+        this._filter.update((current) => ({
           ...current,
           category: 'todos',
         }));
       }
+
+      // ✅ Actualizar filtro del servicio fuera del computed
+      this.productService.setFilter(this._filter());
     });
   }
 
   // ============================================================
-  // EVENTOS DESDE COMPONENTES HIJOS
+  // EVENTOS DESDE COMPONENTES HIJOS (FILTROS / BANNER)
   // ============================================================
 
-  /**
-   * Actualiza parcialmente los filtros secundarios.
-   *
-   * @param partial Objeto parcial con propiedades de ProductFilter.
-   * @returns void
-   *
-   * @example
-   * onFilterChange({ sortBy: 'priceAsc' });
-   */
   onFilterChange(partial: Partial<ProductFilter>) {
-    this._filter.update(current => ({ ...current, ...partial }));
+    this._filter.update((current) => ({ ...current, ...partial }));
+    this.productService.setFilter(this._filter());
   }
 
-  /**
-   * Cambia la categoría principal desde el banner superior.
-   * Siempre sincroniza el filtro secundario.
-   *
-   * @param cat Categoría seleccionada o null.
-   * @returns void
-   */
   onBannerCategoryChange(cat: ProductCategory | 'todos' | null) {
     this.bannerCategory.set(cat);
 
-    this._filter.update(current => ({
+    this._filter.update((current) => ({
       ...current,
       category: cat ?? 'todos',
     }));
+
+    this.productService.setFilter(this._filter());
   }
 
-  /**
-   * Restablece:
-   * - categoría principal
-   * - categoría secundaria
-   * - estado
-   * - orden
-   *
-   * @returns void
-   *
-   * @example
-   * onClearAll();
-   */
   onClearAll() {
     this._filter.set({
       category: 'todos',
@@ -198,5 +144,52 @@ export class ProductListComponent {
     });
 
     this.bannerCategory.set(null);
+    this.productService.setFilter(this._filter());
+  }
+
+  // ============================================================
+  // ADMIN: CRUD DESDE LA VISTA PÚBLICA (CARDS)
+  // ============================================================
+
+  onAdminCreate() {
+    if (!this.isAdmin()) return;
+
+    this.selectedProduct.set(null);
+    this.showForm.set(true);
+  }
+
+  onAdminEdit(productId: string) {
+    if (!this.isAdmin()) return;
+
+    const found =
+      this.productService.getAll().find((p) => p.id === productId) ?? null;
+
+    this.selectedProduct.set(found);
+    this.showForm.set(true);
+  }
+
+  onAdminDelete(productId: string) {
+    if (!this.isAdmin()) return;
+
+    // La confirmación se hace en la card (como tú lo implementaste)
+    this.productService.deleteById(productId);
+  }
+
+  onAdminSave(product: Product) {
+    if (!this.isAdmin()) return;
+
+    // Si existe -> update, si no -> create
+    const exists = this.productService.getAll().some((p) => p.id === product.id);
+
+    if (exists) this.productService.update(product);
+    else this.productService.create(product);
+
+    this.showForm.set(false);
+    this.selectedProduct.set(null);
+  }
+
+  onAdminCancel() {
+    this.showForm.set(false);
+    this.selectedProduct.set(null);
   }
 }

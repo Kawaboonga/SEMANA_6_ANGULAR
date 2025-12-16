@@ -1,0 +1,73 @@
+<div class="container-fluid">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="h5 mb-0">Preventas</h2>
+    <button class="btn btn-sm btn-primary" (click)="onCreate()">
+      <i class="bi bi-plus-lg me-1"></i> Nueva preventa
+    </button>
+  </div>
+
+  <!-- FORMULARIO -->
+  <div class="mb-4" *ngIf="showForm()">
+    <div class="card shadow-sm border-0">
+      <div class="card-body">
+        <app-product-form
+          [product]="selectedProduct()"
+          (save)="onSave($event)"
+          (cancel)="onCancelForm()"
+        ></app-product-form>
+      </div>
+    </div>
+  </div>
+
+  <!-- LISTA DE PREVENTAS -->
+  <div class="card shadow-sm border-0">
+    <div class="card-body">
+      <h3 class="h6 text-uppercase text-muted mb-3">Listado de preventas</h3>
+
+      <div class="table-responsive">
+        <table class="table align-middle mb-0">
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Precio</th>
+              <th>Estado</th>
+              <th class="text-end">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let p of products()">
+              <td>{{ p.name }}</td>
+              <td>
+                {{ p.price | currency:(p.currency || 'CLP'):'symbol-narrow':'1.0-0' }}
+              </td>
+              <td>
+                <span class="badge bg-info" *ngIf="p.isPreSale">Preventa</span>
+              </td>
+              <td class="text-end">
+                <button
+                  class="btn btn-sm btn-outline-secondary me-2"
+                  (click)="onEdit(p)"
+                >
+                  <i class="bi bi-pencil-square"></i>
+                </button>
+                <button
+                  class="btn btn-sm btn-outline-danger"
+                  (click)="onDelete(p)"
+                >
+                  <i class="bi bi-trash"></i>
+                </button>
+              </td>
+            </tr>
+
+            <tr *ngIf="products().length === 0">
+              <td colspan="4" class="text-center text-muted small">
+                No hay preventas registradas todavía.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+</div>

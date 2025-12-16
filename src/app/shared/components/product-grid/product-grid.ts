@@ -7,13 +7,15 @@
 // - NO contiene lógica de filtrado, orden ni búsqueda.
 // - Solo recibe un array de productos desde ProductListComponent.
 // - Renderiza <app-product-card> por cada producto.
+// - Opcionalmente puede mostrar acciones de administración (editar/eliminar)
+//   si se le pasa [canEdit]="true" desde el componente padre.
 //
 // Este patrón mantiene clara la arquitectura:
 //   • ProductListComponent = componente inteligente (smart)
 //   • ProductGridComponent = componente visual (dumb)
 // ============================================================================
 
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { Product } from '@core/models/product.model';
@@ -24,7 +26,7 @@ import { ProductCardComponent } from '@shared/components/product-card/product-ca
  *
  * @description
  * Componente visual encargado exclusivamente de renderizar un **grid** de
- * productos usando `<app-product-card>` para cada item.  
+ * productos usando `<app-product-card>` para cada item.
  *
  * Este componente **no contiene lógica** de filtrado ni ordenamiento:
  * recibe un arreglo de productos *ya procesado* desde el componente padre
@@ -37,17 +39,17 @@ import { ProductCardComponent } from '@shared/components/product-card/product-ca
  * <app-product-grid [products]="products()"></app-product-grid>
  * ```
  *
- * Aquí `products()` es un computed o arreglo calculado en
- * `ProductListComponent`.
+ * Si el usuario actual es administrador y quieres mostrar acciones de edición
+ * y eliminación en las tarjetas:
  *
- * @example
- * <!-- Con lista estática -->
- * <app-product-grid [products]="[{ id:'p1', name:'Guitarra', ... }]">
+ * ```html
+ * <app-product-grid
+ *   [products]="products()"
+ *   [canEdit]="isAdmin()"
+ *   (editRequest)="onAdminEdit($event)"
+ *   (deleteRequest)="onAdminDelete($event)">
  * </app-product-grid>
- *
- * @example
- * <!-- Dentro de ProductListComponent -->
- * <app-product-grid [products]="filteredProducts"></app-product-grid>
+ * ```
  */
 @Component({
   selector: 'app-product-grid',
@@ -61,7 +63,6 @@ import { ProductCardComponent } from '@shared/components/product-card/product-ca
   templateUrl: './product-grid.html',
 })
 export class ProductGridComponent {
-
   /**
    * Lista de productos a mostrar en el grid.
    *
@@ -71,9 +72,52 @@ export class ProductGridComponent {
    *
    * @param products Arreglo de `Product` ya filtrados y ordenados.
    * @default []
-   *
-   * @example
-   * <app-product-grid [products]="myFilteredProducts"></app-product-grid>
    */
   @Input() products: Product[] = [];
+
+  /**
+   * Indica si las tarjetas deben mostrar acciones de administración
+   * (botones Editar / Eliminar).
+   *
+   * Normalmente se enlaza a algo como `isAdmin()` en el componente padre.
+   *
+   * @default false
+   */
+  @Input() canEdit = false;
+
+  /**
+   * Evento emitido cuando una tarjeta solicita editar un producto.
+   *
+   * El payload es el `id` del producto.
+   *
+   * @example
+   * (editRequest)="onAdminEdit($event)"
+   */
+  @Output() editRequest = new EventEmitter<string>();
+
+  /**
+   * Evento emitido cuando una tarjeta solicita eliminar un producto.
+   *
+   * El payload es el `id` del producto.
+   *
+   * @example
+   * (deleteRequest)="onAdminDelete($event)"
+   */
+  @Output() deleteRequest = new EventEmitter<string>();
+
+  /**
+   * Re-emite el id del producto cuando una card dispara su propio
+   * evento de edición.
+   */
+  onEditFromCard(productId: string): void {
+    this.editRequest.emit(productId);
+  }
+
+  /**
+   * Re-emite el id del producto cuando una card dispara su propio
+   * evento de eliminación.
+   */
+  onDeleteFromCard(productId: string): void {
+    this.deleteRequest.emit(productId);
+  }
 }

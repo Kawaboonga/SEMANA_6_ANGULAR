@@ -1,4 +1,3 @@
-// src/app/shared/forms/product-form/product-form.ts
 
 // ============================================================================
 // PRODUCT FORM COMPONENT
@@ -13,7 +12,7 @@
 //    • Definir valores por defecto coherentes cuando no hay producto.
 //    • Validar lo mínimo indispensable (nombre, categoría, precio, descripción).
 //    • Normalizar el objeto Product que se emite al componente padre.
-//    • Generar un slug simple a partir del nombre cuando no existe.
+//    • Generar un slug simple a partir del nombre cuando no existe uno previo.
 // - Flags editoriales (showInCarousel, isFeatured, etc.) se controlan aquí,
 //   para definir qué aparece en el home, qué va en carruseles, ofertas, etc.
 // ============================================================================
@@ -34,10 +33,7 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 
-import {
-  Product,
-  ProductCondition,
-} from '@core/models/product.model';
+import { Product, ProductCondition } from '@core/models/product.model';
 import { ProductCategory } from '@core/models/product-category.model';
 
 @Component({
@@ -66,7 +62,6 @@ import { ProductCategory } from '@core/models/product-category.model';
  * ```
  */
 export class ProductFormComponent implements OnChanges {
-
   // ==========================================================================
   // INPUTS / OUTPUTS
   // ==========================================================================
@@ -109,64 +104,40 @@ export class ProductFormComponent implements OnChanges {
   form: FormGroup;
 
   // ==========================================================================
-  // OPCIONES PREDEFINIDAS (CATALOGOS)
+  // OPCIONES (SELECTS)
   // ==========================================================================
 
-  /**
-   * @description
-   * Categorías permitidas para los productos.
-   *
-   * Debe estar alineado con:
-   * - el tipo `ProductCategory`
-   * - los filtros de la vista de productos
-   * - el banner de categorías del frontend.
-   */
+  /** Lista de categorías disponibles para el catálogo. */
   categoryOptions: ProductCategory[] = [
     'guitarras',
     'bajos',
     'pedales',
     'amplificadores',
     'accesorios',
-    'otros',
   ];
 
-  /**
-   * @description
-   * Condiciones del producto (estado de uso).
-   *
-   * - `"nuevo"` → producto sin uso.
-   * - `"usado"` → producto de segunda mano.
-   *
-   * Se usa para mostrar badges o textos específicos en las cards.
-   */
+  /** Condiciones permitidas. */
   conditionOptions: ProductCondition[] = ['nuevo', 'usado'];
 
   // ==========================================================================
-  // CONSTRUCTOR: definición del formulario
+  // CONFIGURACIÓN
   // ==========================================================================
 
   /**
-   * @description
-   * Constructor del componente.
+   * Imagen de relleno (placeholder).
+   * Si el usuario no ingresa imageUrl, asignamos este valor.
    *
-   * - Inyecta `FormBuilder`.
-   * - Define el `FormGroup` con campos obligatorios y opcionales.
-   * - Configura valores por defecto coherentes para modo creación.
-   *
-   * @param fb Servicio `FormBuilder` para construir formularios reactivos.
-   *
-   * @usageNotes
-   * - `category` comienza en `null` para obligar a elegir.
-   * - `condition` comienza en `"usado"` como caso frecuente.
-   * - `stock` comienza en `1` como mínimo razonable para publicar algo.
+   * Nota:
+   * - Esta vez usamos una URL pública (requerimiento tuyo).
+   * - Si en el futuro prefieres empaquetarla localmente, vuelve a assets/.
    */
+  private readonly FALLBACK_IMAGE_URL =
+    'https://polarvectors.com/wp-content/uploads/2023/06/Guitar-SVG.jpg';
+
   constructor(private fb: FormBuilder) {
-    /**
-     * Definición del FormGroup con:
-     * - campos base obligatorios (name, category, price, description)
-     * - campos opcionales (brand, model, year, imageUrl, etc.)
-     * - flags editoriales para controlar visibilidad en el sitio.
-     */
+    // ------------------------------------------------------------------------
+    // 1) Crear el formulario con valores por defecto.
+    // ------------------------------------------------------------------------
     this.form = this.fb.group({
       // Datos principales del producto
       name: ['', Validators.required],
@@ -174,16 +145,24 @@ export class ProductFormComponent implements OnChanges {
       price: [0, [Validators.required, Validators.min(0)]],
 
       // Descripciones (shortDescription se usa para cards, description para detalle)
-      shortDescription: [''],
-      description: ['', Validators.required],
+      shortDescription: ['', [Validators.required, Validators.minLength(10)]],
+      description: ['', [Validators.required, Validators.minLength(10)]],
 
       // Datos técnicos / complementarios
-      brand: [''],
-      model: [''],
-      year: [null],
-      condition: ['usado' as ProductCondition],
-      stock: [1, [Validators.min(0)]],
-      imageUrl: [''],
+      // (Ahora: obligatorios. Solo imagen es opcional.)
+      brand: ['', Validators.required],
+      model: ['', Validators.required],
+      year: [
+        null,
+        [
+          Validators.required,
+          Validators.min(1900),
+          Validators.max(new Date().getFullYear() + 1),
+        ],
+      ],
+      condition: ['usado' as ProductCondition, Validators.required],
+      stock: [1, [Validators.required, Validators.min(0)]],
+      imageUrl: [''], // opcional
 
       // Flags editoriales que afectan cómo y dónde se muestra el producto
       showInCarousel: [false],
@@ -207,62 +186,61 @@ export class ProductFormComponent implements OnChanges {
    * - Si pasa de tener producto a `null` → modo creación (form reset con defaults).
    *
    * @param changes Mapa de cambios detectados en las propiedades de entrada.
-   *
-   * @example
-   * ```ts
-   * ngOnChanges(changes: SimpleChanges) {
-   *   if (changes['product']) { ... }
-   * }
-   * ```
    */
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['product']) {
-      // MODO EDICIÓN: hay un producto → cargo sus datos en el form.
-      if (this.product) {
-        this.form.patchValue({
-          name: this.product.name,
-          category: this.product.category,
-          price: this.product.price,
+    if (!changes['product']) return;
 
-          shortDescription: this.product.shortDescription ?? '',
-          description: this.product.description,
-          brand: this.product.brand ?? '',
-          model: this.product.model ?? '',
-          year: this.product.year ?? null,
-          condition: this.product.condition ?? 'usado',
-          stock: this.product.stock ?? 1,
-          imageUrl: this.product.imageUrl ?? '',
+    // MODO EDICIÓN
+    if (this.product) {
+      this.form.patchValue({
+        name: this.product.name,
+        category: this.product.category,
+        price: this.product.price,
 
-          showInCarousel: this.product.showInCarousel ?? false,
-          isFeatured: this.product.isFeatured ?? false,
-          isOffer: this.product.isOffer ?? false,
-          isNew: this.product.isNew ?? false,
-          isActive: this.product.isActive ?? true,
-        });
-      } else {
-        // MODO CREACIÓN: product = null → form en blanco con defaults.
-        this.form.reset({
-          name: '',
-          category: null,
-          price: 0,
+        shortDescription: this.product.shortDescription ?? '',
+        description: this.product.description ?? '',
 
-          shortDescription: '',
-          description: '',
-          brand: '',
-          model: '',
-          year: null,
-          condition: 'usado',
-          stock: 1,
-          imageUrl: '',
+        brand: this.product.brand ?? '',
+        model: this.product.model ?? '',
+        year: this.product.year ?? null,
+        condition: this.product.condition ?? 'usado',
+        stock: this.product.stock ?? 1,
 
-          showInCarousel: false,
-          isFeatured: false,
-          isOffer: false,
-          isNew: false,
-          isActive: true,
-        });
-      }
+        // Trim para evitar que quede " " y el usuario crea que hay imagen
+        imageUrl: (this.product.imageUrl ?? '').toString().trim(),
+
+        showInCarousel: this.product.showInCarousel ?? false,
+        isFeatured: this.product.isFeatured ?? false,
+        isOffer: this.product.isOffer ?? false,
+        isNew: this.product.isNew ?? false,
+        isActive: this.product.isActive ?? true,
+      });
+
+      return;
     }
+
+    // MODO CREACIÓN
+    this.form.reset({
+      name: '',
+      category: null,
+      price: 0,
+
+      shortDescription: '',
+      description: '',
+
+      brand: '',
+      model: '',
+      year: null,
+      condition: 'usado',
+      stock: 1,
+      imageUrl: '',
+
+      showInCarousel: false,
+      isFeatured: false,
+      isOffer: false,
+      isNew: false,
+      isActive: true,
+    });
   }
 
   // ==========================================================================
@@ -271,92 +249,75 @@ export class ProductFormComponent implements OnChanges {
 
   /**
    * @description
-   * Helper rápido para el template que indica si un control
-   * tiene un error específico y ya fue tocado.
-   *
-   * @param ctrl Nombre del control dentro del `FormGroup`.
-   * @param type Tipo de error a comprobar (ej. `'required'`, `'min'`).
-   * @returns `true` si el control tiene ese error y está `touched`.
-   *
-   * @example
-   * ```html
-   * <div *ngIf="hasError('name', 'required')">
-   *   El nombre del producto es obligatorio.
-   * </div>
-   * ```
+   * Helper para saber si un control está inválido y tocado (para feedback visual).
    */
-  hasError(ctrl: string, type: string): boolean {
-    const c = this.form.get(ctrl);
-    return !!c && c.touched && c.hasError(type);
+  isInvalid(controlName: string): boolean {
+    const c = this.form.get(controlName);
+    return !!c && c.invalid && (c.touched || c.dirty);
   }
 
   // ==========================================================================
-  // SUBMIT / CANCEL
+  // EVENTOS
   // ==========================================================================
 
   /**
+   * @method onSubmit
    * @description
-   * Maneja el envío del formulario.
-   *
-   * Flujo:
-   * 1. Si el formulario es inválido:
-   *    - Marca todos los controles como `touched`.
-   *    - No emite nada.
-   *
-   * 2. Si es válido:
-   *    - Obtiene los valores crudos del form.
-   *    - Construye un objeto `Product` completo.
-   *    - Mantiene `id` y `slug` existentes en modo edición.
-   *    - Genera un `slug` nuevo desde el nombre si no existía.
-   *    - Normaliza campos opcionales vacíos a `undefined`.
-   *    - Emite el `Product` final mediante `this.save.emit(product)`.
-   *
-   * @usageNotes
-   * El componente padre debe suscribirse al evento `(save)` para persistir
-   * o actualizar el producto en la capa de datos.
+   * - Si el formulario es inválido, fuerza validaciones visuales.
+   * - Si es válido, normaliza el Product:
+   *    • slug (si no existe)
+   *    • imageUrl (fallback si viene vacío)
+   * - Emite `save` para que el contenedor persista en localStorage.
    */
-  onSubmit() {
+  onSubmit(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
     }
 
     const v = this.form.value;
-    const base = this.product;
 
-    // Objeto Product que se enviará al componente padre.
+    // Si el usuario no puso imagen, usamos placeholder
+    const imageCandidate = (v.imageUrl ?? '').toString().trim();
+    const finalImageUrl =
+      imageCandidate.length > 0 ? imageCandidate : this.FALLBACK_IMAGE_URL;
+
+    const finalSlug = this.product?.slug ?? this.slugify(v.name as string);
+
     const product: Product = {
-      // Si ya existe un producto, mantengo su id.
-      // Si no, genero un id nuevo con crypto.randomUUID()
-      id: base?.id ?? crypto.randomUUID(),
+      // Mantener ID si editamos; crear uno si estamos creando
+      id: this.product?.id ?? crypto.randomUUID(),
 
-      // Slug: si ya existía lo mantengo, si no lo genero a partir del nombre.
-      slug: base?.slug ?? this.slugify(v.name),
+      // Normalización de rutas
+      slug: finalSlug,
 
       // Datos principales
       name: v.name,
       category: v.category,
       price: v.price,
 
-      // Si las cadenas opcionales están vacías, las paso a undefined
-      // para no llenar el modelo con strings vacíos.
-      shortDescription: v.shortDescription || undefined,
+      shortDescription: v.shortDescription,
       description: v.description,
 
-      brand: v.brand || undefined,
-      model: v.model || undefined,
-      year: v.year || undefined,
-      condition: v.condition || 'usado',
-      stock: v.stock ?? 1,
+      // Datos técnicos
+      brand: v.brand,
+      model: v.model,
+      year: v.year,
+      condition: v.condition,
+      stock: v.stock,
 
-      imageUrl: v.imageUrl || undefined,
+      // Imagen (fallback garantizado)
+      imageUrl: finalImageUrl,
 
-      // Flags editoriales tal como vienen del form
-      showInCarousel: v.showInCarousel,
-      isFeatured: v.isFeatured,
-      isOffer: v.isOffer,
-      isNew: v.isNew,
-      isActive: v.isActive,
+      // Flags
+      showInCarousel: !!v.showInCarousel,
+      isFeatured: !!v.isFeatured,
+      isOffer: !!v.isOffer,
+      isNew: !!v.isNew,
+      isActive: !!v.isActive,
+
+      // createdAt: conservar si existe; si no, generarlo
+      createdAt: this.product?.createdAt ?? new Date().toISOString(),
     };
 
     this.save.emit(product);
@@ -364,16 +325,9 @@ export class ProductFormComponent implements OnChanges {
 
   /**
    * @description
-   * Notifica al componente padre que se canceló la edición/creación.
-   *
-   * No modifica el formulario ni los datos; solo emite el evento `cancel`.
-   *
-   * @example
-   * ```html
-   * <button type="button" (click)="onCancel()">Cancelar</button>
-   * ```
+   * Botón cancelar del formulario.
    */
-  onCancel() {
+  onCancel(): void {
     this.cancel.emit();
   }
 
@@ -383,25 +337,10 @@ export class ProductFormComponent implements OnChanges {
 
   /**
    * @description
-   * Convierte el nombre del producto en un slug "URL-friendly".
-   *
-   * Pasos:
-   * - Normaliza el nombre para eliminar acentos.
-   * - Lo pasa a minúsculas.
-   * - Reemplaza cualquier carácter que no sea `[a-z0-9]` por guiones.
-   * - Quita guiones sobrantes al inicio y al final.
-   *
-   * @param name Nombre crudo del producto (ej: `"Guitarra Eléctrica Stratocaster 2024"`).
-   * @returns Slug normalizado (ej: `"guitarra-electrica-stratocaster-2024"`).
-   *
-   * @example
-   * ```ts
-   * const slug = this.slugify('Pedal Overdrive Súper Vintage');
-   * // 'pedal-overdrive-super-vintage'
-   * ```
+   * Genera un slug URL-safe desde un texto.
    */
-  private slugify(name: string): string {
-    return name
+  private slugify(value: string): string {
+    return value
       .normalize('NFD')
       .replace(/[\u0300-\u036f]/g, '')
       .toLowerCase()

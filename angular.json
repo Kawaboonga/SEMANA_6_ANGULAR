@@ -13,7 +13,6 @@
   "projects": {
     "Proyecto-semana4": {
       "projectType": "application",
-      "schematics": {},
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",
@@ -21,11 +20,14 @@
         "build": {
           "builder": "@angular/build:application",
           "options": {
+            "outputPath": "dist/Proyecto-semana4",
             "browser": "src/main.ts",
-            "polyfills": [
-              "zone.js"
-            ],
+
+            "outputMode": "static",
+
+            "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
+
             "assets": [
               {
                 "glob": "**/*",
@@ -37,20 +39,22 @@
                 "output": "assets"
               }
             ],
+
             "styles": [
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "node_modules/bootstrap-icons/font/bootstrap-icons.css",
               "src/styles.css"
             ],
+
             "scripts": [
               "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
             ],
-            "server": "src/main.server.ts",
-            "outputMode": "server",
-            "ssr": {
-              "entry": "src/server.ts"
-            }
+
+            "allowedCommonJsDependencies": [
+              "bootstrap"
+            ]
           },
+
           "configurations": {
             "production": {
               "budgets": [
@@ -65,7 +69,10 @@
                   "maximumError": "8kB"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "optimization": true,
+              "sourceMap": false,
+              "extractLicenses": true
             },
             "development": {
               "optimization": false,
@@ -73,8 +80,10 @@
               "sourceMap": true
             }
           },
+
           "defaultConfiguration": "production"
         },
+
         "serve": {
           "builder": "@angular/build:dev-server",
           "configurations": {
@@ -87,9 +96,11 @@
           },
           "defaultConfiguration": "development"
         },
+
         "extract-i18n": {
           "builder": "@angular/build:extract-i18n"
         },
+
         "test": {
           "builder": "@angular/build:karma",
           "options": {

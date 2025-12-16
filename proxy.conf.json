@@ -1,0 +1,8 @@
+{
+  "/JSON_API": {
+    "target": "https://kawaboonga.github.io",
+    "secure": true,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  }
+}

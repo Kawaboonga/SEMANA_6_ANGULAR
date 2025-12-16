@@ -14,7 +14,7 @@
 
   <!-- ============================================================
        ENCABEZADO PRINCIPAL
-       Título + subtítulo del catálogo
+       Título + subtítulo del catálogo + botón admin "Nuevo"
   ============================================================ -->
   <div class="d-flex justify-content-between align-items-center mb-5">
     <div>
@@ -23,16 +23,43 @@
         Guitarras, bajos, pedales, amplificadores y más.
       </p>
     </div>
+
+    <!-- BOTÓN "NUEVO PRODUCTO" (solo admin) -->
+    <button
+      *ngIf="isAdmin()"
+      type="button"
+      class="btn btn-primary"
+      (click)="onAdminCreate()"
+    >
+      <i class="bi bi-plus-lg me-1"></i>
+      Nuevo producto
+    </button>
   </div>
+
+  
 
   <!-- Wrapper con fade-up general -->
   <div appFadeUp>
 
     <!-- ============================================================
+         FORMULARIO INLINE (solo cuando showForm = true)
+         Reutiliza el mismo ProductFormComponent (dashboard-style)
+    ============================================================ -->
+
+    <div *ngIf="showForm()" class="mb-4" appFadeUp>
+      <div class="card shadow-sm border-0">
+        <div class="card-body">
+          <app-product-form
+            [product]="selectedProduct()"
+            (save)="onAdminSave($event)"
+            (cancel)="onAdminCancel()"
+          ></app-product-form>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
          BANNER DE CATEGORÍAS PRINCIPALES
-         - Botones grandes (Guitarras / Bajos / Pedales / Amplificadores)
-         - categoryChange: emite categoría seleccionada
-         - activeCategory: categoría activa actual
     ============================================================ -->
     <div>
       <app-product-category-banner
@@ -43,11 +70,9 @@
 
     <!-- ============================================================
          FILTROS SECUNDARIOS
-         - condición (nuevo, usado…)
-         - orden (recent, price-low, price-high)
-         - botón "Limpiar filtros"
-         - Inputs/Outputs completamente controlados por signals
     ============================================================ -->
+    
+
     <div class="mb-4">
       <app-product-filters
         [filter]="filter()"
@@ -58,13 +83,21 @@
 
     <!-- ============================================================
          GRID DE PRODUCTOS
-         - Recibe lista final filtrada desde computed() en TS
-         - Componente UI totalmente “tonto”
+         - Admin ve botones editar/eliminar en cards
+         - Acciones conectadas a CRUD real (localStorage)
     ============================================================ -->
-    <div appFadeUp>
-      <app-product-grid [products]="products()"></app-product-grid>
+     <div appFadeUp>
+      <app-product-grid
+        [products]="products()"
+        [canEdit]="isAdmin()"
+        (editRequest)="onAdminEdit($event)"
+        (deleteRequest)="onAdminDelete($event)">
+      </app-product-grid>
     </div>
+
 
   </div> <!-- /fade wrapper -->
 
 </section>
+
+

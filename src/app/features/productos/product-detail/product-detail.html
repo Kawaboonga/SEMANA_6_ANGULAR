@@ -5,6 +5,8 @@
      ----------------------------------------------------------------------------
      Estructura:
      - Card principal con imagen (izquierda) + contenido (derecha)
+     - Acciones admin reutilizables
+     - Formulario colapsable de edición
      - Footer con botones de acción
      - Estado para producto no encontrado
 ============================================================================ -->
@@ -32,16 +34,52 @@
 
     <!-- ============================================================
          COLUMNA DERECHA — INFORMACIÓN DEL PRODUCTO
-         Contiene: título, descripción, detalles y precio
+         Contiene: título, descripción, detalles, acciones admin y precio
     ============================================================ -->
     <div class="col-md-6 d-flex flex-column">
       <div class="p-4 p-md-5 flex-grow-1">
 
-        <!-- TÍTULO DEL PRODUCTO -->
+        <!-- ========================================================
+             ADMIN: PANEL DE ACCIONES (Editar / Eliminar)
+             --------------------------------------------------------
+             - Reemplaza los botones sueltos
+             - Maneja confirmación de eliminación
+             - Emite eventos al componente padre
+        ======================================================== -->
+        <app-admin-actions-panel
+          [isAdmin]="isAdmin()"
+          [title]="p.name"
+          (edit)="onAdminEdit()"
+          (delete)="onAdminDelete()"
+        ></app-admin-actions-panel>
+
+        <!-- ========================================================
+             ADMIN: FORMULARIO COLAPSABLE (editar)
+             --------------------------------------------------------
+             - Se abre/cierra con toggle
+             - Reutiliza ProductFormComponent
+        ======================================================== -->
+        <div *ngIf="showForm()" class="mb-4" appFadeUp>
+          <div class="card border-0 shadow-sm">
+            <div class="card-body">
+              <app-product-form
+                [product]="selectedProduct()"
+                (save)="onAdminSave($event)"
+                (cancel)="onAdminCancel()"
+              ></app-product-form>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================================
+             CONTENIDO PRINCIPAL DEL PRODUCTO
+        ======================================================== -->
+
+        <!-- TÍTULO -->
         <h1 class="h3">{{ p.name }}</h1>
         <hr>
 
-        <!-- Descripción corta o fallback a descripción principal -->
+        <!-- Descripción corta o fallback -->
         <p class="text-body-secondary">
           {{ p.shortDescription || p.description }}
         </p>
@@ -91,7 +129,7 @@
             {{ p.price | currency:'CLP':'symbol':'1.0-0' }}
           </p>
 
-          <!-- Precio anterior (si existe → se muestra tachado) -->
+          <!-- Precio anterior -->
           <p
             class="text-decoration-line-through text-muted mb-0"
             *ngIf="p.previousPrice"
@@ -106,7 +144,7 @@
       <!-- ========================================================
            FOOTER DEL CARD
            Botones de acción:
-           - Contactar vendedor (CTA principal)
+           - Contactar vendedor
            - Volver a productos
       ======================================================== -->
       <div class="p-4 border-top bg-dark d-flex gap-3 justify-content-start">
@@ -126,8 +164,12 @@
 </div>
 
 <!-- ============================================================
+     TOAST DE FEEDBACK (guardar / eliminar)
+============================================================ -->
+<app-toast></app-toast>
+
+<!-- ============================================================
      ESTADO: PRODUCTO NO ENCONTRADO
-     Se muestra si 'product' es undefined/null
 ============================================================ -->
 <ng-template #notFound>
   <div class="container py-4">

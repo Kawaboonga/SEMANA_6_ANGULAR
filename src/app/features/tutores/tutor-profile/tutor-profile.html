@@ -36,7 +36,7 @@
         <h1 class="mb-1 text-light">{{ t.name }}</h1>
 
         <!-- Estilos + nivel -->
-        <p class="text-body-secondary mb-2">
+        <p class="text-secondary mb-2">
           {{ t.styles.join(' · ') | titlecase }} ·
           {{ t.levelRange.join(' a ') | titlecase }}
         </p>
@@ -61,8 +61,36 @@
         <p class="text-body-secondary mb-0">
           {{ t.shortDescription }}
         </p>
+
+
+
       </div>
+
+      <!-- ADMIN: ACCIONES EN EL DETALLE -->
+    <div *ngIf="isAdmin()" class="d-flex gap-2">
+      <button type="button" class="btn btn-sm btn-outline-secondary" (click)="onAdminEdit()">
+        <i class="bi bi-pencil-square me-1"></i>
+        Editar
+      </button>
+
+      <button type="button" class="btn btn-sm btn-outline-danger" (click)="onAdminDelete()">
+        <i class="bi bi-trash me-1"></i>
+        Eliminar
+      </button>
     </div>
+    </div>
+
+    <div *ngIf="showForm()" class="mb-4" appFadeUp>
+  <div class="card bg-darky border-0 shadow-sm">
+    <div class="card-body">
+      <app-tutor-form
+        [value]="selectedTutor()"
+        (save)="onAdminSave($event)"
+        (cancel)="onAdminCancel()"
+      ></app-tutor-form>
+    </div>
+  </div>
+</div>
 
     <!-- ================================================================
          CUERPO PRINCIPAL (Tabs + Contenido)
@@ -75,7 +103,7 @@
       <div class="col-lg-8">
 
         <!-- Card contenedor del perfil -->
-        <div class="card bg-darky border-0 shadow-sm mb-3">
+        <div class="card border-0 shadow-sm mb-3">
 
           <!-- -----------------------------------------
                TABS superiores pegados al borde del card
@@ -136,7 +164,7 @@
                  ============================================================ -->
             <ng-container *ngIf="activeTab === 'perfil'">
 
-              <h4 class="mb-3 text-light">Acerca del tutor</h4>
+              <h4 class="mb-3">Acerca del tutor</h4>
               <p class="text-body-secondary">
                 {{ t.fullDescription || t.shortDescription }}
               </p>
@@ -253,7 +281,7 @@
                  ============================================================ -->
             <ng-container *ngIf="activeTab === 'cursos'">
 
-              <h5 class="mb-3 text-light">Cursos del tutor</h5>
+              <h5 class="mb-3">Cursos del tutor</h5>
 
               <!-- Sin cursos -->
               <p *ngIf="coursesFromTutor.length === 0" class="text-body-secondary mb-0">
@@ -274,7 +302,7 @@
                  ============================================================ -->
             <ng-container *ngIf="activeTab === 'resenas'">
 
-              <h5 class="mb-3 text-light">Reseñas</h5>
+              <h5 class="mb-3">Reseñas</h5>
 
               <p *ngIf="t.reviews.length === 0" class="text-body-secondary mb-0">
                 Aún no hay reseñas. Sé el primero en compartir tu experiencia.
@@ -307,7 +335,7 @@
                  ============================================================ -->
             <ng-container *ngIf="activeTab === 'equipo'">
 
-              <h5 class="mb-3 text-light">Equipo / Set up</h5>
+              <h5 class="mb-3">Equipo / Set up</h5>
 
               <p *ngIf="t.gear.length === 0" class="text-body-secondary mb-0">
                 Todavía no ha compartido su equipo.
@@ -330,7 +358,7 @@
 
                     <!-- Info del gear -->
                     <div>
-                      <h6 class="mb-1 text-light">{{ g.name }}</h6>
+                      <h6 class="mb-1">{{ g.name }}</h6>
                       <p class="mb-1 text-body-secondary">
                         {{ g.description }}
                       </p>
@@ -356,13 +384,13 @@
            ================================ -->
       <aside class="col-12 col-lg-4">
 
-        <div class="card bg-darky sticky-top" style="top: 90px">
+        <div class="card sticky-top" style="top: 90px">
           <div class="card-body">
 
             <!-- Precio por hora -->
             <div class="d-flex justify-content-between align-items-baseline mb-2">
               <h6 class="text-muted text-uppercase small mb-0">Precio por hora</h6>
-              <h3 class="mb-0 text-light">
+              <h3 class="mb-0 text-primary">
                 ${{ t.hourlyRate | number: '1.0-0' }}
               </h3>
             </div>
@@ -383,7 +411,7 @@
 
             <!-- CTA secundaria -->
             <div class="d-flex gap-2 mt-3">
-              <button class="btn btn-outline-light flex-fill" type="button">
+              <button class="btn btn-success flex-fill" type="button">
                 <i class="bi bi-whatsapp"></i>
               </button>
             </div>
@@ -408,7 +436,7 @@
      VISTA CUANDO NO EXISTE EL TUTOR
      ================================================================ -->
 <section class="page-shell my-5" *ngIf="!tutor">
-  <p class="text-body-secondary">
+  <p class="text-secondary">
     No encontramos este tutor.
   </p>
 </section>

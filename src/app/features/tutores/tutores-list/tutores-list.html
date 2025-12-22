@@ -5,10 +5,25 @@
        ------------------------------------------------------------
        Título + subtítulo. No tiene lógica, solo texto estático.
   ============================================================ -->
-  <h2 class="text-light display-6">Instructores disponibles</h2>
-  <p class="text-secondary pb-4">
-    Encuentra un tutor que mejor se adapte a tu nivel y modalidad.
-  </p>
+  <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
+    <div>
+      <h2 class="text-light display-6">Instructores disponibles</h2>
+      <p class="text-secondary pb-4">
+        Encuentra un tutor que mejor se adapte a tu nivel y modalidad.
+      </p>
+    </div>
+
+    <!-- BOTÓN "NUEVO TUTOR" (solo admin) -->
+    <button
+      *ngIf="isAdmin()"
+      type="button"
+      class="btn btn-primary"
+      (click)="onAdminCreate()"
+    >
+      <i class="bi bi-plus-lg me-1"></i>
+      Nuevo tutor
+    </button>
+  </div>
 
 
   <!-- ============================================================
@@ -19,6 +34,22 @@
   <div appFadeUp>
 
     <!-- ============================================================
+         FORMULARIO INLINE (solo cuando showForm = true)
+         Reutiliza el mismo TutorFormComponent (dashboard-style)
+    ============================================================ -->
+    <div *ngIf="showForm()" class="mb-4" appFadeUp>
+      <div class="card shadow-sm border-0">
+        <div class="card-body">
+          <app-tutor-form
+            [value]="selectedTutor()"
+            (save)="onAdminSave($event)"
+            (cancel)="onAdminCancel()"
+          ></app-tutor-form>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
          BARRA DE FILTROS (DUMB COMPONENT)
          ------------------------------------------------------------
          - Recibe los valores del filtro actual mediante @Input
@@ -26,13 +57,10 @@
              • filterChange → cuando cambia un campo
              • reset        → cuando se presionan “limpiar filtros”
     ============================================================ -->
-    <!-- Estado actual del filtro -->
-    <!-- Cambios parciales -->
-    <!-- Reset completo -->
     <app-tutor-filter-bar
-      [filter]="filter()"                     
-      (filterChange)="onFilterChange($event)"  
-      (reset)="onResetFilter()"               
+      [filter]="filter()"
+      (filterChange)="onFilterChange($event)"
+      (reset)="onResetFilter()"
       class="mb-4"
     ></app-tutor-filter-bar>
 
@@ -45,16 +73,20 @@
          - Cada tutor usa app-tutor-card (dumb component)
     ============================================================ -->
     <div class="row g-4 pt-3" appFadeUp>
-      
+
       <!-- Tarjeta individual -->
       <div
         class="col-12 col-md-6 col-lg-3"
         *ngFor="let tutor of tutors()"
       >
         <app-tutor-card
-          [tutor]="tutor"          
-          variant="grid"           
-          [descriptionMaxLength]="140"   
+          [tutor]="tutor"
+          variant="grid"
+          [descriptionMaxLength]="140"
+
+          [canEdit]="isAdmin()"
+          (editRequest)="onAdminEdit($event)"
+          (deleteRequest)="onAdminDelete($event)"
         ></app-tutor-card>
       </div>
       <!--- Datos del tutor -->

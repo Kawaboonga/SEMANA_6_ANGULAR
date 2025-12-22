@@ -70,7 +70,7 @@ tutor-avatar img {
 .profile-tab {
   flex: 1;
   border: 0;
-  background: transparent;
+  background: #f3f4f6;
   padding: 0.75rem 1rem;
   font-size: 0.9rem;
   font-weight: 500;
@@ -86,12 +86,12 @@ tutor-avatar img {
 
 /* Hover en pestañas inactivas */
 .profile-tab:hover:not(.active) {
-  background: #f3f4f6;
+  background:  #e0ecff;
 }
 
 /* Pestaña activa */
 .profile-tab.active {
-  background: #e0ecff;        /* color suave activo */
+  background: transparent;        /* color suave activo */
   color: #1d4ed8;             /* azul activo */
 }
 

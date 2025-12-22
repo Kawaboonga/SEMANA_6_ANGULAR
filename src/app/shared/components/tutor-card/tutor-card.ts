@@ -13,7 +13,7 @@
 //  Sólo renderiza datos recibidos vía @Input().
 // ============================================================================
 
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
@@ -36,6 +36,12 @@ export type TutorCardVariant = 'carousel' | 'grid';
  *
  * También permite controlar si se muestra o no la descripción,
  * además de la longitud máxima de esta.
+ *
+ * Además, tal como en ProductCard / CourseCard:
+ * - Puede mostrar botones de administración (Editar / Eliminar)
+ *   si el contenedor lo solicita con `[canEdit]="true"`.
+ * - Emite eventos hacia el padre (editRequest / deleteRequest)
+ *   para que el componente contenedor haga el CRUD con TutorService.
  *
  * @usageNotes
  * Se inserta directamente en el template:
@@ -123,4 +129,62 @@ export class TutorCardComponent {
    * @param descriptionMaxLength número máximo de caracteres
    */
   @Input() descriptionMaxLength = 120;
+
+  // ==========================================================================
+  // MODO ADMIN (igual patrón que productos / cursos)
+  // ==========================================================================
+
+  /**
+   * @description
+   * Si es `true`, la card muestra acciones de administración.
+   * Normalmente se enlaza a algo como `isAdmin()` en el componente padre.
+   */
+  @Input() canEdit = false;
+
+  /**
+   * @description
+   * Solicita al componente padre abrir el formulario de edición.
+   * Payload: `id` del tutor.
+   */
+  @Output() editRequest = new EventEmitter<string>();
+
+  /**
+   * @description
+   * Solicita al componente padre eliminar el tutor.
+   * Payload: `id` del tutor.
+   */
+  @Output() deleteRequest = new EventEmitter<string>();
+
+  /**
+   * @description
+   * Click del botón editar.
+   *
+   * @important
+   * - Se hace stopPropagation + preventDefault porque esta card tiene links
+   *   (CTA "Ver perfil") y no queremos navegar cuando el admin edita.
+   */
+  onEditClick(event: MouseEvent): void {
+    event.stopPropagation();
+    event.preventDefault();
+    this.editRequest.emit(this.tutor.id);
+  }
+
+  /**
+   * @description
+   * Click del botón eliminar.
+   * - Confirma con `confirm()` (mismo estándar de productos/cursos).
+   */
+  onDeleteClick(event: MouseEvent): void {
+    event.stopPropagation();
+    event.preventDefault();
+
+    const ok = confirm(
+      `¿Eliminar el tutor "${this.tutor.name}"?\n` +
+        'Esta acción no se puede deshacer.',
+    );
+
+    if (!ok) return;
+
+    this.deleteRequest.emit(this.tutor.id);
+  }
 }

@@ -1,0 +1,23 @@
+<div *ngIf="isAdmin" class="mb-3">
+
+  <div class="d-flex justify-content-end gap-2">
+    <button
+      type="button"
+      class="btn btn-sm btn-outline-secondary"
+      (click)="toggleEdit()"
+    >
+      <i class="bi bi-pencil-square me-1"></i>
+      Editar
+    </button>
+
+    <button
+      type="button"
+      class="btn btn-sm btn-outline-danger"
+      (click)="onDelete()"
+    >
+      <i class="bi bi-trash me-1"></i>
+      Eliminar
+    </button>
+  </div>
+
+</div>

@@ -1,4 +1,3 @@
-
 <section class="pt-4">
 
   <!-- ============================================================
@@ -11,9 +10,37 @@
         Encuentra el curso que mejor se adapte a tu nivel y modalidad.
       </p>
     </div>
+
+    <!-- BOTÓN "NUEVO CURSO" (solo admin) -->
+    <button
+      *ngIf="isAdmin()"
+      type="button"
+      class="btn btn-primary"
+      (click)="onAdminCreate()"
+    >
+      <i class="bi bi-plus-lg me-1"></i>
+      Nuevo curso
+    </button>
   </div>
 
   <div appFadeUp>
+
+    <!-- ============================================================
+         FORMULARIO INLINE (solo cuando showForm = true)
+         Reutiliza el mismo CourseFormComponent (dashboard-style)
+    ============================================================ -->
+
+    <div *ngIf="showForm()" class="mb-4" appFadeUp>
+      <div class="card shadow-sm border-0">
+        <div class="card-body">
+          <app-course-form
+            [course]="selectedCourse()"
+            (save)="onAdminSave($event)"
+            (cancel)="onAdminCancel()"
+          ></app-course-form>
+        </div>
+      </div>
+    </div>
 
     <!-- ============================================================
          FILTROS (nivel + modalidad)
@@ -71,7 +98,12 @@
         class="col-md-6 col-lg-3"
         *ngFor="let course of filtered"
       >
-        <app-course-card [course]="course"></app-course-card>
+        <app-course-card
+          [course]="course"
+          [canEdit]="isAdmin()"
+          (editRequest)="onAdminEdit($event)"
+          (deleteRequest)="onAdminDelete($event)"
+        ></app-course-card>
       </div>
     </div>
 

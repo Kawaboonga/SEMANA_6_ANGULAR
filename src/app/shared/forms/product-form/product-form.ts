@@ -1,3 +1,4 @@
+// src/app/shared/forms/product-form/product-form.ts
 
 // ============================================================================
 // PRODUCT FORM COMPONENT
@@ -12,7 +13,7 @@
 //    • Definir valores por defecto coherentes cuando no hay producto.
 //    • Validar lo mínimo indispensable (nombre, categoría, precio, descripción).
 //    • Normalizar el objeto Product que se emite al componente padre.
-//    • Generar un slug simple a partir del nombre cuando no existe uno previo.
+//    • Generar un slug simple a partir del nombre cuando no existe.
 // - Flags editoriales (showInCarousel, isFeatured, etc.) se controlan aquí,
 //   para definir qué aparece en el home, qué va en carruseles, ofertas, etc.
 // ============================================================================
@@ -66,48 +67,16 @@ export class ProductFormComponent implements OnChanges {
   // INPUTS / OUTPUTS
   // ==========================================================================
 
-  /**
-   * @description
-   * Producto que se está editando.
-   *
-   * - Si viene con datos → modo edición.
-   * - Si es `null` → modo creación (producto nuevo).
-   */
   @Input() product: Product | null = null;
-
-  /**
-   * @description
-   * Evento que emite el objeto `Product` final cuando el formulario es válido
-   * y el usuario hace submit.
-   *
-   * @example
-   * ```ts
-   * onSave(product: Product) {
-   *   this.productService.upsert(product);
-   * }
-   * ```
-   */
   @Output() save = new EventEmitter<Product>();
-
-  /**
-   * @description
-   * Evento simple para avisar al padre que el usuario canceló
-   * (cerrar modal, panel lateral, dialog, etc.).
-   */
   @Output() cancel = new EventEmitter<void>();
 
-  /**
-   * @description
-   * Formulario reactivo principal que contiene todos los campos
-   * del modelo `Product` que se administran desde esta vista.
-   */
   form: FormGroup;
 
   // ==========================================================================
   // OPCIONES (SELECTS)
   // ==========================================================================
 
-  /** Lista de categorías disponibles para el catálogo. */
   categoryOptions: ProductCategory[] = [
     'guitarras',
     'bajos',
@@ -116,7 +85,6 @@ export class ProductFormComponent implements OnChanges {
     'accesorios',
   ];
 
-  /** Condiciones permitidas. */
   conditionOptions: ProductCondition[] = ['nuevo', 'usado'];
 
   // ==========================================================================
@@ -132,7 +100,7 @@ export class ProductFormComponent implements OnChanges {
    * - Si en el futuro prefieres empaquetarla localmente, vuelve a assets/.
    */
   private readonly FALLBACK_IMAGE_URL =
-    'https://polarvectors.com/wp-content/uploads/2023/06/Guitar-SVG.jpg';
+    'assets/img/products/placeholder-guitar.jpg';
 
   constructor(private fb: FormBuilder) {
     // ------------------------------------------------------------------------
@@ -164,7 +132,7 @@ export class ProductFormComponent implements OnChanges {
       stock: [1, [Validators.required, Validators.min(0)]],
       imageUrl: [''], // opcional
 
-      // Flags editoriales que afectan cómo y dónde se muestra el producto
+      // Flags editoriales
       showInCarousel: [false],
       isFeatured: [false],
       isOffer: [false],
@@ -173,20 +141,6 @@ export class ProductFormComponent implements OnChanges {
     });
   }
 
-  // ==========================================================================
-  // CICLO DE VIDA: sincronizar el formulario cuando cambia @Input() product
-  // ==========================================================================
-
-  /**
-   * @description
-   * Hook de ciclo de vida que se ejecuta cada vez que cambia un `@Input`.
-   *
-   * Aquí nos interesa el cambio en `product`:
-   * - Si llega un producto con datos → modo edición (se rellenan campos).
-   * - Si pasa de tener producto a `null` → modo creación (form reset con defaults).
-   *
-   * @param changes Mapa de cambios detectados en las propiedades de entrada.
-   */
   ngOnChanges(changes: SimpleChanges): void {
     if (!changes['product']) return;
 
@@ -205,9 +159,7 @@ export class ProductFormComponent implements OnChanges {
         year: this.product.year ?? null,
         condition: this.product.condition ?? 'usado',
         stock: this.product.stock ?? 1,
-
-        // Trim para evitar que quede " " y el usuario crea que hay imagen
-        imageUrl: (this.product.imageUrl ?? '').toString().trim(),
+        imageUrl: this.product.imageUrl ?? '',
 
         showInCarousel: this.product.showInCarousel ?? false,
         isFeatured: this.product.isFeatured ?? false,
@@ -249,8 +201,14 @@ export class ProductFormComponent implements OnChanges {
 
   /**
    * @description
-   * Helper para saber si un control está inválido y tocado (para feedback visual).
+   * Helper para saber si un control tiene un error específico y ya fue tocado.
+   * (Tu HTML usa hasError(...), así que lo dejamos aquí como contrato estable.)
    */
+  hasError(controlName: string, errorName: string): boolean {
+    const c = this.form.get(controlName);
+    return !!c && c.hasError(errorName) && (c.touched || c.dirty);
+  }
+
   isInvalid(controlName: string): boolean {
     const c = this.form.get(controlName);
     return !!c && c.invalid && (c.touched || c.dirty);
@@ -260,15 +218,6 @@ export class ProductFormComponent implements OnChanges {
   // EVENTOS
   // ==========================================================================
 
-  /**
-   * @method onSubmit
-   * @description
-   * - Si el formulario es inválido, fuerza validaciones visuales.
-   * - Si es válido, normaliza el Product:
-   *    • slug (si no existe)
-   *    • imageUrl (fallback si viene vacío)
-   * - Emite `save` para que el contenedor persista en localStorage.
-   */
   onSubmit(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
@@ -278,20 +227,17 @@ export class ProductFormComponent implements OnChanges {
     const v = this.form.value;
 
     // Si el usuario no puso imagen, usamos placeholder
-    const imageCandidate = (v.imageUrl ?? '').toString().trim();
     const finalImageUrl =
-      imageCandidate.length > 0 ? imageCandidate : this.FALLBACK_IMAGE_URL;
+      (v.imageUrl ?? '').toString().trim().length > 0
+        ? v.imageUrl.toString().trim()
+        : this.FALLBACK_IMAGE_URL;
 
     const finalSlug = this.product?.slug ?? this.slugify(v.name as string);
 
     const product: Product = {
-      // Mantener ID si editamos; crear uno si estamos creando
       id: this.product?.id ?? crypto.randomUUID(),
-
-      // Normalización de rutas
       slug: finalSlug,
 
-      // Datos principales
       name: v.name,
       category: v.category,
       price: v.price,
@@ -299,34 +245,26 @@ export class ProductFormComponent implements OnChanges {
       shortDescription: v.shortDescription,
       description: v.description,
 
-      // Datos técnicos
       brand: v.brand,
       model: v.model,
       year: v.year,
       condition: v.condition,
       stock: v.stock,
 
-      // Imagen (fallback garantizado)
       imageUrl: finalImageUrl,
 
-      // Flags
       showInCarousel: !!v.showInCarousel,
       isFeatured: !!v.isFeatured,
       isOffer: !!v.isOffer,
       isNew: !!v.isNew,
       isActive: !!v.isActive,
 
-      // createdAt: conservar si existe; si no, generarlo
       createdAt: this.product?.createdAt ?? new Date().toISOString(),
     };
 
     this.save.emit(product);
   }
 
-  /**
-   * @description
-   * Botón cancelar del formulario.
-   */
   onCancel(): void {
     this.cancel.emit();
   }
@@ -335,10 +273,6 @@ export class ProductFormComponent implements OnChanges {
   // UTILIDADES
   // ==========================================================================
 
-  /**
-   * @description
-   * Genera un slug URL-safe desde un texto.
-   */
   private slugify(value: string): string {
     return value
       .normalize('NFD')

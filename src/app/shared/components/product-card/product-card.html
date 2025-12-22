@@ -4,7 +4,7 @@
      - Card reutilizable para productos del marketplace.
      - Incluye:
          ✓ Imagen + badges (condición, nuevo ingreso, descuento)
-         ✓ Título clicable con stretched-link
+         ✓ Título clicable
          ✓ Datos breves: marca, modelo, año
          ✓ Precio + precio anterior
          ✓ Resumen automático (getSummary)
@@ -18,18 +18,17 @@
        ============================================================ -->
   <div class="position-relative">
 
-    <!-- Imagen del producto (fallback si no existe) -->
+    <!-- Imagen del producto (fallback por URL pública) -->
     <img
-  class="card-img-top img-fluid"
-  [src]="imageSrc"
-  (error)="onImgError($event)"
-  [alt]="product.name"
-/>
+      [src]="imageSrc"
+      (error)="onImgError($event)"
+      [alt]="product.name"
+      class="card-img-top img-fluid"
+    />
 
-    <!-- Badges informativos (condición, nuevo ingreso, descuento, etc.) -->
+    <!-- Badges informativos -->
     <div class="position-absolute top-0 start-0 m-2 d-flex flex-wrap gap-1">
 
-      <!-- Condición del producto -->
       <span *ngIf="product.condition === 'usado'" class="badge bg-warning">
         Usado
       </span>
@@ -38,17 +37,14 @@
         Nuevo
       </span>
 
-      <!-- Descuento calculado en TS -->
       <span *ngIf="hasDiscount" class="badge bg-danger">
         -{{ discountPercent }}%
       </span>
 
-      <!-- Nuevo ingreso -->
       <span *ngIf="product.isNew" class="badge bg-info">
         Nuevo ingreso
       </span>
 
-      <!-- Preventa (si aplica) -->
       <span *ngIf="product.isPreSale" class="badge bg-primary">
         Preventa
       </span>
@@ -92,7 +88,6 @@
   <div *ngIf="canEdit" class="px-3 pb-3">
     <div class="d-flex gap-2">
 
-      <!-- Botón EDITAR -->
       <button
         type="button"
         class="btn btn-sm btn-outline-secondary"
@@ -102,7 +97,6 @@
         Editar
       </button>
 
-      <!-- Botón ELIMINAR -->
       <button
         type="button"
         class="btn btn-sm btn-outline-danger"
@@ -119,15 +113,13 @@
        SECCIÓN: FOOTER (precio + ubicación)
        ============================================================ -->
   <div class="card-footer">
-    <div class="d-flex justify-content-between align-items-center py-2">
+    <div class="d-flex justify-content-between align-items-center py-2 gap-2">
 
-      <!-- Precio actual -->
       <span class="fw-bold">
         {{ product.price
           | currency:(product.currency || 'CLP'):'symbol-narrow':'1.0-0' }}
       </span>
 
-      <!-- Precio anterior tachado -->
       <small
         *ngIf="product.previousPrice"
         class="text-muted text-decoration-line-through ms-1"
@@ -136,10 +128,17 @@
           | currency:(product.currency || 'CLP'):'symbol-narrow':'1.0-0' }}
       </small>
 
-      <!-- Ubicación -->
       <small *ngIf="product.location" class="text-muted">
         <i class="bi bi-geo-alt me-1"></i>{{ product.location }}
       </small>
+
+      <!-- CTA: Ver detalle del producto (igual que la navegación por título) -->
+      <a
+        class="btn btn-sm btn-outline-primary ms-auto"
+        [routerLink]="['/productos', product.slug]"
+      >
+        Ver detalles
+      </a>
 
     </div>
   </div>

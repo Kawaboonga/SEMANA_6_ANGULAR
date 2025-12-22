@@ -1,10 +1,4 @@
-
-import {
-  Injectable,
-  computed,
-  inject,
-  signal,
-} from '@angular/core';
+import { Injectable, computed, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {
   Course,
@@ -25,40 +19,17 @@ export interface CourseFilter {
   sortByRating?: 'asc' | 'desc' | null;
 }
 
-
-
 /**
  * Servicio encargado de manejar los cursos del proyecto.
  *
- * Por ahora trabaja con un mock local (`COURSES_MOCK`), pero está pensado
- * para conectarse a una API real en cualquier momento.
- *
- * Se usa en:
- * - listados generales de cursos,
- * - la ficha de detalle `/cursos/:slug`,
- * - módulos de tutor (cursos impartidos por un profesor),
- * - el carrusel del home,
- * - el panel de Administración (CRUD básico local).
+ * - Fuente principal: JSON remoto publicado en GitHub Pages (/JSON_API/courses.json)
+ * - Fallback: localStorage (si existiera data previa)
+ * - Fallback final: mock mínimo (para no dejar la UI en blanco)
  *
  * @usageNotes
- * - Todos los métodos retornan arreglos puros (sin mutar la data original).
- * - `getFeaturedCoursesForCarousel()` mapea cursos al modelo genérico
- *   `CarouselItem` para reutilizar el componente del carrusel.
- * - Los métodos alias (`getCourseBySlug`, `getCoursesByTutor`) existen
- *   porque distintos componentes los llaman de forma distinta.
- *
- * @example
- * const cursos = this.courseService.getAll();
- *
- * @example
- * const curso = this.courseService.getBySlug('curso-guitarra-rock');
+ * - En GitHub Pages, las rutas relativas pueden fallar en rutas hijas como /cursos.
+ *   Por eso el JSON_URL debe ser ABSOLUTO (empieza con "/").
  */
-
-
-
-
-
-
 @Injectable({
   providedIn: 'root',
 })
@@ -72,8 +43,11 @@ export class CourseService {
   /** localStorage key */
   private readonly STORAGE_KEY = 'soundseeker_courses';
 
-  /** JSON desde assets — compatible con GitHub Pages */
-  private readonly JSON_URL = 'assets/data/courses.json';
+  /**
+   * JSON remoto (GitHub Pages)
+   * IMPORTANTE: ruta absoluta para que funcione en /cursos, /cursos/:slug, etc.
+   */
+private readonly JSON_URL = 'https://kawaboonga.github.io/JSON_API/courses.json?v=' + Date.now();
 
   /**
    * Mock aislado — solo se usa como fallback,
@@ -104,12 +78,12 @@ export class CourseService {
           'Fundamentos de palm mute',
           'Riffs clásicos',
           'Power chords y progresiones',
-          'Introducción a solos'
+          'Introducción a solos',
         ],
         learnOutcomes: [
           'Tocar riffs con buen timing.',
           'Entender progresiones de rock.',
-          'Improvisar solos sencillos.'
+          'Improvisar solos sencillos.',
         ],
         reviews: [],
         showInCarousel: true,
@@ -119,8 +93,8 @@ export class CourseService {
         isActive: true,
         priceCLP: 89990,
         price: 89990,
-        priceLabel: '$89.990'
-      }
+        priceLabel: '$89.990',
+      },
     ];
   }
 
@@ -207,52 +181,100 @@ export class CourseService {
   });
 
   // ============================================================
-  // 3) CONSTRUCTOR: carga inicial (localStorage → JSON → mock)
+  // 3) CONSTRUCTOR: carga inicial
   // ============================================================
 
   constructor() {
     this.loadInitialData();
   }
 
+  /**
+   * Estrategia:
+   * 1) intenta localStorage
+   * 2) intenta JSON remoto (robusto, parseando como texto)
+   * 3) fallback mock
+   */
   private loadInitialData(): void {
-    if (typeof window === 'undefined') {
+    // 1) localStorage
+    const fromStorage = this.loadFromStorage();
+    if (fromStorage?.length) {
+      this._courses.set(fromStorage);
+    }
+
+    // 2) JSON remoto (si llega, reemplaza)
+    this.loadFromRemoteJson();
+
+    // 3) si quedamos vacíos (y el remoto falla), aseguramos fallback
+    if (this._courses().length === 0) {
       this._courses.set(this.fallbackMock);
-      return;
+      this.persist();
     }
+  }
 
-    // 1) Intentar leer desde localStorage
-    const raw = localStorage.getItem(this.STORAGE_KEY);
-    if (raw) {
-      try {
-        const parsed = JSON.parse(raw) as Course[];
-        this._courses.set(parsed);
-        return;
-      } catch {
-        /** continua al JSON */
-      }
+  /**
+   * Carga desde JSON remoto.
+   *
+   * @important
+   * - Usamos responseType:'text' + JSON.parse para evitar casos donde GH Pages
+   *   devuelve HTML (por ejemplo 404 que retorna index.html).
+   */
+  private loadFromRemoteJson(): void {
+    this.http
+      .get(this.JSON_URL, { responseType: 'text' })
+      .subscribe({
+        next: (txt) => {
+          try {
+            const parsed = JSON.parse(txt);
+            const list = Array.isArray(parsed) ? (parsed as Course[]) : [];
+
+            this._courses.set(list);
+            this.persist();
+
+            // Debug útil
+            console.log(
+              '[CourseService] Cursos cargados desde JSON remoto:',
+              list.length,
+              'URL:',
+              this.JSON_URL,
+            );
+          } catch (e) {
+            console.error(
+              '[CourseService] Error parseando JSON remoto. ¿Está devolviendo HTML?',
+              e,
+              'URL:',
+              this.JSON_URL,
+              'Preview:',
+              (txt ?? '').slice(0, 120),
+            );
+          }
+        },
+        error: (err) => {
+          console.error(
+            '[CourseService] Error cargando JSON remoto:',
+            err,
+            'URL:',
+            this.JSON_URL,
+          );
+        },
+      });
+  }
+
+  private loadFromStorage(): Course[] | null {
+    if (typeof window === 'undefined') return null;
+    try {
+      const raw = localStorage.getItem(this.STORAGE_KEY);
+      if (!raw) return null;
+      const parsed = JSON.parse(raw) as Course[];
+      return Array.isArray(parsed) ? parsed : null;
+    } catch {
+      return null;
     }
-
-    // 2) Intentar cargar desde JSON
-    this.http.get<Course[]>(this.JSON_URL).subscribe({
-      next: (data) => {
-        this._courses.set(data);
-        this.persist();
-      },
-      error: () => {
-        // 3) Fallback final
-        this._courses.set(this.fallbackMock);
-        this.persist();
-      },
-    });
   }
 
   private persist(): void {
     if (typeof window === 'undefined') return;
     try {
-      localStorage.setItem(
-        this.STORAGE_KEY,
-        JSON.stringify(this._courses()),
-      );
+      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this._courses()));
     } catch {}
   }
 
@@ -279,7 +301,7 @@ export class CourseService {
   }
 
   // ============================================================
-  // 5) MÉTODOS DE LECTURA
+  // 5) LECTURAS
   // ============================================================
 
   getAll(): Course[] {
@@ -295,9 +317,7 @@ export class CourseService {
   }
 
   getByTutorId(tutorId: string, exceptId?: string): Course[] {
-    return this._courses().filter(
-      (c) => c.tutorId === tutorId && c.id !== exceptId,
-    );
+    return this._courses().filter((c) => c.tutorId === tutorId && c.id !== exceptId);
   }
 
   getCoursesByTutor(tutorId: string, exceptId?: string) {
@@ -357,10 +377,14 @@ export class CourseService {
   }
 
   /**
-   * Restablece datos desde JSON original (opción para Admin)
+   * Restablece los cursos desde el JSON original (remoto).
+   * Útil para un botón "Restablecer cursos" en el panel de Admin.
    */
   resetFromJson(): void {
-    localStorage.removeItem(this.STORAGE_KEY);
-    this.loadInitialData();
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem(this.STORAGE_KEY);
+    }
+    this._courses.set([]);
+    this.loadFromRemoteJson();
   }
 }

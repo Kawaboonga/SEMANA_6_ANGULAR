@@ -1,8 +1,8 @@
 
 
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import { TutorService } from '@core/services/tutor.service';
 import { Tutor } from '@core/models/tutor.model';
@@ -10,6 +10,8 @@ import { Tutor } from '@core/models/tutor.model';
 import { Course } from '@core/models/course.model';
 import { CourseService } from '@core/services/course.service';
 import { CourseCardComponent } from '@shared/components/course-card/course-card';
+import { TutorFormComponent } from '@shared/forms/tutor-form/tutor-form';
+import { AuthService } from '@core/services/auth.service';
 import { FadeUpDirective } from '@shared/directives/fade-up';
 
 /**
@@ -31,62 +33,69 @@ import { FadeUpDirective } from '@shared/directives/fade-up';
  * @example
  * <app-tutor-profile-page></app-tutor-profile-page>
  */
+
 @Component({
   selector: 'app-tutor-profile-page',
   standalone: true,
-  imports: [CommonModule, CourseCardComponent, RouterLink, FadeUpDirective],
+  imports: [
+    CommonModule,
+    CourseCardComponent,
+    TutorFormComponent,
+    RouterLink,
+    FadeUpDirective,
+  ],
   templateUrl: './tutor-profile.html',
   styleUrl: './tutor-profile.css',
 })
 export class TutorProfileComponent {
-
   // ==========================================================================
   //  INYECCIÓN DE SERVICIOS Y RUTA
   // ==========================================================================
-  /**
-   * Lee parámetros de la URL (ej: :id).
-   * @private
-   */
+
+  /** Lee parámetros de la URL (ej: :id). */
   private route = inject(ActivatedRoute);
 
-  /**
-   * Servicio para obtener datos de tutores y sus filtros.
-   * @private
-   */
+  /** Para navegar de vuelta a /tutores luego de eliminar. */
+  private router = inject(Router);
+
+  /** Servicio para obtener datos de tutores y sus filtros. */
   private tutorService = inject(TutorService);
 
-  /**
-   * Servicio con todos los cursos disponibles.
-   * @private
-   */
+  /** Servicio con todos los cursos disponibles. */
   private courseService = inject(CourseService);
+
+  /** Servicio de autenticación (para habilitar acciones admin). */
+  private authService = inject(AuthService);
 
   // ==========================================================================
   //  PROPIEDADES DE ESTADO
   // ==========================================================================
 
-  /**
-   * Tutor actualmente seleccionado según la URL.
-   *
-   * @type {Tutor | undefined}
-   */
+  /** Tutor actualmente seleccionado según la URL. */
   tutor: Tutor | undefined;
 
-  /**
-   * Cursos dictados por este tutor.  
-   * Se carga automáticamente al resolver el tutor.
-   *
-   * @type {Course[]}
-   */
+  /** Cursos dictados por este tutor. */
   coursesFromTutor: Course[] = [];
 
-  /**
-   * Pestaña actualmente activa en la UI del perfil.
-   *
-   * @type {'perfil' | 'cursos' | 'resenas' | 'equipo'}
-   * @default 'perfil'
-   */
+  /** Pestaña actualmente activa en la UI del perfil. */
   activeTab: 'perfil' | 'cursos' | 'resenas' | 'equipo' = 'perfil';
+
+  // ==========================================================================
+  // ADMIN: ¿ES ADMINISTRADOR?
+  // ==========================================================================
+
+  /** True si el usuario logueado tiene rol admin. */
+  isAdmin = computed(() => this.authService.isAdmin());
+
+  // ==========================================================================
+  // ADMIN: FORM STATE (EDITAR)
+  // ==========================================================================
+
+  /** Controla si se muestra el formulario inline (editar). */
+  showForm = signal(false);
+
+  /** Tutor seleccionado para editar (clonado). */
+  selectedTutor = signal<Tutor | null>(null);
 
   // ==========================================================================
   //  CICLO DE VIDA
@@ -96,8 +105,6 @@ export class TutorProfileComponent {
    * Inicializa el componente, resolviendo:
    * - El tutor asociado al :id
    * - Los cursos impartidos por dicho tutor
-   *
-   * @returns {void}
    */
   ngOnInit(): void {
     /** ID del tutor desde la ruta */
@@ -126,29 +133,57 @@ export class TutorProfileComponent {
     // ------------------------------------------------------------
     this.coursesFromTutor = this.courseService.getCoursesByTutor(this.tutor.id);
 
-    console.log(
-      'TutorProfile: cursos asociados →',
-      this.tutor.id,
-      this.coursesFromTutor
-    );
+    console.log('TutorProfile: cursos asociados →', this.tutor.id, this.coursesFromTutor);
   }
 
   // ==========================================================================
   //  CAMBIAR PESTAÑA
   // ==========================================================================
 
-  /**
-   * Cambia la pestaña visible en el UI del perfil.
-   *
-   * @param {'perfil' | 'cursos' | 'resenas' | 'equipo'} tab
-   *        Nombre de la pestaña objetivo.
-   *
-   * @example
-   * setTab('cursos');
-   *
-   * @returns {void}
-   */
+  /** Cambia la pestaña visible en el UI del perfil. */
   setTab(tab: 'perfil' | 'cursos' | 'resenas' | 'equipo'): void {
     this.activeTab = tab;
+  }
+
+  // ==========================================================================
+  // ADMIN: ACCIONES DESDE EL DETALLE
+  // ==========================================================================
+
+  /** Abre el formulario en modo editar (si es admin). */
+  onAdminEdit(): void {
+    if (!this.isAdmin() || !this.tutor) return;
+    this.selectedTutor.set({ ...this.tutor });
+    this.showForm.set(true);
+  }
+
+  /** Elimina el tutor actual (si es admin) y vuelve al listado. */
+  onAdminDelete(): void {
+    if (!this.isAdmin() || !this.tutor) return;
+
+    const ok = confirm(
+      `¿Eliminar el tutor "${this.tutor.name}"?\nEsta acción no se puede deshacer.`,
+    );
+    if (!ok) return;
+
+    this.tutorService.deleteTutor(this.tutor.id);
+    this.router.navigate(['/tutores']);
+  }
+
+  /** Guarda cambios desde el TutorFormComponent (update). */
+  onAdminSave(tutor: Tutor): void {
+    if (!this.isAdmin()) return;
+
+    // upsert = crea si no existe / actualiza si existe
+    this.tutorService.upsertTutor(tutor);
+    this.tutor = tutor;
+
+    this.showForm.set(false);
+    this.selectedTutor.set(null);
+  }
+
+  /** Cancela edición. */
+  onAdminCancel(): void {
+    this.showForm.set(false);
+    this.selectedTutor.set(null);
   }
 }

@@ -60,26 +60,20 @@ export class ProductCardComponent {
   // FALLBACK IMAGEN (URL PÚBLICA)
   // ==========================================================================
   /**
-   * @property FALLBACK_IMAGE_URL
-   * @description
-   * Imagen de relleno (placeholder) usada cuando:
-   *  - product.imageUrl viene vacío/null/undefined
-   *  - la imagen falla al cargar (404, CORS, etc.)
-   *
-   * Nota:
-   * - Se usa URL pública (requerimiento del proyecto).
+   * Imagen de relleno (placeholder).
+   * Se usa cuando:
+   * - product.imageUrl viene vacío/null/undefined
+   * - la URL falla al cargar (404, CORS, etc.)
    */
   readonly FALLBACK_IMAGE_URL =
-    'https://polarvectors.com/wp-content/uploads/2023/06/Guitar-SVG.jpg';
+    'assets/img/products/placeholder-guitar.jpg';
+    //'https://polarvectors.com/wp-content/uploads/2023/06/Guitar-SVG.jpg';
 
   /**
    * @property imageSrc
    * @description
-   * Fuente final de la imagen para renderizar en la vista.
-   *
-   * Importante:
-   * - Evita usar `.trim()` directo en el template porque si imageUrl
-   *   no es string (data sucia desde JSON/localStorage) revienta la vista.
+   * Fuente final de imagen para evitar lógica compleja en el template
+   * (y prevenir crashes si imageUrl no es string).
    */
   get imageSrc(): string {
     const raw = (this.product?.imageUrl ?? '').toString().trim();
@@ -89,16 +83,15 @@ export class ProductCardComponent {
   /**
    * @method onImgError
    * @description
-   * Handler para el evento (error) del <img>.
-   * Si la URL de imagen falla, reemplaza por el placeholder.
-   *
-   * @usageNotes
-   * Evitamos un loop infinito verificando que no estemos ya
-   * usando la imagen fallback.
+   * Si la imagen falla, reemplazamos por la de fallback.
+   * Evitamos loop infinito si ya estamos en fallback.
    */
   onImgError(event: Event): void {
     const img = event.target as HTMLImageElement;
-    if (img.src === this.FALLBACK_IMAGE_URL) return;
+
+    // Evitar loop infinito
+    if (img.src.includes(this.FALLBACK_IMAGE_URL)) return;
+
     img.src = this.FALLBACK_IMAGE_URL;
   }
 

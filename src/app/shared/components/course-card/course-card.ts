@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
@@ -12,9 +12,9 @@ import { Course } from '@core/models/course.model';
  * Componente visual reutilizable para renderizar una tarjeta de curso.
  * Está diseñado como **dumb component**, lo que significa:
  *
- *  ✔ No contiene lógica de negocio  
- *  ✔ No consulta servicios  
- *  ✔ No filtra ni ordena  
+ *  ✔ No contiene lógica de negocio
+ *  ✔ No consulta servicios
+ *  ✔ No filtra ni ordena
  *  ✔ Solo recibe un `Course` y lo muestra
  *
  * Esto permite reutilizar la misma tarjeta en:
@@ -23,6 +23,11 @@ import { Course } from '@core/models/course.model';
  *  - carouseles del home
  *  - resultados de búsqueda
  *  - módulos futuros sin duplicar HTML
+ *
+ * Además, tal como en ProductCard:
+ *  - Puede mostrar botones de administración (Editar / Eliminar)
+ *    si el contenedor lo solicita con `[canEdit]="true"`.
+ *  - Emite eventos simples hacia el padre (editRequest / deleteRequest).
  *
  * @usageNotes
  * Importar en cualquier vista standalone:
@@ -57,17 +62,77 @@ import { Course } from '@core/models/course.model';
   styleUrls: ['./course-card.css'],
 })
 export class CourseCardComponent {
+  // ==========================================================================
+  // INPUT PRINCIPAL
+  // ==========================================================================
 
   /**
    * @description
    * Modelo completo del curso que se desea mostrar.
-   *  
+   *
    * **required: true** → evita que se renderice sin datos válidos.
    *
    * @param course - Objeto `Course` con toda la información del curso.
    */
   @Input({ required: true }) course!: Course;
 
+  // ==========================================================================
+  // MODO ADMIN → BOTONES EDITAR / ELIMINAR (igual patrón que productos)
+  // ==========================================================================
+
+  /**
+   * @description
+   * Si es `true`, la card muestra acciones de administración.
+   * Normalmente se enlaza a algo como `isAdmin()` en el componente padre.
+   */
+  @Input() canEdit = false;
+
+  /**
+   * @description
+   * Solicita al componente padre abrir el formulario de edición.
+   * Payload: `id` del curso.
+   */
+  @Output() editRequest = new EventEmitter<string>();
+
+  /**
+   * @description
+   * Solicita al componente padre eliminar el curso.
+   * Payload: `id` del curso.
+   */
+  @Output() deleteRequest = new EventEmitter<string>();
+
+  /**
+   * @description
+   * Click del botón editar.
+   *
+   * @important
+   * - Se hace stopPropagation + preventDefault porque esta card tiene links
+   *   (stretched-link y CTA) y no queremos navegar cuando el admin edita.
+   */
+  onEditClick(event: MouseEvent): void {
+    event.stopPropagation();
+    event.preventDefault();
+    this.editRequest.emit(this.course.id);
+  }
+
+  /**
+   * @description
+   * Click del botón eliminar.
+   * - Confirma con `confirm()` (mismo estándar de productos).
+   */
+  onDeleteClick(event: MouseEvent): void {
+    event.stopPropagation();
+    event.preventDefault();
+
+    const ok = confirm(
+      `¿Eliminar el curso "${this.course.title}"?\n` +
+        'Esta acción no se puede deshacer.',
+    );
+
+    if (!ok) return;
+
+    this.deleteRequest.emit(this.course.id);
+  }
 
   // ------------------------------------------------------------------------
   // GETTERS DERIVADOS (presentación)
@@ -75,7 +140,7 @@ export class CourseCardComponent {
 
   /**
    * @description
-   * Construye la meta-información del curso:  
+   * Construye la meta-información del curso:
    * `"Intermedio · 16 h · 8 clases"`
    *
    * @return string — Cadena lista para mostrarse en la card.
